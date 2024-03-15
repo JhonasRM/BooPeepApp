@@ -16,9 +16,8 @@ const HeaderBar = () => {
 
 const {styles} = StyleSheet.create ({
     header: {
-        flex: 1,
         backgroundColor: "#d4d7ff",
-        height: hp(12),
+        height: hp(9),
         width: wp(100),
         
         flexDirection: "row",
@@ -29,9 +28,10 @@ const {styles} = StyleSheet.create ({
         
     },
     icon: {
+        
         width: 140,
         height: 50,
-        marginLeft: wp(1),
+        marginLeft: wp(2),
         marginTop: hp(2),
         marginBottom: hp(2),
     }

@@ -2,25 +2,11 @@ import {TextInput, Pressable, View, Image, } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./HeaderBarResponsivity";
-import { useState } from "react";
 
 const SearchBar = () => {
-    const [Press, setPress] = useState(false);
-    const buttonstyle = styles.button
-
-    if (Press == false) {
-        const buttonstyle = styles.button
-        const buttonid = {media: ids.button}
-    }
-    else {
-        const buttonstyle = styles.buttonoff
-    }
-
-
     return (
-        <View>
-            <TextInput />
-            <Pressable style={buttonstyle} dataSet={{media: ids.button}} onPressIn={() => {setPress(true)}}>
+        <View style={styles.buttonview}>
+            <Pressable style={styles.button} dataSet={{media: ids.button}}>
                 <Image source={require('../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img}/>
             </Pressable>
         </View>
@@ -28,19 +14,15 @@ const SearchBar = () => {
 }
 
 const {styles} = StyleSheet.create ({
+    buttonview: {
+        position: "absolute",
+        right: 0,      // <-- SE A LUPA ESTIVER NO LUGAR ERRADO MUDE ESSE VALOR
+    },
     button: {
         //backgroundColor: "slateblue",
-        width: wp(2),
-        height: hp(2),
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        right: 0,
+        marginRight: wp(2),
+        borderRadius: 5,        
         opacity: 100,
-    },
-    buttonoff: {
-        backgroundColor: "#FFF"
     },
     img: {
         width: 50,
