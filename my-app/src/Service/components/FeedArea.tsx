@@ -20,34 +20,7 @@ const {styles} = StyleSheet.create ({
     feed: {
         backgroundColor: "#d4d7ff",
         width: wp(102),
-        height: hp(88),
-        
-
-
-
-
-
-
-
-
-
-
-
-        /*'@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },*/
+        height: hp(82),
     }
 })
 

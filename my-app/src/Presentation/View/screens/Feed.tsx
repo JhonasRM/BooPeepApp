@@ -9,6 +9,7 @@ const Feed = () => {
     return (
     <View>
         <HeaderBar />
+        <FeedArea />
     </View>
     )
 }
