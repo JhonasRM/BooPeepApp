@@ -3,7 +3,7 @@ import StyleSheet from 'react-native-media-query';
 
 export const {ids} = StyleSheet.create ({
     footer: {
-        '@media (min-width: 280px) and (max-width: 359px)': {
+        /*'@media (min-width: 280px) and (max-width: 359px)': {
             width: wp(102),
         },
 
@@ -57,10 +57,10 @@ export const {ids} = StyleSheet.create ({
 
         '@media (min-width: 1280px)': {
             width: wp(100),
-        },
+        },*/
     },
     button: {
-        '@media (min-width: 414px)': {
+        /*'@media (min-width: 414px)': {
             width: wp(27),
             height: hp(4),
         },
@@ -73,10 +73,10 @@ export const {ids} = StyleSheet.create ({
         '@media (min-width: 1280px)': {
             width: wp(10),
             height: hp(5),
-        },
+        },*/
     },
     button2: {
-        '@media (min-width: 768px) and (max-width: 1024px)': {
+        /*'@media (min-width: 768px) and (max-width: 1024px)': {
             width: wp(10),
         },
         '@media (min-width: 540px) and (max-width: 767px)': {
@@ -91,6 +91,6 @@ export const {ids} = StyleSheet.create ({
         },
         '@media (min-width: 1280px)': {
             width: wp(7),
-        },
+        },*/
     },
 })
