@@ -2,37 +2,101 @@ import { Text, View, Image, Pressable } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FeedBlockResponsivity";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchFeed = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    return response.json();
+}
+
+export function FeedQuery() {
+    const {data, isLoading} = useQuery({
+        queryKey: ['data'],
+        queryFn: fetchFeed,
+    });
+
+    if (isLoading) {
+        return (
+            <View>
+                <Image source={require('../../../assets/gifs/icons8-círculo-de-carga.gif')} />
+            </View>
+        )
+    }
+
+
+    return (
+        <View>
+            {data && data.map(item => (
+                /*<View key={item.id}> 
+                    <Text>{item.userId}</Text>
+                    <Text>{item.title}</Text>
+                    <Text>{item.body}</Text>
+                </View>*/
+                    // <View style={styles.feedblock}>
+            <View style={styles.feedblock}>
+                <View style={styles.firstline}>
+                    <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
+                     <Text style={styles.usertext}> {item.userId} </Text>
+                    <Pressable style={styles.options}>
+                    <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
+                    </Pressable>
+                </View>
+                 <Text style={styles.infotext}> 
+                 {item.body}
+                 </Text>
+
+                <View style={styles.middleline}>
+                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                </View>
+
+               <View style={styles.endline}>
+                   <View style={styles.status} dataSet={{media: ids.status}}/>
+                    <Text style={styles.statustext}>Status: {item.title}</Text>
+                    <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                </View>
+                <Text style={styles.time} key={`postId-${item.id}`}>Há: {item.id} horas atrás</Text>
+            </View>
+            ))
+            }
+        </View>
+    )
+}
 
 const FeedBlock = () => {
+    
     return (
-        <View style={styles.feedblock}>
-        {/* --------------------------------------------- */}
-          <View style={styles.firstline}>
-            <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-            <Text style={styles.usertext}> User </Text>
-            <Pressable style={styles.options}>
-                <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
-            </Pressable>
-          </View>
-        {/* --------------------------------------------- */}
-            <Text style={styles.infotext}> 
-                Lorem amogus sussy baki is the new rizz skibiritoiler ohmagad big smoke i'll have 2 number 9s a number
-                9 large a number 6 with extra dip 2 number 45s one with MAC AND cheese and a large soda AND NOBODY IS STOPPING
-                ME! HihehiHA! *Bad to the Bone Riff*
-            </Text>
-          <View style={styles.middleline}>
-            <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-            <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-          </View>
-        {/* --------------------------------------------- */}
-          <View style={styles.endline}>
-            <View style={styles.status} dataSet={{media: ids.status}}/>
-            <Text style={styles.statustext}>Status: RAPAIZ</Text>
-            <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
-          </View>
-            <Text style={styles.time}>Há: 25 horas atrás</Text>
-        {/* --------------------------------------------- */}
+        <View>
+            <FeedQuery />
         </View>
+        // <View style={styles.feedblock}>
+        // {/* --------------------------------------------- */}
+        //   <View style={styles.firstline}>
+        //     <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
+        //     <Text style={styles.usertext}> User </Text>
+        //     <Pressable style={styles.options}>
+        //         <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
+        //     </Pressable>
+        //   </View>
+        // {/* --------------------------------------------- */}
+        //     <Text style={styles.infotext}> 
+        //         Lorem amogus sussy baki is the new rizz skibiritoiler ohmagad big smoke i'll have 2 number 9s a number
+        //         9 large a number 6 with extra dip 2 number 45s one with MAC AND cheese and a large soda AND NOBODY IS STOPPING
+        //         ME! HihehiHA! *Bad to the Bone Riff*
+        //     </Text>
+        //   <View style={styles.middleline}>
+        //     <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+        //     <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+        //   </View>
+        // {/* --------------------------------------------- */}
+        //   <View style={styles.endline}>
+        //     <View style={styles.status} dataSet={{media: ids.status}}/>
+        //     <Text style={styles.statustext}>Status: RAPAIZ</Text>
+        //     <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+        //   </View>
+        //     <Text style={styles.time}>Há: 25 horas atrás</Text>
+        // {/* --------------------------------------------- */}
+        // </View>
     )
 }
 
