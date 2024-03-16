@@ -9,8 +9,6 @@ const FeedArea = () => {
         <View style={styles.feed} dataSet={{ media: ids.feed }}>
             <ScrollView >
                 <FeedBlock />
-                <FeedBlock />
-                <FeedBlock />
             </ScrollView>
         </View>
     )
