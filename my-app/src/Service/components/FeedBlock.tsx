@@ -3,6 +3,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
+import LoadingBox from "./LoadingIcon";
+import ErrorMessage from "./ErrorMessage";
 
 const fetchFeed = async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -10,16 +12,20 @@ const fetchFeed = async () => {
 }
 
 export function FeedQuery() {
-    const {data, isLoading} = useQuery({
+    const {data, isLoading, isError, error} = useQuery({
         queryKey: ['data'],
         queryFn: fetchFeed,
     });
 
     if (isLoading) {
         return (
-            <View>
-                <Image source={require('../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loading} />
-            </View>
+            <LoadingBox />
+        )
+    }
+
+    if (isError && error) {
+        return (
+            <ErrorMessage message={error.message} />
         )
     }
 
@@ -66,10 +72,6 @@ const FeedBlock = () => {
 }
 
 const {styles} = StyleSheet.create ({
-    loading: {
-        width: 100,
-        height: 100,
-    },
     feedblock: {
         backgroundColor: "#ffffff",
         marginHorizontal: wp(5),
@@ -117,7 +119,7 @@ const {styles} = StyleSheet.create ({
         marginRight: wp(1),
     },
     statustext: {
-        
+        marginRight: wp(18),
     },
     time: {
         marginLeft: 10,

@@ -17,7 +17,7 @@ const FeedArea = () => {
 const {styles} = StyleSheet.create ({
     feed: {
         backgroundColor: "#d4d7ff",
-        width: wp(102),
+        width: wp(100),
         height: hp(82),
     }
 })
