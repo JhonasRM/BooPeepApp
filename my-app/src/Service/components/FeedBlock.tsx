@@ -5,8 +5,9 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "./LoadingIcon";
 import ErrorMessage from "./ErrorMessage";
+import { useState } from "react";
 
-const fetchFeed = async () => {
+const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
     return response.json();
 }
@@ -29,7 +30,6 @@ export function FeedQuery() {
         )
     }
 
-
     return (
         <View>
             {data && data.map(item => (
@@ -38,7 +38,7 @@ export function FeedQuery() {
                     <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
                      <Text style={styles.usertext}> {item.userId} </Text>
                     <Pressable style={styles.options}>
-                    <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
+                        <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
                     </Pressable>
                 </View>
                  <Text style={styles.infotext}> 
@@ -136,6 +136,12 @@ const {styles} = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         marginLeft: 10,
+    },
+    optionsmenu: {
+        backgroundColor: "slateblue",
+        position: "absolute",
+        right: 0,  
+        marginRight: 10,
     },
 })
 
