@@ -33,7 +33,7 @@ export function FeedQuery() {
     return (
         <View>
             {data && data.map(item => (
-            <View style={styles.feedblock}>
+            <View style={styles.feedblock} key={item.id}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
                      <Text style={styles.usertext}> {item.userId} </Text>
@@ -55,7 +55,7 @@ export function FeedQuery() {
                     <Text style={styles.statustext}>Status: {item.title}</Text>
                     <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
                 </View>
-                <Text style={styles.time} key={`postId-${item.id}`}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
+                <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
             </View>
             ))
             }
