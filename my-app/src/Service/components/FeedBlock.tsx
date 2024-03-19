@@ -55,7 +55,7 @@ export function FeedQuery() {
                     <Text style={styles.statustext}>Status: {item.title}</Text>
                     <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
                 </View>
-                <Text style={styles.time} key={`postId-${item.id}`}>Há: {item.id} horas atrás</Text>
+                <Text style={styles.time} key={`postId-${item.id}`}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
             </View>
             ))
             }
@@ -104,6 +104,7 @@ const {styles} = StyleSheet.create ({
         marginTop: hp(2),
         marginBottom: hp(2),
         paddingHorizontal: wp(5),
+        marginHorizontal: wp(1),
         
     },
     middleline: {
