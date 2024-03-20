@@ -9,8 +9,6 @@ const FeedArea = () => {
         <View style={styles.feed} dataSet={{ media: ids.feed }}>
             <ScrollView >
                 <FeedBlock />
-                <FeedBlock />
-                <FeedBlock />
             </ScrollView>
         </View>
     )
@@ -19,35 +17,8 @@ const FeedArea = () => {
 const {styles} = StyleSheet.create ({
     feed: {
         backgroundColor: "#d4d7ff",
-        width: wp(102),
-        height: hp(88),
-        
-
-
-
-
-
-
-
-
-
-
-
-        /*'@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },
-
-        '@media (max-width: &px) and (min-width: &px)': {
-        
-        },*/
+        width: wp(100),
+        height: hp(82),
     }
 })
 

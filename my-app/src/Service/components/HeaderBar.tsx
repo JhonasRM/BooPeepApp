@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar";
 const HeaderBar = () => {
     return (
         <View style={styles.header} dataSet={{media: ids.header}}>
-            <Image source={require('../../../assets/icons/BooPeep2.jpg')} style={styles.icon} />
+            <Image source={require('../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
             <SearchBar />
             {/* <Pressable style={styles.button} dataSet={{media: ids.button}}><Image source={require('../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img} /></Pressable> */}
         </View>
@@ -16,9 +16,8 @@ const HeaderBar = () => {
 
 const {styles} = StyleSheet.create ({
     header: {
-        flex: 1,
         backgroundColor: "#d4d7ff",
-        height: hp(12),
+        height: hp(9),
         width: wp(100),
         
         flexDirection: "row",
@@ -29,11 +28,11 @@ const {styles} = StyleSheet.create ({
         
     },
     icon: {
-        width: 140,
-        height: 50,
-        marginLeft: wp(1),
+        width: 130,
+        height: 55,
+        marginLeft: wp(2),
         marginTop: hp(2),
-        marginBottom: hp(2),
+        marginBottom: hp(2)
     }
 })
 

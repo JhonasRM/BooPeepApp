@@ -2,36 +2,71 @@ import { Text, View, Image, Pressable } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FeedBlockResponsivity";
+import { useQuery } from "@tanstack/react-query";
+import LoadingBox from "./LoadingIcon";
+import ErrorMessage from "./ErrorMessage";
+import { useState } from "react";
+
+const fetchFeed = async () => {                                 //Chamar a API
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    return response.json();
+}
+
+export function FeedQuery() {
+    const {data, isLoading, isError, error} = useQuery({
+        queryKey: ['data'],
+        queryFn: fetchFeed,
+    });
+
+    if (isLoading) {
+        return (
+            <LoadingBox />
+        )
+    }
+
+    if (isError && error) {
+        return (
+            <ErrorMessage message={error.message} />
+        )
+    }
+
+    return (
+        <View>
+            {data && data.map(item => (
+            <View style={styles.feedblock} key={item.id}>
+                <View style={styles.firstline}>
+                    <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
+                     <Text style={styles.usertext}> {item.userId} </Text>
+                    <Pressable style={styles.options}>
+                        <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
+                    </Pressable>
+                </View>
+                 <Text style={styles.infotext}> 
+                 {item.body}
+                 </Text>
+
+                <View style={styles.middleline}>
+                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                </View>
+
+               <View style={styles.endline}>
+                   <View style={styles.status} dataSet={{media: ids.status}}/>
+                    <Text style={styles.statustext}>Status: {item.title}</Text>
+                    <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                </View>
+                <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
+            </View>
+            ))
+            }
+        </View>
+    )
+}
 
 const FeedBlock = () => {
     return (
-        <View style={styles.feedblock}>
-        {/* --------------------------------------------- */}
-          <View style={styles.firstline}>
-            <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-            <Text style={styles.usertext}> User </Text>
-            <Pressable style={styles.options}>
-                <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
-            </Pressable>
-          </View>
-        {/* --------------------------------------------- */}
-            <Text style={styles.infotext}> 
-                Lorem amogus sussy baki is the new rizz skibiritoiler ohmagad big smoke i'll have 2 number 9s a number
-                9 large a number 6 with extra dip 2 number 45s one with MAC AND cheese and a large soda AND NOBODY IS STOPPING
-                ME! HihehiHA! *Bad to the Bone Riff*
-            </Text>
-          <View style={styles.middleline}>
-            <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-            <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-          </View>
-        {/* --------------------------------------------- */}
-          <View style={styles.endline}>
-            <View style={styles.status} dataSet={{media: ids.status}}/>
-            <Text style={styles.statustext}>Status: RAPAIZ</Text>
-            <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
-          </View>
-            <Text style={styles.time}>Há: 25 horas atrás</Text>
-        {/* --------------------------------------------- */}
+        <View>
+            <FeedQuery />
         </View>
     )
 }
@@ -69,6 +104,7 @@ const {styles} = StyleSheet.create ({
         marginTop: hp(2),
         marginBottom: hp(2),
         paddingHorizontal: wp(5),
+        marginHorizontal: wp(1),
         
     },
     middleline: {
@@ -84,7 +120,7 @@ const {styles} = StyleSheet.create ({
         marginRight: wp(1),
     },
     statustext: {
-        
+        marginRight: wp(18),
     },
     time: {
         marginLeft: 10,
@@ -100,6 +136,12 @@ const {styles} = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         marginLeft: 10,
+    },
+    optionsmenu: {
+        backgroundColor: "slateblue",
+        position: "absolute",
+        right: 0,  
+        marginRight: 10,
     },
 })
 

@@ -3,7 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 
 export const {ids} = StyleSheet.create ({
     feed: {
-        '@media (min-width: 280px) and (max-width: 374px)': {
+        /*'@media (min-width: 280px) and (max-width: 374px)': {
             width: wp(102),
             height: hp(85),
         },
@@ -83,6 +83,6 @@ export const {ids} = StyleSheet.create ({
         '@media (min-width: 1280px)': {
             width: wp(100),
             height: hp(84),
-        },
+        },*/
     },
 })

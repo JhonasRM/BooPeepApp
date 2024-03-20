@@ -21,7 +21,6 @@ const FooterBar = () => {
 
 const {styles} = StyleSheet.create ({
     footer: {
-        flex: 1,
         position: "relative",
         backgroundColor: "#d4d7ff",
         flexDirection: "row",
@@ -34,7 +33,7 @@ const {styles} = StyleSheet.create ({
         
 
         width: wp(102),
-        height: hp(100),
+        height: hp(9),
 
         
     },
