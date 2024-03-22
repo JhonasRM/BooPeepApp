@@ -7,13 +7,13 @@ const FooterBar = () => {
     return (
         <View style={styles.footer} dataSet={{ media: ids.footer }}>
             <Pressable style={styles.button} dataSet={{ media: ids.button }}>
-                <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
+                <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
             </Pressable>
             <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>  
-                <Image source={require('../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
+                <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
             </Pressable>
             <Pressable style={styles.button} dataSet={{ media: ids.button }}> 
-                <Image source={require('../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
+                <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
             </Pressable>
         </View>
     )

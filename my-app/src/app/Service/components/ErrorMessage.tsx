@@ -6,7 +6,7 @@ const ErrorMessage = ({ message }) => {
 
     return (
         <View style={styles.Errorbox}>
-            <Image source={require('../../../assets/icons/icons8-erro-100.png')} style={styles.Warningimg}/>
+            <Image source={require('../../../../assets/icons/icons8-erro-100.png')} style={styles.Warningimg}/>
             <Text style={styles.Wrongtext}>Algo deu errado.</Text>
             <View style={styles.Errorview}>
                 <Text style={styles.Errortext}> Erro: {message} </Text>
