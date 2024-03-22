@@ -28,8 +28,8 @@ const {styles} = StyleSheet.create ({
         
     },
     icon: {
-        width: 130,
-        height: 55,
+        width: 120,
+        height: 44,
         marginLeft: wp(2),
         marginTop: hp(2),
         marginBottom: hp(2)
