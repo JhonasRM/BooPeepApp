@@ -5,7 +5,7 @@ import { Image, View } from "react-native"
 const LoadingBox = () => {
     return (
     <View style={styles.loadingbox}>
-        <Image source={require('../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
+        <Image source={require('../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
     </View>
     )
 }

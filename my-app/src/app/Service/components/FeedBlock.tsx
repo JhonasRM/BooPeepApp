@@ -35,10 +35,10 @@ export function FeedQuery() {
             {data && data.map(item => (
             <View style={styles.feedblock} key={item.id}>
                 <View style={styles.firstline}>
-                    <Image source={require('../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
+                    <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
                      <Text style={styles.usertext}> {item.userId} </Text>
                     <Pressable style={styles.options}>
-                        <Image source={require('../../../assets/icons/icons8-menu-2-24.png')}/>
+                        <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')}/>
                     </Pressable>
                 </View>
                  <Text style={styles.infotext}> 
@@ -46,14 +46,14 @@ export function FeedQuery() {
                  </Text>
 
                 <View style={styles.middleline}>
-                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-                    <Image source={require('../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
                 </View>
 
                <View style={styles.endline}>
                    <View style={styles.status} dataSet={{media: ids.status}}/>
                     <Text style={styles.statustext}>Status: {item.title}</Text>
-                    <Image source={require('../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                    <Image source={require('../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
                 </View>
                 <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
             </View>

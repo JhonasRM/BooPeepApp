@@ -7,7 +7,7 @@ const SearchBar = () => {
     return (
         <View style={styles.buttonview}>
             <Pressable style={styles.button} dataSet={{media: ids.button}}>
-                <Image source={require('../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img}/>
+                <Image source={require('../../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img}/>
             </Pressable>
         </View>
     )
