@@ -50,7 +50,7 @@ export default function App(): JSX.Element {
           <Text style={styles.sendButtonText}>Enviar</Text>
         </TouchableOpacity>
       </View>
-      <FooterBar />
+      <FooterBar whatScreen='chat'/>
     </View>
   );
 }
