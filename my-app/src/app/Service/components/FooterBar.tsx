@@ -17,7 +17,7 @@ const FooterBar = () => {
                 <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
             </Pressable>
 
-            <Link href={"./Presentation/View/screens/Test"} asChild>
+            <Link href={"./Presentation/View/screens/ChatApp"} asChild>
                 <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                     <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                 </Pressable>
