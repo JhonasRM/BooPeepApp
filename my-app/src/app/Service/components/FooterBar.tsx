@@ -2,19 +2,26 @@ import { View, Pressable, Image} from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FooterBarResponsivity";
+import { Link } from "expo-router";
 
 const FooterBar = () => {
     return (
         <View style={styles.footer} dataSet={{ media: ids.footer }}>
-            <Pressable style={styles.button} dataSet={{ media: ids.button }}>
-                <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
-            </Pressable>
-            <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>  
+            <Link href={""} asChild>
+                <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                    <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
+                </Pressable>
+            </Link>
+
+            <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
                 <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
             </Pressable>
-            <Pressable style={styles.button} dataSet={{ media: ids.button }}> 
-                <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
-            </Pressable>
+
+            <Link href={"./Presentation/View/screens/ChatApp"} asChild>
+                <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                    <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
+                </Pressable>
+            </Link>
         </View>
     )
 }
@@ -30,11 +37,9 @@ const {styles} = StyleSheet.create ({
         shadowOffset: {height: hp(1.3), width: wp(1.3)},
         shadowRadius: 20,
         bottom: 0,
-        
 
         width: wp(102),
         height: hp(9),
-
         
     },
     button: {
@@ -64,7 +69,7 @@ const {styles} = StyleSheet.create ({
     img3: {
         width: 37,
         height: 37,
-    },
+    }
 })
 
 export default FooterBar
