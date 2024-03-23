@@ -36,7 +36,9 @@ export default function Login() {
         />
 
         <TouchableOpacity style={style.btnSubmit}>
+          <Link href={"./Feed"}>
           <Text style={style.submitText}>Entrar</Text>
+          </Link>
         </TouchableOpacity>
 
         <TouchableOpacity style={style.btnRegister}>
@@ -55,7 +57,7 @@ export default function Login() {
             source={require('../../../../../assets/icons/icons8-google-logo-48.png')}
           />
           
-          <Link href={"/Principal"}>
+          <Link href={"./ChatApp"}>
           <Text style={style.submitGoogle}>Conecter-se com Google</Text>
           </Link>
         </TouchableOpacity>
