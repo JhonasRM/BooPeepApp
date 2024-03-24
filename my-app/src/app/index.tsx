@@ -14,10 +14,10 @@ import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
-  const queryClient = new QueryClient();
+  
 
   return (
-    // <QueryClientProvider client={queryClient}>
+    
       <KeyboardAvoidingView style={styles.background}>
         <View style={styles.containerLogo}>
           <Image
@@ -44,7 +44,6 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    // </QueryClientProvider>
   );
 }
 
