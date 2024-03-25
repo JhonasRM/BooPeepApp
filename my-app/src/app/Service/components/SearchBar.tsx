@@ -92,14 +92,13 @@ const {styles} = StyleSheet.create ({
         position: "absolute",
         width: wp(55),
         borderRadius: 5,
-        
 
         color: "#FFF",
         textAlign: "right",
         paddingRight: wp(12)
     },
     TextInputOff: {
-        
+           
     }
 })
 
