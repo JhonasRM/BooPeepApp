@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Link }  from "expo-router";
-import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 
 
 export default function Login() {
   // Essa é a tela de Login
   return (
     <KeyboardAvoidingView style={style.background}>
+      
       <View style={style.containerLogo}>
         <Image
         style={{
-          width: 450,
-          height:153
+          marginTop: 40,
+          marginBottom: 40,
         }}
           source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
         />
@@ -42,7 +43,7 @@ export default function Login() {
         </TouchableOpacity>
 
         <TouchableOpacity style={style.btnRegister}>
-        <Link href={"/Redefinir"}>
+        <Link href={"./Redefinir"}>
           <Text style={style.registerText}>Recuperar Senha</Text>
           </Link>
         </TouchableOpacity>
@@ -52,7 +53,7 @@ export default function Login() {
             style={{
               width: 40,
               height: 40,
-              marginRight: 10,
+              marginRight: 15
             }}
             source={require('../../../../../assets/icons/icons8-google-logo-48.png')}
           />
@@ -79,16 +80,23 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: "center",
+    position: "relative"
+  },
+  contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     width: '90%',
-    alignItems: "center"
+    // alignItems: "center",
+    // paddingTop: 28,
   },
   input: {
     backgroundColor: '#fff',
     width: '100%',
+    // height: 45,
     marginBottom: 15,
     color: "#222",
     fontSize: 17,
@@ -116,6 +124,8 @@ const style = StyleSheet.create({
   },
   btnRegister: {
     marginTop: 10,
+    alignItems: "center",
+    justifyContent: 'center',
   },
   registerText: {
     color: "#fff",

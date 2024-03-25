@@ -8,8 +8,7 @@ export default function Redefinir() {
         <View style={styles.containerLogo}>
          <Image
          style={{
-            width: 350,
-            height: 450,
+    
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
@@ -36,12 +35,13 @@ export default function Redefinir() {
                 secureTextEntry={true}
                 onChangeText={() => { }}
          />
-         </View>
-
+         
+          <View style={styles.btnSubmit}>
          <TouchableOpacity style={styles.btnRegister}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>
-
+         </View>
+         </View>
     </KeyboardAvoidingView>
     );
 };
@@ -57,12 +57,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        position: "relative"
       },
       container: {
         flex: 1,
-        justifyContent: "center",
+        // justifyContent: "center",
         width: '90%',
-        alignItems: "center"
+        // alignItems: "center"
       },
       input: {
         backgroundColor: '#fff',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
       },
       btnRegister: {
         backgroundColor: '#7b83ff',
-        width: '90%',
+        width: '100%',
         height: 45,
         alignItems: 'center',
         justifyContent: 'center',
@@ -98,4 +99,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
       },
+      btnSubmit: {
+        alignItems: 'center',
+        justifyContent: "center"
+      }
 })
