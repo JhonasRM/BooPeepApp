@@ -26,7 +26,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </Pressable>
                 </View>
             
-                <Link href={"./Presentation/View/screens/ChatApp" || "./ChatApp"} asChild>
+                <Link href={"./ChatApp"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
@@ -62,13 +62,13 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </Pressable>
                 </View>
                 
-                <Link href={"./Presentation/View/screens/Feed" || "./Feed"} asChild>
+                <Link href={"./Feed"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
                     </Pressable>
                 </Link>
             
-                <Link href={"./Presentation/View/screens/ChatApp" || "./ChatApp"} asChild>
+                <Link href={"./ChatApp"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>

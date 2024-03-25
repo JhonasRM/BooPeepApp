@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "./LoadingIcon";
 import ErrorMessage from "./ErrorMessage";
 import { useState } from "react";
+import CreatePost from "./CreatePost";
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
