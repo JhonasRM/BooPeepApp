@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import FeedBlock from "./FeedBlock";
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
@@ -10,22 +11,45 @@ const CreatePost = () => {
     }
 
     return (
-        <View style={isTouched ? styles.containerOn : styles.containerOff}>
+        <KeyboardAvoidingView 
+        behavior="padding"
+        style={isTouched ? styles.containerOn : styles.containerOff}
+        >
             <TouchableOpacity style={isTouched ? styles.buttonOff : styles.buttonOn}
             onPress={pressHandler}>
                 <Text style={styles.plustext}>+</Text>
             </TouchableOpacity>
 
             <View style={isTouched ? styles.formOn : styles.formOff}>
-                <Text style={styles.labeltext}>Criar postagem</Text>
-                <TextInput placeholder={"Me diga o que ocorreu..."} 
-                placeholderTextColor="slateblue" style={styles.textInput}/>
+                <TouchableWithoutFeedback>
+                    <ScrollView keyboardShouldPersistTaps={"handled"}>
 
-                <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
-                    <Text style={styles.labeltext}>x</Text>
-                </TouchableOpacity>
+                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
+                            <Image source={require("../../../../assets/icons/icons8-fechar-janela-100.png")} 
+                            style={styles.exitimg}
+                            />
+                        </TouchableOpacity>
+                        
+                        <Text style={styles.labeltext}>Criar postagem</Text>
+
+                        <TextInput 
+                        placeholder={"Título da postagem"} 
+                        placeholderTextColor={"slateblue"}
+                        style={styles.textInput}
+                        />
+
+                        <TextInput 
+                        placeholder={"Me diga o que ocorreu..."} 
+                        placeholderTextColor={"slateblue"}
+                        multiline
+                        numberOfLines={10}
+                        style={styles.textInput}
+                        />
+
+                    </ScrollView>
+                </TouchableWithoutFeedback>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -74,17 +98,29 @@ const styles = StyleSheet.create ({
         display: "none"
     },
     labeltext: {
-        fontSize: 28,
-        marginBottom: hp(1),
+        fontSize: 30,
+        marginBottom: hp(2),
     },
     textInput: {
-        backgroundColor: "#ffffff",
-        color: "slateblue"
+        backgroundColor: "#000000",
+        paddingHorizontal: wp(2),
+        paddingTop: hp(1),
+        marginVertical: hp(0.5),
+        textAlignVertical: "top",
+        borderRadius: 10,
+
+        color: "slateblue",
     },
     exitbutton: {
         position: "absolute",
         top: 0,
         right: 0,
+        height: 40,
+        width: 40,
+    },
+    exitimg: {
+        width: 40,
+        height: 40,
     }
 })
 
