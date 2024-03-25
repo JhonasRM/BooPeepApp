@@ -87,8 +87,8 @@ const {styles} = StyleSheet.create ({
         justifyContent: "space-evenly",
         paddingHorizontal: wp(2),
         alignItems: "center",
-        shadowOffset: {height: hp(1.3), width: wp(1.3)},
-        shadowRadius: 20,
+        borderTopColor: "#0000001a",
+        borderTopWidth: wp(0.9),
         bottom: 0,
 
         width: wp(102),
