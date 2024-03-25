@@ -66,13 +66,17 @@ export function FeedQuery() {
 
 const FeedBlock = () => {
     return (
-        <View>
+        <View style={styles.container}>
             <FeedQuery />
         </View>
     )
 }
 
 const {styles} = StyleSheet.create ({
+    container: {
+        flex: 1,
+        position: "relative",
+    },
     feedblock: {
         backgroundColor: "#ffffff",
         marginHorizontal: wp(5),
@@ -145,7 +149,6 @@ const {styles} = StyleSheet.create ({
         marginRight: 10,
     },
 })
-
 
 
 
