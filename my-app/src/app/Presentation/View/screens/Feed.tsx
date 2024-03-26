@@ -11,9 +11,9 @@ const Feed = () => {
     return (
      <QueryClientProvider client={queryClient}>
     <View>
-        <HeaderBar />
+        <HeaderBar whatScreen="feedchat"/>
         <FeedArea />
-        <FooterBar />
+        <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>
     )
