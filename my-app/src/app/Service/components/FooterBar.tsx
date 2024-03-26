@@ -7,7 +7,7 @@ import { Link } from "expo-router";
 const FooterBar = () => {
     return (
         <View style={styles.footer} dataSet={{ media: ids.footer }}>
-            <Link href={""} asChild>
+            <Link href={"./UserConfig"} asChild>
                 <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                     <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                 </Pressable>
@@ -17,7 +17,7 @@ const FooterBar = () => {
                 <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
             </Pressable>
 
-            <Link href={"./Presentation/View/screens/ChatApp"} asChild>
+            <Link href={"./ChatApp"} asChild>
                 <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                     <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                 </Pressable>
