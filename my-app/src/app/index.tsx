@@ -10,7 +10,7 @@ import {
   TouchableOpacity, StyleSheet
 } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Link } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
@@ -31,17 +31,19 @@ export default function App() {
         </View>
 
         <View style={styles.container}>
-          <TouchableOpacity style={styles.btnSubmit}>
-            <Link href={"./Presentation/View/screens/Login"}>
+        
+          <TouchableOpacity style={styles.btnSubmit} onPress={() => router.push("./Presentation/View/screens/Login")}>
+    
               <Text style={styles.submitText}>Entrar</Text>
-            </Link>
+    
           </TouchableOpacity>
+          
 
-          <TouchableOpacity style={styles.btnSubmit2}>
-            <Link href={"./Presentation/View/screens/Cadastro"}>
+          
+          <TouchableOpacity  style={styles.btnSubmit2} onPress={() => router.push("./Presentation/View/screens/Cadastro")}>
               <Text style={styles.submitText2}>Registrar-se</Text>
-            </Link>
           </TouchableOpacity>
+          
         </View>
       </KeyboardAvoidingView>
   );
