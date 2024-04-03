@@ -5,6 +5,7 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "./LoadingIcon";
 import ErrorMessage from "./ErrorMessage";
+import ContainerOptions from "./ContainerOptions";
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -36,9 +37,7 @@ export function FeedQuery() {
                 <View style={styles.firstline}>
                     <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
                      <Text style={styles.usertext}> {item.userId} </Text>
-                    <Pressable style={styles.options}>
-                        <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')}/>
-                    </Pressable>
+                     <ContainerOptions style={styles.options}/>
                 </View>
                  <Text style={styles.infotext}> 
                  {item.body}
@@ -97,9 +96,12 @@ const {styles} = StyleSheet.create ({
         position: "absolute",
         right: 0,  
         marginRight: 10,
+        zIndex: 1,
+        backgroundColor: "slateblue",
+        borderRadius: 5,
     },
     infotext: {
-        paddingHorizontal: wp(5)
+        paddingHorizontal: wp(5),
     },
     missingpic: {
         width: 140,
@@ -139,12 +141,6 @@ const {styles} = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         marginLeft: 10,
-    },
-    optionsmenu: {
-        backgroundColor: "slateblue",
-        position: "absolute",
-        right: 0,  
-        marginRight: 10,
     },
 })
 
