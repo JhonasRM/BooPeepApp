@@ -5,24 +5,24 @@ import { ids } from "./HeaderBarResponsivity";      //Ver como vamos usar isso.
 import { useRef, useState } from "react";
 
 const SearchBar = () => {
-    console.log("====Startup====")
+    //console.log("====Startup====")
     const [isPress, setIsPress] = useState(false)
-    console.log(isPress)
+    //console.log(isPress)
     const [isDisabled, setIsDisabled] = useState(false)
-    console.log(isDisabled)
+    //console.log(isDisabled)
 
     const inputReference = useRef<TextInput | null>(null)
     const [isFocusing, setIsFocusing] = useState(false)
-    console.log(isFocusing)
+    //console.log(isFocusing)
     const [isWorking, setIsWorking] = useState(false)
-    console.log(isWorking)
+    //console.log(isWorking)
 
     const pressHandle = () => {        
-        console.log("====On Press====")
+    //    console.log("====On Press====")
         setIsPress(isPress => !isPress)
-        console.log(isPress)
+    //    console.log(isPress)
         setIsWorking(isWorking => !isWorking)
-        console.log(isWorking)
+    //    console.log(isWorking)
         
         setTimeout(() => {
             if (inputReference.current !== null && inputReference.current !== undefined) {
@@ -33,21 +33,21 @@ const SearchBar = () => {
     }
 
     const onFocus = () => {
-        console.log("====On Focus====")
+    //    console.log("====On Focus====")
         setIsFocusing(isFocusing => !isFocusing)
-        console.log(isFocusing)
+    //    console.log(isFocusing)
         setIsDisabled(isDisabled => !isDisabled)
-        console.log(isDisabled)
+    //    console.log(isDisabled)
     }
 
     const onBlur = () => {
-        console.log("====On Blur====")
+    //    console.log("====On Blur====")
         setIsFocusing(isFocusing => !isFocusing)
-        console.log(isFocusing)
+    //    console.log(isFocusing)
         setIsDisabled(isDisabled => !isDisabled)
-        console.log(isDisabled)
+    //    console.log(isDisabled)
         setIsWorking(isWorking => !isWorking)
-        console.log(isWorking)
+    //    console.log(isWorking)
     }
 
     return (
