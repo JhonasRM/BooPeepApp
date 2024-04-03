@@ -1,5 +1,4 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import Feed from "./Presentation/View/screens/Feed";
 import {
   Text,
   View,

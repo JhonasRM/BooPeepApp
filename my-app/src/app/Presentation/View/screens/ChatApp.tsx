@@ -30,7 +30,7 @@ export default function App(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <HeaderBar />
+      <HeaderBar whatScreen='feedchat'/>
       <FlatList
         data={messages}
         renderItem={renderMessage}
@@ -50,7 +50,7 @@ export default function App(): JSX.Element {
           <Text style={styles.sendButtonText}>Enviar</Text>
         </TouchableOpacity>
       </View>
-      <FooterBar />
+      <FooterBar whatScreen='chat'/>
     </View>
   );
 }

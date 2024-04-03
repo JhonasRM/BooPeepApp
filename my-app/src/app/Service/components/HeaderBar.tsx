@@ -3,14 +3,25 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./HeaderBarResponsivity";
 import SearchBar from "./SearchBar";
+import React from "react";
 
-const HeaderBar = () => {
+type whatPage = {
+    whatScreen: "feedchat" | "user"
+}
+
+const HeaderBar = (props: whatPage) => {
     return (
-        <View style={styles.header} dataSet={{media: ids.header}}>
+            <View style={styles.header} dataSet={{media: ids.header}}>
             <Image source={require('../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
-            <SearchBar />
-            {/* <Pressable style={styles.button} dataSet={{media: ids.button}}><Image source={require('../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img} /></Pressable> */}
-        </View>
+                {props.whatScreen === "feedchat" ? (
+                    <SearchBar />
+                ) : (
+                    <Image source={require("../../../../assets/icons/icons8-configurações-100.png")} 
+                    style={styles.img}
+                    />
+                )
+                }
+            </View>
     )
 }
 
@@ -33,7 +44,14 @@ const {styles} = StyleSheet.create ({
         marginLeft: wp(2),
         marginTop: hp(2),
         marginBottom: hp(2)
-    }
+    },
+    img: {
+        width: 40,
+        height: 40,
+        position: "absolute",
+        right: 0,
+        marginRight: wp(3),
+    },
 })
 
 export default HeaderBar

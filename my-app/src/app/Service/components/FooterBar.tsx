@@ -3,25 +3,78 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FooterBarResponsivity";
 import { Link } from "expo-router";
+import React from "react";
 
-const FooterBar = () => {
+type whatPage = {
+    whatScreen: "feed" | "chat" | "user"
+}
+
+const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pagina" - Bolt
     return (
         <View style={styles.footer} dataSet={{ media: ids.footer }}>
-            <Link href={"./UserConfig"} asChild>
-                <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+             {props.whatScreen === "feed" ? (
+                <>
+                <Link href={""} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
+                    </Pressable>
+                </Link>
+            
+                <View style={styles.button} dataSet={{media: ids.button}}>
+                <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
+                    <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
+                </Pressable>
+                </View>
+            
+                <Link href={"./ChatApp"} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
+                    </Pressable>
+                </Link>
+                </>
+             ) : props.whatScreen === "chat" ? (
+                <>
+                <Link href={""} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
+                    </Pressable>
+                </Link>
+
+                <Link href={"./Feed"} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
+                    </Pressable>
+                </Link>
+            
+                <View style={styles.button} dataSet={{media: ids.button}}>
+                    <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
+                        <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
+                    </Pressable>
+                </View>
+
+                </>
+             ) : (
+                <>
+                
+                <View style={styles.button} dataSet={{media: ids.button}}>
+                <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
                     <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                 </Pressable>
-            </Link>
-
-            <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
-                <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
-            </Pressable>
-
-            <Link href={"./ChatApp"} asChild>
-                <Pressable style={styles.button} dataSet={{ media: ids.button }}>
-                    <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
-                </Pressable>
-            </Link>
+                </View>
+                
+                <Link href={"./Feed"} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
+                    </Pressable>
+                </Link>
+            
+                <Link href={"./ChatApp"} asChild>
+                    <Pressable style={styles.button} dataSet={{ media: ids.button }}>
+                        <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
+                    </Pressable>
+                </Link>
+                </>
+             )}
         </View>
     )
 }
@@ -31,11 +84,11 @@ const {styles} = StyleSheet.create ({
         position: "relative",
         backgroundColor: "#d4d7ff",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         paddingHorizontal: wp(2),
         alignItems: "center",
-        shadowOffset: {height: hp(1.3), width: wp(1.3)},
-        shadowRadius: 20,
+        borderTopColor: "#0000001a",
+        borderTopWidth: wp(0.9),
         bottom: 0,
 
         width: wp(102),

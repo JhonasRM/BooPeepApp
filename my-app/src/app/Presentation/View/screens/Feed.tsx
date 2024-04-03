@@ -3,6 +3,7 @@ import HeaderBar from "../../../Service/components/HeaderBar";
 import FeedArea from "../../../Service/components/FeedArea";
 import FooterBar from "../../../Service/components/FooterBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CreatePost from "../../../Service/components/CreatePost";
 
 
 
@@ -11,9 +12,10 @@ const Feed = () => {
     return (
      <QueryClientProvider client={queryClient}>
     <View>
-        <HeaderBar />
+        <HeaderBar whatScreen="feedchat"/>
         <FeedArea />
-        <FooterBar />
+        <CreatePost />
+        <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>
     )
