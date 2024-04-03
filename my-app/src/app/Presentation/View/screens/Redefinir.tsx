@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
       },
       container: {
         flex: 1,
-        // justifyContent: "center",
+        justifyContent: "center",
         width: '90%',
-        // alignItems: "center"
+        alignItems: "center"
       },
       input: {
         backgroundColor: '#fff',
-        width: '100%',
+        width: '90%',
         marginBottom: 15,
         color: '#222',
         fontSize: 17,
@@ -80,12 +80,13 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontSize: 17,
         color: '#fff',
-        alignSelf: 'flex-start'
+        // alignSelf: 'flex-start',
+        width: '90%'
       },
       btnRegister: {
         backgroundColor: '#7b83ff',
-        width: '100%',
-        height: 45,
+        width: 300,
+        height: 55,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
