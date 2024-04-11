@@ -27,7 +27,7 @@ const ContainerOptions = (props: Props) => {
 
                     <TouchableOpacity style={styles.optioncontainer}>
                         <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
-                        <Text style={styles.btnText}>Denunciar Post</Text>
+                        <Text style={styles.btnText}>Transformar isso em Props</Text>
                     </TouchableOpacity>
             </View>
             )}
@@ -40,11 +40,13 @@ const ContainerOptions = (props: Props) => {
 const styles = StyleSheet.create({
     optionsmenu: {
         borderRadius: 5,
+        backgroundColor: "#d4d7ff",
+        paddingVertical: 2,
     },
     optioncontainer: {
-        
-        backgroundColor: "purple",
-        borderRadius: 5,
+        backgroundColor: "#ffffff",
+        borderColor: "#000000",
+        borderWidth: 1.25,
 
         flexDirection: "row",
         alignItems: "center",

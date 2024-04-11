@@ -88,6 +88,7 @@ const styles = StyleSheet.create ({
     },
     plustext: {     //<Text>
         fontSize: 50,         
+        color: "#ffffff"
     },
     formOn: {
         display: "flex",
@@ -102,7 +103,7 @@ const styles = StyleSheet.create ({
         marginBottom: hp(2),
     },
     textInput: {
-        backgroundColor: "#000000",
+        backgroundColor: "#303556",
         paddingHorizontal: wp(2),
         paddingTop: hp(1),
         marginVertical: hp(0.5),

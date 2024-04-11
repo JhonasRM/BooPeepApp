@@ -87,7 +87,7 @@ const {styles} = StyleSheet.create ({
         height: 40,
     },
     textInputOn: {
-        backgroundColor: "slateblue",
+        backgroundColor: "#FFFFFF",
         paddingVertical: hp(0.8),
         position: "absolute",
         width: wp(55),

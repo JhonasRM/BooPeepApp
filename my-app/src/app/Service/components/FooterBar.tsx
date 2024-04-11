@@ -14,7 +14,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
         <View style={styles.footer} dataSet={{ media: ids.footer }}>
              {props.whatScreen === "feed" ? (
                 <>
-                <Link href={""} asChild>
+                <Link href={"./UserConfig"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                     </Pressable>
