@@ -1,9 +1,11 @@
 import { ScrollView } from "react-native"
+import UserConfigProps from "../../../Service/components/UserConfigProps"
 
 const NotificationConfig = () => {
     return (
         <ScrollView>
-            
+            <UserConfigProps optType="header" optText="Notificações" optLink="./UserConfig"
+            optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}/>
         </ScrollView>
     )
 }

@@ -97,7 +97,7 @@ const {styles} = StyleSheet.create ({
         right: 0,  
         marginRight: 10,
         zIndex: 1,
-        backgroundColor: "slateblue",
+        //backgroundColor: "#dbdbdb",
         borderRadius: 5,
     },
     infotext: {

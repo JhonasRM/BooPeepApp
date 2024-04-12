@@ -51,7 +51,7 @@ const UserConfigProps = (props: optProps) => {
 
 const styles = StyleSheet.create ({
     header: {
-        backgroundColor: "slateblue",
+        backgroundColor: "#d4d7ff",
         borderBottomColor: "#888888",
         borderBottomWidth: 2,
         
@@ -61,7 +61,7 @@ const styles = StyleSheet.create ({
         paddingLeft: 5,
     },
     hdrText: {
-        color: "purple",
+        color: "#400096",
         fontSize: 19,
         fontWeight: "bold"
     },

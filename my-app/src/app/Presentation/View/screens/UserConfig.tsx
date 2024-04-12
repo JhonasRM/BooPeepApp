@@ -13,15 +13,15 @@ const UserConfig = () => {
         optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}
         />
 
-        <UserConfigProps optType="option" optText="Notificações" 
+        <UserConfigProps optType="option" optText="Notificações" optLink="./NotificationConfig"
         optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}
         />
 
-        <UserConfigProps optType="option" optText="Preferências" 
+        <UserConfigProps optType="option" optText="Preferências" optLink="./PreferenceConfig"
         optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}
         />
 
-        <UserConfigProps optType="option" optText="Sobre" 
+        <UserConfigProps optType="option" optText="Sobre" optLink="./Aboutus"
         optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}
         />
     </ScrollView>
