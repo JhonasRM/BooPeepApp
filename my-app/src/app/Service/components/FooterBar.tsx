@@ -26,7 +26,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </Pressable>
                 </View>
             
-                <Link href={"./ChatApp"} asChild>
+                <Link href={"./Mensagens"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
@@ -34,7 +34,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </>
              ) : props.whatScreen === "chat" ? (
                 <>
-                <Link href={""} asChild>
+                <Link href={"./UserConfig"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                     </Pressable>
@@ -68,7 +68,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                     </Pressable>
                 </Link>
             
-                <Link href={"./ChatApp"} asChild>
+                <Link href={"./Mensagens"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
