@@ -30,7 +30,8 @@ const CreatePost = () => {
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"slateblue"}
                         style={styles.textInput}
-                        />
+                        /> 
+                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
@@ -39,6 +40,7 @@ const CreatePost = () => {
                         numberOfLines={14}
                         style={styles.textInput}
                         />
+                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TouchableOpacity style={styles.imagebutton} onPress={pressHandler}>
                             <Image source={require("../../../../assets/icons/icons8-imagem-100.png")} 
@@ -105,29 +107,30 @@ const styles = StyleSheet.create ({
 
         borderBottomWidth: 3,
         borderRadius: 5,
-        borderBottomColor: "#303556",
+        borderBottomColor: "#000", //Precisa do isDark useState
     },
     textInput: {
-        backgroundColor: "#303556",
+        backgroundColor: "#d4d7ff", //Precisa do isDark useState
         paddingHorizontal: wp(2),
         paddingTop: hp(1),
         marginVertical: hp(1),
         textAlignVertical: "top",
         borderRadius: 5,
         borderWidth: 2,
+        borderColor: "#000", //Precisa do isDark useState
 
         color: "slateblue",
     },
     imagebutton: {
         position: "absolute",
-        top: 0,
+        top: 7,
         right: 0,
         height: 40,
         width: 40,
     },
     imageimg: {
-        width: 40,
-        height: 40,
+        width: 37,
+        height: 37,
     }
 })
 
