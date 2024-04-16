@@ -37,10 +37,14 @@ const CreatePost = () => {
                         placeholder={"Me diga o que ocorreu..."} 
                         placeholderTextColor={"slateblue"}
                         multiline
-                        numberOfLines={14}
+                        numberOfLines={10}
                         style={styles.textInput}
                         />
                         {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
+
+                        <TouchableOpacity style={styles.postbtn}>
+                            <Text style={styles.btntext}>Postar</Text>
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={pressHandler}>
                             <Image source={require("../../../../assets/icons/icons8-imagem-100.png")} 
@@ -123,15 +127,29 @@ const styles = StyleSheet.create ({
     },
     imagebutton: {
         position: "absolute",
-        top: 7,
-        right: 0,
+        bottom: 0,
+        right: wp(22),
         height: 40,
         width: 40,
+        paddingTop: 1,
     },
     imageimg: {
         width: 37,
         height: 37,
-    }
+    },
+    postbtn: {
+        backgroundColor: "#400096",
+        borderWidth: 2,
+        borderRadius: 5,
+
+        marginLeft: wp(70),
+        paddingVertical: hp(1),
+    },
+    btntext: {
+        color: "#FFF",
+        textAlign: "center",
+        fontSize: 17
+    },
 })
 
 export default CreatePost
