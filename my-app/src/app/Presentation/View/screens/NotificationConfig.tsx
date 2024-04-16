@@ -5,7 +5,7 @@ const NotificationConfig = () => {
     return (
         <ScrollView>
             <UserConfigProps optType="header" optText="Notificações" optLink="./UserConfig"
-            optImgUrl={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')}/>
+            optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}/>
         </ScrollView>
     )
 }
