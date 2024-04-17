@@ -2,13 +2,29 @@ import { useEffect, useState } from "react";
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FeedBlock from "./FeedBlock";
+import * as ImagePicker from 'expo-image-picker';
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
+    const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
 
     const pressHandler = () => {
         setIsTouched(!isTouched)
     }
+
+    const imageHandler = async() => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    
 
     return (
         <KeyboardAvoidingView 
@@ -46,7 +62,7 @@ const CreatePost = () => {
                             <Text style={styles.btntext}>Postar</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.imagebutton} onPress={pressHandler}>
+                        <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
                             <Image source={require("../../../../assets/icons/icons8-imagem-100.png")} 
                             style={styles.imageimg}
                             />
