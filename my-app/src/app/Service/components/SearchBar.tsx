@@ -87,13 +87,13 @@ const {styles} = StyleSheet.create ({
         height: 40,
     },
     textInputOn: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFFFFF", //Precisa do isDark useState
         paddingVertical: hp(0.8),
         position: "absolute",
         width: wp(55),
         borderRadius: 5,
 
-        color: "#FFF",
+        color: "#000", //Precisa do isDark useState
         textAlign: "right",
         paddingRight: wp(12)
     },

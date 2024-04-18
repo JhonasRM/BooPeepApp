@@ -1,5 +1,6 @@
 import { Link } from "expo-router"
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { widthPercentageToDP } from "react-native-responsive-screen"
 
 type optProps = {
     optType: "header" | "option" | "button",
@@ -88,12 +89,14 @@ const styles = StyleSheet.create ({
         fontWeight: "bold",
     },
     imghdr: {
-        width: 40,
-        height: 40
+        width: 30,
+        height: 30,
+        marginHorizontal: widthPercentageToDP(1),
     },
     img: {
         width: 35,
         height: 35,
+        marginLeft: widthPercentageToDP(1),
     }
 })
 

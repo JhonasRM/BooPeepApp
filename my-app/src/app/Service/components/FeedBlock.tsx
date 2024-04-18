@@ -39,6 +39,9 @@ export function FeedQuery() {
                      <Text style={styles.usertext}> {item.userId} </Text>
                      <ContainerOptions style={styles.options}/>
                 </View>
+                 <Text style={styles.titletext}>
+                    {item.userId}
+                 </Text>
                  <Text style={styles.infotext}> 
                  {item.body}
                  </Text>
@@ -99,6 +102,11 @@ const {styles} = StyleSheet.create ({
         zIndex: 1,
         //backgroundColor: "#dbdbdb",
         borderRadius: 5,
+    },
+    titletext: {
+        paddingHorizontal: wp(5),
+        paddingTop: wp(2),
+        fontSize: 18,
     },
     infotext: {
         paddingHorizontal: wp(5),

@@ -2,13 +2,29 @@ import { useEffect, useState } from "react";
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FeedBlock from "./FeedBlock";
+import * as ImagePicker from 'expo-image-picker';
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
+    const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
 
     const pressHandler = () => {
         setIsTouched(!isTouched)
     }
+
+    const imageHandler = async() => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    
 
     return (
         <KeyboardAvoidingView 
@@ -23,12 +39,6 @@ const CreatePost = () => {
             <View style={isTouched ? styles.formOn : styles.formOff}>
                 <TouchableWithoutFeedback>
                     <ScrollView keyboardShouldPersistTaps={"handled"}>
-
-                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
-                            <Image source={require("../../../../assets/icons/icons8-fechar-janela-100.png")} 
-                            style={styles.exitimg}
-                            />
-                        </TouchableOpacity>
                         
                         <Text style={styles.labeltext}>Criar postagem</Text>
 
@@ -36,7 +46,8 @@ const CreatePost = () => {
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"slateblue"}
                         style={styles.textInput}
-                        />
+                        /> 
+                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
@@ -45,6 +56,17 @@ const CreatePost = () => {
                         numberOfLines={10}
                         style={styles.textInput}
                         />
+                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
+
+                        <TouchableOpacity style={styles.postbtn}>
+                            <Text style={styles.btntext}>Postar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
+                            <Image source={require("../../../../assets/icons/icons8-imagem-100.png")} 
+                            style={styles.imageimg}
+                            />
+                        </TouchableOpacity>
 
                     </ScrollView>
                 </TouchableWithoutFeedback>
@@ -101,28 +123,49 @@ const styles = StyleSheet.create ({
     labeltext: {
         fontSize: 30,
         marginBottom: hp(2),
+        marginRight: wp(38),
+
+        borderBottomWidth: 3,
+        borderRadius: 5,
+        borderBottomColor: "#000", //Precisa do isDark useState
     },
     textInput: {
-        backgroundColor: "#303556",
+        backgroundColor: "#d4d7ff", //Precisa do isDark useState
         paddingHorizontal: wp(2),
         paddingTop: hp(1),
-        marginVertical: hp(0.5),
+        marginVertical: hp(1),
         textAlignVertical: "top",
-        borderRadius: 10,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: "#000", //Precisa do isDark useState
 
         color: "slateblue",
     },
-    exitbutton: {
+    imagebutton: {
         position: "absolute",
-        top: 0,
-        right: 0,
+        bottom: 0,
+        right: wp(22),
         height: 40,
         width: 40,
+        paddingTop: 1,
     },
-    exitimg: {
-        width: 40,
-        height: 40,
-    }
+    imageimg: {
+        width: 37,
+        height: 37,
+    },
+    postbtn: {
+        backgroundColor: "#400096",
+        borderWidth: 2,
+        borderRadius: 5,
+
+        marginLeft: wp(70),
+        paddingVertical: hp(1),
+    },
+    btntext: {
+        color: "#FFF",
+        textAlign: "center",
+        fontSize: 17
+    },
 })
 
 export default CreatePost
