@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, FlatList } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import HeaderBar from '../../../Service/components/HeaderBar';
 import FooterBar from '../../../Service/components/FooterBar';
 
@@ -11,6 +11,7 @@ interface Message {
 export default function App(): JSX.Element {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const handleMessageSend = (): void => {
     if (message.trim() === '') return;
@@ -20,24 +21,29 @@ export default function App(): JSX.Element {
     };
     setMessages([...messages, newMessage]);
     setMessage('');
+   
+    scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  const renderMessage = ({ item }: { item: Message }): JSX.Element => (
-    <View style={styles.messageContainer}>
-      <Text style={styles.messageText}>{item.text}</Text>
-    </View>
-  );
+  const renderMessages = (): JSX.Element[] => {
+    return messages.map((message) => (
+      <View style={styles.messageContainer} key={message.id}>
+        <Text style={styles.messageText}>{message.text}</Text>
+      </View>
+    ));
+  };
 
   return (
     <View style={styles.container}>
       <HeaderBar whatScreen='feedchat'/>
-      <FlatList
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        style={styles.messagesContainer}
-        inverted
-        />
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.messagesContainer}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        {renderMessages()}
+      </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -61,9 +67,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#d4d7ff',
   },
   messagesContainer: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingVertical: 8,
   },
   messageContainer: {
     backgroundColor: '#400096',
@@ -110,3 +116,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
