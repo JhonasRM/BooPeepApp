@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import HeaderBar from '../../../Service/components/HeaderBar';
 import FooterBar from '../../../Service/components/FooterBar';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface Message {
   id: string;
@@ -27,7 +28,13 @@ export default function App(): JSX.Element {
 
   const renderMessages = (): JSX.Element[] => {
     return messages.map((message) => (
-      <View style={styles.messageContainer} key={message.id}>
+      <View
+        style={[
+          styles.messageContainer,
+          { alignSelf: 'flex-end' }, 
+        ]}
+        key={message.id}
+      >
         <Text style={styles.messageText}>{message.text}</Text>
       </View>
     ));
@@ -51,9 +58,11 @@ export default function App(): JSX.Element {
           onChangeText={setMessage}
           placeholder="Digite sua mensagem..."
           placeholderTextColor="#888"
-          />
+        />
         <TouchableOpacity style={styles.sendButton} onPress={handleMessageSend}>
-          <Text style={styles.sendButtonText}>Enviar</Text>
+          <View style={styles.sendButtonIcon}>
+            <MaterialIcons name="send" size={24} color="#400096" />
+          </View>
         </TouchableOpacity>
       </View>
       <FooterBar whatScreen='chat'/>
@@ -64,15 +73,14 @@ export default function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d4d7ff',
+    backgroundColor: '#ffffff',
   },
   messagesContainer: {
-    flexGrow: 1,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   messageContainer: {
-    backgroundColor: '#400096',
+    backgroundColor: '#7C83FF',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -90,7 +98,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderTopWidth: 1,
     borderTopColor: '#202112',
-    backgroundColor: '#202112',
+    backgroundColor: '#ffffff',
   },
   input: {
     flex: 1,
@@ -103,17 +111,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   sendButton: {
-    backgroundColor: '#400096',
+    backgroundColor: '#ffffff',
     borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sendButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  sendButtonIcon: {
+    backgroundColor: '#ffffff', 
   },
 });
-
