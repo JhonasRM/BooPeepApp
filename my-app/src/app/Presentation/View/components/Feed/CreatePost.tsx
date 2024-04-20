@@ -64,7 +64,7 @@ const CreatePost = () => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
-                            <Image source={require("../../../../../assets/icons/icons8-imagem-100.png")} 
+                            <Image source={require("../../../../../../assets/icons/icons8-imagem-100.png")} 
                             style={styles.imageimg}
                             />
                         </TouchableOpacity>

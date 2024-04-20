@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
-import HeaderBar from '../../../Service/components/HeaderBar';
-import FooterBar from '../../../Service/components/FooterBar';
+import HeaderBar from '../components/HeaderBar';
+import FooterBar from '../components/FooterBar';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface Message {
