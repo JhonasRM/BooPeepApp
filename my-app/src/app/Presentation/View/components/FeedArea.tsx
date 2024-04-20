@@ -3,6 +3,7 @@ import StyleSheet from 'react-native-media-query';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FeedBlock from "../components/FeedBlock";
 import { ids } from "./FeedAreaResponsivity";
+import React from "react";
 
 const FeedArea = () => {
     return (

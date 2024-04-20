@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "./LoadingIcon";
 import ErrorMessage from "./ErrorMessage";
 import ContainerOptions from "./ContainerOptions";
+import React from "react";
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -35,7 +36,7 @@ export function FeedQuery() {
             {data && data.map(item => (
             <View style={styles.feedblock} key={item.id}>
                 <View style={styles.firstline}>
-                    <Image source={require('../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
+                    <Image source={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
                      <Text style={styles.usertext}> {item.userId} </Text>
                      <ContainerOptions style={styles.options}/>
                 </View>
@@ -47,14 +48,14 @@ export function FeedQuery() {
                  </Text>
 
                 <View style={styles.middleline}>
-                    <Image source={require('../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-                    <Image source={require('../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <Image source={require('../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
                 </View>
 
                <View style={styles.endline}>
                    <View style={styles.status} dataSet={{media: ids.status}}/>
                     <Text style={styles.statustext}>Status: {item.title}</Text>
-                    <Image source={require('../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                    <Image source={require('../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
                 </View>
                 <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
             </View>

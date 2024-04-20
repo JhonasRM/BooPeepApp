@@ -3,6 +3,7 @@ import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, T
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FeedBlock from "./FeedBlock";
 import * as ImagePicker from 'expo-image-picker';
+import React from "react";
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
@@ -63,7 +64,7 @@ const CreatePost = () => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
-                            <Image source={require("../../../../assets/icons/icons8-imagem-100.png")} 
+                            <Image source={require("../../../../../assets/icons/icons8-imagem-100.png")} 
                             style={styles.imageimg}
                             />
                         </TouchableOpacity>

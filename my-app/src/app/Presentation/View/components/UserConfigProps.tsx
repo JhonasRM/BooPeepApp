@@ -1,4 +1,5 @@
 import { Link } from "expo-router"
+import React from "react"
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { widthPercentageToDP } from "react-native-responsive-screen"
 

@@ -3,6 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./HeaderBarResponsivity";      //Ver como vamos usar isso.
 import { useRef, useState } from "react";
+import React from "react";
 
 const SearchBar = () => {
     //console.log("====Startup====")
@@ -60,7 +61,7 @@ const SearchBar = () => {
             />
 
             <TouchableOpacity style={styles.button} onPress={pressHandle} disabled={isDisabled}>
-                <Image source={require('../../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img}/>
+                <Image source={require('../../../../../assets/icons/icons8-pesquisar-64.png')} style={styles.img}/>
             </TouchableOpacity>
         </View>
     )

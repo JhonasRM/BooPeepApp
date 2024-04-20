@@ -1,11 +1,12 @@
 import StyleSheet from "react-native-media-query"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Image, View } from "react-native"
+import React from "react";
 
 const LoadingBox = () => {
     return (
     <View style={styles.loadingbox}>
-        <Image source={require('../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
+        <Image source={require('../../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
     </View>
     )
 }

@@ -12,11 +12,11 @@ type whatPage = {
 const HeaderBar = (props: whatPage) => {
     return (
             <View style={styles.header} dataSet={{media: ids.header}}>
-            <Image source={require('../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
+            <Image source={require('../../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
                 {props.whatScreen === "feedchat" ? (
                     <SearchBar />
                 ) : (
-                    <Image source={require("../../../../assets/icons/icons8-configurações-100.png")} 
+                    <Image source={require("../../../../../assets/icons/icons8-configurações-100.png")} 
                     style={styles.img}
                     />
                 )
