@@ -1,12 +1,13 @@
 import { Image, Text, View } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from "react-native-media-query"
+import React from "react";
 
 const ErrorMessage = ({ message }) => {
 
     return (
         <View style={styles.Errorbox}>
-            <Image source={require('../../../../assets/icons/icons8-erro-100.png')} style={styles.Warningimg}/>
+            <Image source={require('../../../../../assets/icons/icons8-erro-100.png')} style={styles.Warningimg}/>
             <Text style={styles.Wrongtext}>Algo deu errado.</Text>
             <View style={styles.Errorview}>
                 <Text style={styles.Errortext}> Erro: {message} </Text>

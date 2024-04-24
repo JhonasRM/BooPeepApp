@@ -1,9 +1,10 @@
 import { View } from "react-native";
-import HeaderBar from "../../../Service/components/HeaderBar";
-import FeedArea from "../../../Service/components/FeedArea";
-import FooterBar from "../../../Service/components/FooterBar";
+import HeaderBar from "../components/HeaderBar";
+import FeedArea from "../components/Feed/FeedArea";
+import FooterBar from "../components/FooterBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import CreatePost from "../../../Service/components/CreatePost";
+import CreatePost from "../components/Feed/CreatePost";
+import React from "react";
 
 
 

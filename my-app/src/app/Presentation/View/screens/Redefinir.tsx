@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Link }  from "expo-router";
 import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity} from 'react-native';
+import React from 'react';
 
 export default function Redefinir() {
     return(

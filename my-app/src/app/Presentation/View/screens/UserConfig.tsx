@@ -1,6 +1,7 @@
 import { Image, ScrollView, Text, View } from "react-native"
 import { Link } from "expo-router";
-import UserConfigProps from "../../../Service/components/UserConfigProps"
+import UserConfigProps from "../components/UserConfig/UserConfigProps";
+import React from "react";
 
 const UserConfig = () => {
     return (
