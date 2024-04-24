@@ -2,8 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import React from 'react';
+import { CadastroStateController } from '../../Controllers/CadastroStateController';
 
 export default function Cadastro() {
+  const {
+    nome,
+    sobrenome,
+    email,
+    password,
+    confirmarSenha,
+    erro,
+    handleFieldChange,
+    handleConfirmarSenhaChange,
+    handleCadastro,
+  } = CadastroStateController()
+
   return (
     
     <KeyboardAvoidingView style={styles.background}>
@@ -26,7 +39,7 @@ export default function Cadastro() {
           style={styles.input}
           placeholder=''
           autoCorrect={false}
-          onChangeText={() => {  }}
+          onChangeText={(nome) => { handleFieldChange("nome", nome) }}
         />
 
       <Text style={styles.label}>Sobrenome:</Text>
@@ -34,7 +47,7 @@ export default function Cadastro() {
           style={styles.input}
           placeholder=''
           autoCorrect={false}
-          onChangeText={() => {  }}
+          onChangeText={(sobrenome) => { handleFieldChange("sobrenome", sobrenome) }}
         />
 
       <Text style={styles.label}>Email:</Text>
