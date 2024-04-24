@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
-import { User } from "../../Service/Entities/UserEntitie";
-import { StateAndSetters } from "../../utils/types/StateAndSetters";
+import { StateAndSetters } from "../../utils/types/Interfaces/StateAndSetters";
+import { User } from "../../Service/Entities/userEntities";
+
 const [nome, setNome] = useState('');
 const [sobrenome, setSobrenome] = useState('');
 const [email, setEmail] = useState('');
