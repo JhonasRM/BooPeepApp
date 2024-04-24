@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { User } from "../Entities/UserEntitie";
+import { User } from "../Entities/userEntities";
 
 export class userValidator {
     private UserSchema;
