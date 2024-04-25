@@ -5,8 +5,9 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
-import ContainerOptions from "./ContainerOptions";
+import ContainerOptions from "../ContainerOptions";
 import React from "react";
+import CommentButton from "../CommentButton";
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -55,9 +56,9 @@ export function FeedQuery() {
                <View style={styles.endline}>
                    <View style={styles.status} dataSet={{media: ids.status}}/>
                     <Text style={styles.statustext}>Status: {item.title}</Text>
-                    <Image source={require('../../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                    <CommentButton btnStyle={styles.chaticon} />
                 </View>
-                <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
+                <Text style={styles.time}>Há: <>{item.id}</> </Text>
             </View>
             ))
             }

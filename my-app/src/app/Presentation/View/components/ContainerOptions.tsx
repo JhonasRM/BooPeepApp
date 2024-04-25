@@ -18,17 +18,12 @@ const ContainerOptions = (props: Props) => {
     return (
         <TouchableOpacity style={props.style} onPress={handlePress}>
             { isPress == false ? (
-            <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')}/>
+            <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')}/>
             ) : (
             <View style={styles.optionsmenu}>
                     <TouchableOpacity style={styles.optioncontainer}>
-                        <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
-                        <Text style={styles.btnText}>Denunciar Post</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.optioncontainer}>
-                        <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
-                        <Text style={styles.btnText}>Transformar isso em Props</Text>
+                        <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
+                        <Text style={[styles.btnText, {color: "red"}]}>Denunciar Post</Text>
                     </TouchableOpacity>
             </View>
             )}
