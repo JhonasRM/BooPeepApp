@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, ImageSourcePropType, ImageStyle, ScrollView, StyleProp, StyleSheet } from "react-native"
+import { Dimensions, ImageSourcePropType, ImageStyle, ScrollView, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { AnimatePresence } from '@tamagui/animate-presence'
 import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons'
@@ -51,11 +51,6 @@ const wrap = (min: number, max: number, v: number) => {
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
 }
 
-type Conf = typeof tamaguiConfig
-declare module '@tamagui/core' {
-  interface TamaguiCustomConfig extends Conf {}
-}
-
 const ImageCarousel = (props: ImageCarouselProps) => {
     const tamaguiConfig = createTamagui(config)
     
@@ -78,7 +73,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
     >
       <AnimatePresence initial={false} custom={{ going }}>
         <GalleryItem key={page} animation="slowest" going={going}>
-          <Image source={{ uri: photos[imageIndex]}} style={{alignSelf: 'center', resizeMode: 'contain', flex: 1, aspectRatio: 1}} />
+          <Image source={{ uri: photos[imageIndex]}} style={{alignSelf: 'center', flex: 1, aspectRatio: 1}} resizeMode="contain"/>
         </GalleryItem>
       </AnimatePresence>
 
@@ -87,18 +82,19 @@ const ImageCarousel = (props: ImageCarouselProps) => {
         icon={ArrowLeft}
         size="$5"
         position="absolute"
-        left="$4"
+        left="$1"
         circular
         elevate
         onPress={() => paginate(-1)}
         zIndex={100}
       />
+
       <Button
         accessibilityLabel="Carousel right"
         icon={ArrowRight}
         size="$5"
         position="absolute"
-        right="$4"
+        right="$1"
         circular
         elevate
         onPress={() => paginate(1)}
@@ -115,6 +111,11 @@ const styles = StyleSheet.create({
     },
     Img: {
         marginHorizontal: wp(3.5),
+    },
+    imgButton: {
+      zIndex: 100,
+      position: "absolute",
+
     }
 })
 
