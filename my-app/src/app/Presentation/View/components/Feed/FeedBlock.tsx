@@ -23,7 +23,7 @@ export function FeedQuery() {
 
     if (isLoading) {
         return (
-            <LoadingBox />
+            <LoadingBox whatPage="Feed"/>
         )
     }
 
