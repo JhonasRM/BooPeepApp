@@ -7,14 +7,13 @@ import { useState } from 'react'
 import { Button, Image, XStack, YStack, styled } from 'tamagui'
 import { TamaguiProvider, createTamagui } from '@tamagui/core'
 import { config } from '@tamagui/config/v3'
+import { AntDesign } from '@expo/vector-icons';
 
 type ImageCarouselProps = {
     ImgStyle?: StyleProp<ImageStyle>
     ImgDataset?: Record<string, string> | undefined
     ImgSource: ImageSourcePropType | undefined
 }
-
-const screenWidth = Dimensions.get('window').width
 
 const GalleryItem = styled(YStack, {
   zIndex: 1,    //ESSE INFELIZ
@@ -44,6 +43,7 @@ const photos = [
   'https://picsum.photos/500/300',
   'https://picsum.photos/501/300',
   'https://picsum.photos/502/300',
+  'https://picsum.photos/503/300'
 ]
 
 const wrap = (min: number, max: number, v: number) => {
@@ -72,20 +72,29 @@ const ImageCarousel = (props: ImageCarouselProps) => {
       width="100%"
       alignItems="center"
     >
-
+      { page == 0 ? (
+        <>
+        </>
+      ) : (
       <TouchableOpacity onPress={() => paginate(-1)} style={styles.buttonLeft}>
-        <Text>Amogus</Text>
+        <AntDesign name="leftcircle" size={50} color="black" />
       </TouchableOpacity>
+      )}
 
       <AnimatePresence initial={false} custom={{ going }}>
-        <GalleryItem key={page} animation="slowest" going={going}>
+        <GalleryItem key={page} going={going}>
           <Image source={{ uri: photos[imageIndex]}} style={{alignSelf: 'center', flex: 1, aspectRatio: 1}} resizeMode="contain"/>
         </GalleryItem>          
       </AnimatePresence>
 
+      { page == (photos.length - 1) ? (
+        <>
+        </>
+      ) : (
       <TouchableOpacity onPress={() => paginate(1)} style={styles.buttonRight}>
-        <Text>Amogus</Text>
+        <AntDesign name="rightcircle" size={50} color="black" />
       </TouchableOpacity>
+      )}
 
       {/* <TouchableOpacity onPress={() => paginate(-1)} style={styles.buttonLeft}>
             <Text>Amogus</Text>
@@ -113,14 +122,16 @@ const styles = StyleSheet.create({
     },
     buttonLeft: {
       position: "absolute",
-      top: 90, bottom: 90, left: 0,
-      backgroundColor: "slateblue",
+      top: 50, bottom: 50, left: 0,
+      alignItems: "center",
+      justifyContent: "center",
       zIndex: 2,
     },
     buttonRight: {
       position: "absolute",
-      top: 90, bottom: 90, right: 0,
-      backgroundColor: "slateblue",
+      top: 50, bottom: 50, right: 0,
+      alignItems: "center",
+      justifyContent: "center",
       zIndex: 2,
     }
 })
