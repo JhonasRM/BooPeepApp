@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import HeaderBar from '../../../Service/components/HeaderBar';
-import FooterBar from '../../../Service/components/FooterBar';
+import HeaderBar from '../components/HeaderBar';
+import FooterBar from '../components/FooterBar';
 
 interface Contact {
   id: number;

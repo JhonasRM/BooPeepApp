@@ -1,3 +1,4 @@
+import React from "react"
 import { useState } from "react"
 import { Image, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native"
 
@@ -17,16 +18,16 @@ const ContainerOptions = (props: Props) => {
     return (
         <TouchableOpacity style={props.style} onPress={handlePress}>
             { isPress == false ? (
-            <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')}/>
+            <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')}/>
             ) : (
             <View style={styles.optionsmenu}>
                     <TouchableOpacity style={styles.optioncontainer}>
-                        <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
+                        <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
                         <Text style={styles.btnText}>Denunciar Post</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.optioncontainer}>
-                        <Image source={require('../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
+                        <Image source={require('../../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
                         <Text style={styles.btnText}>Transformar isso em Props</Text>
                     </TouchableOpacity>
             </View>

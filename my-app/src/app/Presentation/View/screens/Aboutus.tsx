@@ -1,5 +1,7 @@
 import { ScrollView } from "react-native"
-import UserConfigProps from "../../../Service/components/UserConfigProps"
+import UserConfigProps from "../components/UserConfig/UserConfigProps"
+import React from "react"
+
 
 const Aboutus = () => {
     return (

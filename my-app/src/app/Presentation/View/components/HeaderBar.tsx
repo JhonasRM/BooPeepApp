@@ -1,9 +1,10 @@
-import {Image, View, Pressable } from "react-native";
+import {Image, View, Pressable, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./HeaderBarResponsivity";
 import SearchBar from "./SearchBar";
 import React from "react";
+import { Link } from "expo-router";
 
 type whatPage = {
     whatScreen: "feedchat" | "user"
@@ -12,13 +13,17 @@ type whatPage = {
 const HeaderBar = (props: whatPage) => {
     return (
             <View style={styles.header} dataSet={{media: ids.header}}>
-            <Image source={require('../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
+            <Image source={require('../../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
                 {props.whatScreen === "feedchat" ? (
                     <SearchBar />
                 ) : (
-                    <Image source={require("../../../../assets/icons/icons8-configurações-100.png")} 
+                    <Link href={'../screens/UserConfig'} asChild>
+                    <TouchableOpacity style={styles.hdrGear}>
+                    <Image source={require("../../../../../assets/icons/icons8-configurações-100.png")} 
                     style={styles.img}
                     />
+                    </TouchableOpacity>
+                    </Link>
                 )
                 }
             </View>
@@ -48,10 +53,12 @@ const {styles} = StyleSheet.create ({
     img: {
         width: 40,
         height: 40,
+    },
+    hdrGear: {
         position: "absolute",
         right: 0,
         marginRight: wp(3),
-    },
+    }
 })
 
 export default HeaderBar

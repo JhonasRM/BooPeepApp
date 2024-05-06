@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
+import React from 'react';
 
 export default function Cadastro() {
   return (
