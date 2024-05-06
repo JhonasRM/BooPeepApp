@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import React from 'react';
-import { CadastroStateController } from '../../Controllers/CadastroStateController';
+import { cadastroStateController } from '../../Controllers/CadastroStateController';
 
 export default function Cadastro() {
   const {
@@ -15,7 +15,7 @@ export default function Cadastro() {
     handleFieldChange,
     handleConfirmarSenhaChange,
     handleCadastro,
-  } = CadastroStateController()
+  } = cadastroStateController
 
   return (
     
