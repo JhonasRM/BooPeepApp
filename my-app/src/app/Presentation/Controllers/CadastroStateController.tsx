@@ -21,6 +21,7 @@ const setState: StateAndSetters = {
   password: setPassword,
   confirmarSenha: setConfirmarSenha
 };
+
 export function CadastroStateController(){
 const handleFieldChange = async (field: string, value: string) => {
   console.log(`validando ${field} ...`);
