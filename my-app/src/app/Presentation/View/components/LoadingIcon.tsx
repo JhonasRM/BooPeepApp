@@ -3,18 +3,31 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import { Image, View } from "react-native"
 import React from "react";
 
-const LoadingBox = () => {
+type loadingBoxProps = {
+    whatPage: "Feed" | "Comment"
+}
+
+const LoadingBox = (props: loadingBoxProps) => {
     return (
-    <View style={styles.loadingbox}>
+    <>
+    { props.whatPage == "Feed" ? (
+    <View style={[styles.loadingbox, styles.forFeed]}>
         <Image source={require('../../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
     </View>
+    
+    ) : props.whatPage == "Comment" ? (
+    <View style={[styles.loadingbox, styles.forComment]}>
+        <Image source={require('../../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
+    </View>
+    ) : (
+        <View></View>
+    )}
+    </>
     )
 }
 
 const {styles} = StyleSheet.create ({
     loadingbox: {
-        width: wp(100),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
-        height: hp(82),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
         justifyContent: "center",
         alignItems: "center"
     },
@@ -22,6 +35,14 @@ const {styles} = StyleSheet.create ({
         width: 100,
         height: 100,
     },
+    forFeed: {
+        width: wp(100),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
+        height: hp(82),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
+    },
+    forComment: {
+        width: wp(100),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
+        height: hp(40),     //MUDE ISSO CASO QUEIRA FAZER O NEGOCIO DO CARREGAMENTO CABER NA TELA
+    }
 })
 
 export default LoadingBox;

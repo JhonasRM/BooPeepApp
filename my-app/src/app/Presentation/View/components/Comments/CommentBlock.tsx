@@ -3,6 +3,7 @@ import React from "react"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import ContainerOptions from "../ContainerOptions";
+import LoadingBox from "../LoadingIcon";
 
 const CommentBlock = () => {
     const fetchComments = async () => {                                 //Chamar a API
@@ -15,10 +16,16 @@ const CommentBlock = () => {
     //     return response.json();
     // }
 
-    const {data} = useQuery({
+    const {data, isLoading} = useQuery({
         queryKey: ['CommentsData'],
         queryFn: fetchComments
     })
+
+    if (isLoading) {
+        return (
+            <LoadingBox whatPage="Comment" />
+        )
+    }
     
     return ( //FAZER O QUERY AQUI
         <>
