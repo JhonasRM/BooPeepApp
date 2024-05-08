@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import React = require("react");
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import UserConfigProps from "../components/UserConfig/UserConfigProps";
 
@@ -11,7 +12,7 @@ const ChangeData = () => {
         shift: "",
     });
 
-    const handleProfileChange = (name, value) => {
+    const handleProfileChange = (name: any, value: any) => {
         setProfileData(prevData => ({
             ...prevData,
             [name]: value
@@ -31,69 +32,40 @@ const ChangeData = () => {
                 optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
             />
             <View style={styles.formContainer}>
-                <Text style={styles.label}>Nome:</Text>
-                <View style={styles.inputGroup}>
-                    <TextInput
-                        placeholder="Nome"
-                        value={profileData.firstName}
-                        onChangeText={(text) => handleProfileChange("firstName", text)}
-                        style={styles.input}
-                    />
-                </View>
-                <Text style={styles.label}>Sobrenome:</Text>
-                <View style={styles.inputGroup}>
-                    <TextInput
-                        placeholder="Sobrenome"
-                        value={profileData.lastName}
-                        onChangeText={(text) => handleProfileChange("lastName", text)}
-                        style={styles.input}
-                    />
-                </View>
-                <Text style={styles.label}>Email:</Text>
-                <View style={styles.inputGroup}>
-                    <TextInput
-                        placeholder="Email"
-                        value={profileData.email}
-                        onChangeText={(text) => handleProfileChange("email", text)}
-                        style={styles.input}
-                    />
-                </View>
-                <Text style={styles.label}>Curso:</Text>
-                <View style={styles.inputGroup}>
-                    <TextInput
-                        placeholder="Curso"
-                        value={profileData.course}
-                        onChangeText={(text) => handleProfileChange("course", text)}
-                        style={styles.input}
-                    />
-                </View>
-                <Text style={styles.label}>Turno:</Text>
-                <View style={styles.inputGroup}>
-                    <TextInput
-                        placeholder="Turno"
-                        value={profileData.shift}
-                        onChangeText={(text) => handleProfileChange("shift", text)}
-                        style={styles.input}
-                    />
-                </View>
-                <Button title="Alterar" onPress={handleSubmit} color="#400096" style={styles.button} />
+                <InputLabel label="Nome" value={profileData.firstName} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
+                <InputLabel label="Sobrenome" value={profileData.lastName} onChangeText={(text: any) => handleProfileChange("lastName", text)} />
+                <InputLabel label="Email" value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
+                <InputLabel label="Curso" value={profileData.course} onChangeText={(text: any) => handleProfileChange("course", text)} />
+                <InputLabel label="Turno" value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
+                <Button title="Alterar" onPress={handleSubmit} color="#400096" />
             </View>
         </View>
     );
 };
 
+const InputLabel = ({ label, value, onChangeText }: any) => (
+    <View style={styles.inputGroup}>
+        <Text style={styles.label}>{label}:</Text>
+        <TextInput
+            placeholder={label}
+            value={value}
+            onChangeText={onChangeText}
+            style={styles.input}
+        />
+    </View>
+);
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        
     },
     formContainer: {
         flex: 1,
+        padding: 20,
     },
     inputGroup: {
         marginBottom: 20,
-        width: '100%',
     },
     input: {
         height: 40,
@@ -102,17 +74,11 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         paddingLeft: 10,
         color: '#400096',
-        width: '100%',
     },
     label: {
         color: '#400096',
         fontWeight: 'bold',
         marginBottom: 5,
-    },
-    button: {
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
     },
 });
 
