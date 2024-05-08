@@ -5,7 +5,7 @@ export class userService{
     private endpointest: string
     constructor(){
         this.endpointuser = 'https://boopeepapir.onrender.com/user'
-        this.endpointest = 'https://crispy-carnival-w6gwxvwqggrhr7g-3000.app.github.dev/'
+        this.endpointest = 'https://crispy-carnival-w6gwxvwqggrhr7g-3000.app.github.dev/user'
         };
     
     async cadastro (user: User):Promise<{valido: boolean, value?: number, error?: string | Error, data?: User}>{
@@ -59,6 +59,7 @@ export class userService{
           throw new Error(resp.statusText)
         }
         console.log('voltou')
+        console.log(resp.data)
         return { valido: true, value: 201, data: resp.data }
           }catch (error) {
             if(error instanceof Error){
