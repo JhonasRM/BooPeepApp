@@ -4,77 +4,58 @@ import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/types/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 
-class CadastroStateController {
-  private setState: StateAndSetters;
-  private validator: userValidator;
-  private UserService: userService;
+ const CadastroStateController = () => {
+ 
+   const [nome, setNome] = useState("");
+   const [sobrenome, setSobrenome] = useState("");
+   const [email, setEmail] = useState("");
+   const  [password, setPassword] = useState("");
+   const [confirmarSenha, setConfirmarSenha] = useState("");
+   const [erro, setErro] = useState<Error>();
 
-  public nome: string;
-  public sobrenome: string;
-  public email: string;
-  public password: string;
-  public confirmarSenha: string;
-  public erro;
+   const validator: userValidator = new userValidator();
+   const UserService: userService = new userService();
 
-  public setNome: React.Dispatch<React.SetStateAction<string>>;
-  public setSobrenome: React.Dispatch<React.SetStateAction<string>>;
-  public setEmail: React.Dispatch<React.SetStateAction<string>>;
-  public setPassword: React.Dispatch<React.SetStateAction<string>>;
-  public setConfirmarSenha: React.Dispatch<React.SetStateAction<string>>;
-  public setErro;
-
-  constructor() {
-    [this.nome, this.setNome] = useState("");
-    [this.sobrenome, this.setSobrenome] = useState("");
-    [this.email, this.setEmail] = useState("");
-    [this.password, this.setPassword] = useState("");
-    [this.confirmarSenha, this.setConfirmarSenha] = useState("");
-    [this.erro, this.setErro] = useState<Error>();
-
-    this.validator = new userValidator();
-    this.UserService = new userService();
-
-    this.setState = {
-      nome: this.setNome,
-      sobrenome: this.setSobrenome,
-      email: this.setEmail,
-      password: this.setPassword,
-      confirmarSenha: this.setConfirmarSenha,
+   const setState: StateAndSetters = {
+      nome: setNome,
+      sobrenome: setSobrenome,
+      email: setEmail,
+      password: setPassword,
+      confirmarSenha: setConfirmarSenha,
     };
-  }
 
-  async handleFieldChange(field: string, value: string) {
+  const handleFieldChange = async(field: string, value: string) => {
     console.log(`validando ${field} ...`);
-    if (field in this.setState) {
-      this.setState[field as keyof StateAndSetters](value);
-    } else {
-      console.error(
-        `Campo "${field}" não é uma chave válida em StateAndSetters.`
-      );
-    }
-    const valfield = await this.validator.valByField(field, value)
+    if (field in setState) {
+      setState[field as keyof StateAndSetters](value);
+      const valfield = await validator.valByField(field, value)
     if (valfield.valido === false) {
       console.log(valfield.erro);
     }
     console.log("validação concluída");
+    } else {
+      console.error(
+        `Campo "${field}" não é uma chave válida em StateAndSetters.`
+      )    
+    }
   }
 
-  handleConfirmarSenhaChange(senha: string, confirmsenha: string) {
-    this.setConfirmarSenha(confirmsenha);
-    const valconf = this.validator.confirmarSenha(senha, confirmsenha);
+  const handleConfirmarSenhaChange = (senha: string, confirmsenha: string) => {
+    setConfirmarSenha(confirmsenha);
+    const valconf = validator.confirmarSenha(senha, confirmsenha);
     if (valconf.valido === false) {
       console.log(valconf.erro as string);
     }
     console.log("validação concluída");
   }
 
-  handleCadastro(
+  const handleCadastro = async (
     nome: string,
     sobrenome: string,
     email: string,
     password: string,
     confirmarSenha: string
-  ) {
+  ) => {
     const user: User = new User(
       nome,
       sobrenome,
@@ -82,17 +63,30 @@ class CadastroStateController {
       password,
       confirmarSenha
     );
-    const validacao = this.validator.validarUser(user);
+    const validacao = validator.validarUser(user);
     if (validacao.valido === false) {
       console.log(validacao.erro as string)
     } else {
       try {
-        this.UserService.cadastro(user);
+        const req = await UserService.cadastro(user)
+        console.log(req)
       } catch (error) {
         console.error(error);
       }
     }
   }
+
+  return({
+    nome,
+    sobrenome,
+    email,
+    password,
+    confirmarSenha,
+    erro,
+    handleFieldChange,
+    handleConfirmarSenhaChange,
+    handleCadastro,
+  })
 }
 
-export const cadastroStateController = new CadastroStateController()
+export { CadastroStateController }
