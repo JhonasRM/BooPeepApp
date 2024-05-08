@@ -26,9 +26,19 @@ export default function Cadastro() {
     handleCadastro,
   } = CadastroStateController();
 
-  const handlePress = () => {
-    handleCadastro(nome, sobrenome, email, password, confirmarSenha);
+  const handlePress = async () => {
+    try {
+      const cadastro = await handleCadastro(nome, sobrenome, email, password, confirmarSenha);
+      if(cadastro.valido === false){
+        throw new Error(cadastro.error as string)
+      }
+      console.log(`${cadastro.value}. Cadastro realizado com sucesso!`)
+      console.log(cadastro.data)
+    } catch (error) {
+      console.error('Erro ao realizar cadastro:', error);
+    }
   };
+
   return (
     <KeyboardAvoidingView style={styles.background}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -99,7 +109,7 @@ export default function Cadastro() {
 
           <TouchableOpacity
             style={styles.btnRegister}
-            onPress={() => handleCadastro(nome, sobrenome, email, password, confirmarSenha)}
+            onPress={handlePress}
           >
             <Text style={styles.submitText}>Cadastrar</Text>
           </TouchableOpacity>

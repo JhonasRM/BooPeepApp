@@ -6,7 +6,7 @@ export class userService{
         this.endpointuser = 'https://boopeepapir.onrender.com/user'
         };
     
-    async cadastro(user: User){
+    async cadastro (user: User):Promise<{valido: boolean, value?: number, error?: string | Error, data?: User}>{
       const userData = {
         name: user.name,
         email: user.email,
@@ -22,12 +22,17 @@ export class userService{
             "Content-Type": "application/json;charset=UTF-8"                   
         }
       })
-          console.log(resp)
-          return resp.data
-        
+        if(resp.status !== 201){
+          console.log('voltou')
+          throw new Error(resp.statusText)
+        }
+        console.log('voltou')
+        return { valido: true, value: 201, data: resp.data }
           }catch (error) {
-        console.log(error)
-        return error
+            if(error instanceof Error){
+        return { valido: false, value: 400, error:error.message }
+      }
+      return { valido: false, value: 500, error: 'Internal Server Error'}
       }
         
     }
