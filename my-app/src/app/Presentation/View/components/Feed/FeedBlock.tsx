@@ -9,6 +9,7 @@ import ContainerOptions from "../ContainerOptions";
 import React from "react";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
+import { Entypo } from '@expo/vector-icons';
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -54,7 +55,15 @@ export function FeedQuery() {
                 </View>
 
                <View style={styles.endline}>
-                   <View style={styles.status} dataSet={{media: ids.status}}/>
+                    { item.title == "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" ? (
+                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                    ) : item.title == "ea molestias quasi exercitationem repellat qui ipsa sit aut" ? (
+                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                    ) : item.title == "qui est esse" ? (
+                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                    ) : (
+                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                    )}
                     <Text style={styles.statustext}>Status: {item.title}</Text>
                     <CommentButton btnStyle={styles.chaticon} />
                 </View>
