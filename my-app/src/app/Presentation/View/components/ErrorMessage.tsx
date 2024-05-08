@@ -3,7 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from "react-native-media-query"
 import React from "react";
 
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = (message: string) => {
 
     return (
         <View style={styles.Errorbox}>

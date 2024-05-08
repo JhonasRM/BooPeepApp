@@ -10,7 +10,6 @@ const CadastroStateController = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [erro, setErro] = useState<Error>();
 
   const validator: userValidator = new userValidator();
   const UserService: userService = new userService();
@@ -23,29 +22,37 @@ const CadastroStateController = () => {
     confirmarSenha: setConfirmarSenha,
   };
 
-  const handleFieldChange = async (field: string, value: string) => {
+  const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
     console.log(`validando ${field} ...`);
     if (field in setState) {
       setState[field as keyof StateAndSetters](value);
       const valfield = await validator.valByField(field, value);
       if (valfield.valido === false) {
         console.log(valfield.erro);
+        return { valido: true, value: 401, error: valfield.erro}
       }
       console.log("validação concluída");
-    } else {
+      return { valido: true, value: 200}
+    } 
       console.error(
         `Campo "${field}" não é uma chave válida em StateAndSetters.`
       );
-    }
+      return { valido: false, value: 400, error: `Campo "${field}" não é uma chave válida em StateAndSetters.`}
+    
   };
 
-  const handleConfirmarSenhaChange = (senha: string, confirmsenha: string) => {
+  const handleConfirmarSenhaChange = async (
+    senha: string,
+    confirmsenha: string
+  ): Promise<{ valido: boolean, value: number, error?: string | Error}>=> {
     setConfirmarSenha(confirmsenha);
     const valconf = validator.confirmarSenha(senha, confirmsenha);
     if (valconf.valido === false) {
-      console.log(valconf.erro as string);
+      console.log("As senhas não coincidem");
+      return { valido: false,  value: 401, error: valconf.erro };
     }
     console.log("validação concluída");
+    return { valido: true, value: 200 };
   };
 
   const handleCadastro = async (
@@ -69,11 +76,6 @@ const CadastroStateController = () => {
     );
     try {
       console.log(user);
-      // const validacao = await validator.validarUser(user);
-      // if (validacao.valido === false) {
-      //   console.log(validacao.erro);
-      //   throw new Error("Unauthorized");
-      // }
       const req = await UserService.cadastro(user);
       if (req.valido === false) {
         throw new Error("Bad Request");
@@ -87,7 +89,7 @@ const CadastroStateController = () => {
           return { valido: false, value: 400, error: error };
         }
       }
-        return { valido: false, value: 500, error: "Internal Server Error" };
+      return { valido: false, value: 500, error: "Internal Server Error" };
     }
   };
 
@@ -97,7 +99,6 @@ const CadastroStateController = () => {
     email,
     password,
     confirmarSenha,
-    erro,
     handleFieldChange,
     handleConfirmarSenhaChange,
     handleCadastro,

@@ -9,8 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { Link } from "expo-router";
-import React from "react";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
 import { CadastroStateController } from "../../Controllers/CadastroStateController";
 
 export default function Cadastro() {
@@ -20,22 +20,35 @@ export default function Cadastro() {
     email,
     password,
     confirmarSenha,
-    erro,
     handleFieldChange,
     handleConfirmarSenhaChange,
     handleCadastro,
   } = CadastroStateController();
 
+  const [erroA, setErroA] = useState('');
+  const [erroB, setErroB] = useState("");
+  const [erroC, setErroC] = useState("");
+  const [erroD, setErroD] = useState("");
+  const [erroE, setErroE] = useState("");
+  const [erroCadastro, setErroCadastro] = useState('')
+
   const handlePress = async () => {
     try {
-      const cadastro = await handleCadastro(nome, sobrenome, email, password, confirmarSenha);
-      if(cadastro.valido === false){
-        throw new Error(cadastro.error as string)
+      const cadastro = await handleCadastro(
+        nome,
+        sobrenome,
+        email,
+        password,
+        confirmarSenha
+      );
+      if (cadastro.valido === false) {
+        throw new Error(cadastro.error as string);
       }
-      console.log(`${cadastro.value}. Cadastro realizado com sucesso!`)
-      console.log(cadastro.data)
+      console.log(`${cadastro.value}. Cadastro realizado com sucesso!`);
+      router.push("./Presentation/View/screens/Login")
     } catch (error) {
-      console.error('Erro ao realizar cadastro:', error);
+      console.error("Erro ao realizar cadastro:", error);
+
     }
   };
 
@@ -60,18 +73,27 @@ export default function Cadastro() {
             style={styles.input}
             placeholder=""
             autoCorrect={false}
-            onChangeText={(nome) => {
-              handleFieldChange("nome", nome);
+            onChangeText={async (nome) => {
+              const handle = await handleFieldChange("nome", nome);
+              if (handle.valido === false) {
+                setErroA(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroA("");
+              }
             }}
           />
-
           <Text style={styles.label}>Sobrenome:</Text>
           <TextInput
             style={styles.input}
             placeholder=""
             autoCorrect={false}
-            onChangeText={(sobrenome) => {
-              handleFieldChange("sobrenome", sobrenome);
+            onChangeText={async (sobrenome) => {
+              const handle = await handleFieldChange("sobrenome", sobrenome);
+              if (handle.valido === false) {
+                setErroB(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroB("");
+              }
             }}
           />
 
@@ -80,8 +102,13 @@ export default function Cadastro() {
             style={styles.input}
             placeholder=""
             autoCorrect={false}
-            onChangeText={(email) => {
-              handleFieldChange("email", email);
+            onChangeText={async (email) => {
+              const handle = await handleFieldChange("email", email);
+              if (handle.valido === false) {
+                setErroC(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroC("");
+              }
             }}
           />
 
@@ -91,8 +118,13 @@ export default function Cadastro() {
             placeholder=""
             secureTextEntry={true}
             autoCorrect={false}
-            onChangeText={(password) => {
-              handleFieldChange("password", password);
+            onChangeText={async (password) => {
+              const handle = await handleFieldChange("password", password);
+              if (handle.valido === false) {
+                setErroD(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroD("");
+              }
             }}
           />
 
@@ -102,15 +134,20 @@ export default function Cadastro() {
             placeholder=""
             secureTextEntry={true}
             autoCorrect={false}
-            onChangeText={(confirmarSenha) => {
-              handleConfirmarSenhaChange(password, confirmarSenha);
+            onChangeText={async (confirmarSenha) => {
+              const handle = await handleConfirmarSenhaChange(
+                password,
+                confirmarSenha
+              );
+              if (handle.valido === false) {
+                setErroE(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroE("");
+              }
             }}
           />
 
-          <TouchableOpacity
-            style={styles.btnRegister}
-            onPress={handlePress}
-          >
+          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
             <Text style={styles.submitText}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
