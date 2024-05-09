@@ -30,7 +30,7 @@ const HeaderBar = (props: whatPage) => {
                     </TouchableOpacity>
                 </Link>
 
-                <Text style={styles.commenttext}> Mensagens </Text>
+                <Text style={styles.commenttext}> Mensagens</Text>
                 </View>
             ) : (
                 <Image source={require('../../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
@@ -38,7 +38,13 @@ const HeaderBar = (props: whatPage) => {
             
                 
             {props.whatScreen === "user" ? ( //"Componente á direita" - Bolt
-                <Image source={require("../../../../../assets/icons/icons8-configurações-100.png")} style={styles.img} />
+                <Link href={'../screens/UserConfig'} asChild>
+                    <TouchableOpacity style={styles.hdrGear}>
+                    <Image source={require("../../../../../assets/icons/icons8-configurações-100.png")} 
+                    style={styles.img}
+                    />
+                    </TouchableOpacity>
+                </Link>
             ) : (
                 <></>
             )}     
@@ -70,6 +76,8 @@ const {styles} = StyleSheet.create ({
     img: {
         width: 40,
         height: 40,
+    },
+    hdrGear: {
         position: "absolute",
         right: 0,
         marginRight: wp(3),
