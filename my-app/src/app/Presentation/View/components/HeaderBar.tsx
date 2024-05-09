@@ -1,4 +1,4 @@
-import {Image, View, Pressable, TouchableOpacity } from "react-native";
+import {Image, View, Pressable, TouchableOpacity, Text } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./HeaderBarResponsivity";
@@ -7,32 +7,55 @@ import React from "react";
 import { Link } from "expo-router";
 
 type whatPage = {
-    whatScreen: "feedchat" | "user"
+    whatScreen: "feed" | "user" | "chat" | "comment"
 }
 
-const HeaderBar = (props: whatPage) => {
+const HeaderBar = (props: whatPage) => {    
     return (
-            <View style={styles.header} dataSet={{media: ids.header}}>
-            <Image source={require('../../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
-                {props.whatScreen === "feedchat" ? (
-                    <SearchBar />
-                ) : (
-                    <Link href={'../screens/UserConfig'} asChild>
+        <View style={props.whatScreen === "feed" ? [styles.header, {backgroundColor: "#d4d7ff"}] : styles.header}>
+            
+            {props.whatScreen === "chat" ? ( //"Logo do BooPeep" - Bolt
+                <Link href={"../screens/Feed"} asChild>
+                    <TouchableOpacity>
+                        <Image source={require('../../../../../assets/icons/icons8-esquerda-2-100.png')} 
+                        style={styles.imghdr} />
+                    </TouchableOpacity>
+                </Link>
+            ) : props.whatScreen === "comment" ? (
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Link href={"../screens/Feed"} asChild>
+                    <TouchableOpacity>
+                    <Image source={require('../../../../../assets/icons/icons8-esquerda-2-100.png')} 
+                    style={styles.imghdr} />
+                    </TouchableOpacity>
+                </Link>
+
+                <Text style={styles.commenttext}> Mensagens</Text>
+                </View>
+            ) : (
+                <Image source={require('../../../../../assets/icons/2-removebg-preview.png')} style={styles.icon} />
+            )}
+            
+                
+            {props.whatScreen === "user" ? ( //"Componente á direita" - Bolt
+                <Link href={'../screens/UserConfig'} asChild>
                     <TouchableOpacity style={styles.hdrGear}>
                     <Image source={require("../../../../../assets/icons/icons8-configurações-100.png")} 
                     style={styles.img}
                     />
                     </TouchableOpacity>
-                    </Link>
-                )
-                }
-            </View>
+                </Link>
+            ) : (
+                <></>
+            )}     
+
+        </View>
     )
 }
 
 const {styles} = StyleSheet.create ({
     header: {
-        backgroundColor: "#d4d7ff",
+        //backgroundColor: "#d4d7ff",
         height: hp(9),
         width: wp(100),
         
@@ -58,6 +81,16 @@ const {styles} = StyleSheet.create ({
         position: "absolute",
         right: 0,
         marginRight: wp(3),
+    },
+    imghdr: {
+        width: 35,
+        height: 35,
+        marginHorizontal: wp(3),
+    },
+    commenttext: {
+        color: "#400096",
+        fontSize: 19,
+        fontWeight: "bold"
     }
 })
 

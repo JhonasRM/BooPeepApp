@@ -5,8 +5,11 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
-import ContainerOptions from "./ContainerOptions";
+import ContainerOptions from "../ContainerOptions";
 import React from "react";
+import CommentButton from "../CommentButton";
+import ImageCarousel from "../ImageCarousel";
+import { Entypo } from '@expo/vector-icons';
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -21,7 +24,7 @@ export function FeedQuery() {
 
     if (isLoading) {
         return (
-            <LoadingBox />
+            <LoadingBox whatPage="Feed"/>
         )
     }
 
@@ -48,16 +51,23 @@ export function FeedQuery() {
                  </Text>
 
                 <View style={styles.middleline}>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <ImageCarousel ImgStyle={styles.missingpic} ImgDataset={{media: ids.missingpic}} ImgSource={require('../../../../../../assets/pictures/riff.jpg')}/>
                 </View>
 
                <View style={styles.endline}>
-                   <View style={styles.status} dataSet={{media: ids.status}}/>
+                    { item.title == "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" ? (
+                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                    ) : item.title == "ea molestias quasi exercitationem repellat qui ipsa sit aut" ? (
+                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                    ) : item.title == "qui est esse" ? (
+                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                    ) : (
+                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                    )}
                     <Text style={styles.statustext}>Status: {item.title}</Text>
-                    <Image source={require('../../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                    <CommentButton btnStyle={styles.chaticon} />
                 </View>
-                <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
+                <Text style={styles.time}>Há: <>{item.id}</> </Text>
             </View>
             ))
             }
@@ -123,7 +133,9 @@ const {styles} = StyleSheet.create ({
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: hp(1),
+        marginHorizontal: wp(2),
     },
     status: {
         borderWidth: wp(2),

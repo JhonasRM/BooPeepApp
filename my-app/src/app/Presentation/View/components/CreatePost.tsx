@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import FeedBlock from "./FeedBlock";
+import FeedBlock from "./Feed/FeedBlock";
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
 
@@ -64,8 +64,14 @@ const CreatePost = () => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
-                            <Image source={require("../../../../../../assets/icons/icons8-imagem-100.png")} 
+                            <Image source={require("../../../../../assets/icons/icons8-imagem-100.png")} 
                             style={styles.imageimg}
+                            />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
+                            <Image source={require("../../../../../assets/icons/icons8-fechar-janela-100.png")} 
+                            style={styles.exitimg}
                             />
                         </TouchableOpacity>
 
@@ -166,6 +172,17 @@ const styles = StyleSheet.create ({
         color: "#FFF",
         textAlign: "center",
         fontSize: 17
+    },
+    exitbutton: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        height: 40,
+        width: 40,
+    },
+    exitimg: {
+        width: 40,
+        height: 40,
     },
 })
 
