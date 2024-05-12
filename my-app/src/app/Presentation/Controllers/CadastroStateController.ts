@@ -29,10 +29,10 @@ const CadastroStateController = () => {
       const valfield = await validator.valByField(field, value);
       if (valfield.valido === false) {
         console.log(valfield.erro);
-        return { valido: true, value: 401, error: valfield.erro}
+        return { valido: false, value: 401, error: valfield.erro}
       }
       console.log("validação concluída");
-      return { valido: true, value: 200}
+      return { valido: true, value: 200 }
     } 
       console.error(
         `Campo "${field}" não é uma chave válida em StateAndSetters.`

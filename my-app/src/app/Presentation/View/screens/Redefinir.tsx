@@ -1,15 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { Link }  from "expo-router";
-import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import React, { useState } from 'react';
+import AuthErrorMessage from '../components/AuthErrorMessage';
 
 export default function Redefinir() {
+  const [erroA, setErroA] = useState("");
+  const [erroRedefinir, setErroRedefinir] = useState('')
+
     return(
         <KeyboardAvoidingView style={styles.background}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+
         <View style={styles.containerLogo}>
          <Image
          style={{
-    
+          marginVertical: 40,
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
@@ -31,18 +37,23 @@ export default function Redefinir() {
          />
 
         <Text style={styles.label}>Confirmar nova senha:</Text>
+        <AuthErrorMessage ErrorMessage={"Nova senha não é igual."} />
             <TextInput style={styles.input}
                 autoCorrect={false}
                 secureTextEntry={true}
                 onChangeText={() => { }}
          />
          
+         <View style={styles.changeView}>
+         <AuthErrorMessage ErrorMessage={"Error: BAD REQUEST LOL"} />
           <View style={styles.btnSubmit}>
          <TouchableOpacity style={styles.btnRegister}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>
          </View>
          </View>
+         </View>
+         </ScrollView>
     </KeyboardAvoidingView>
     );
 };
@@ -62,27 +73,35 @@ const styles = StyleSheet.create({
       },
       container: {
         flex: 1,
-        justifyContent: "center",
+        //justifyContent: "center",
         width: '90%',
-        alignItems: "center"
+        //alignItems: "center"
+      },
+      contentContainer: {
+        justifyContent: "center",
+        alignItems: "center",
       },
       input: {
-        backgroundColor: '#fff',
-        width: '90%',
+        backgroundColor: "#fff",
+        width: "100%",
         marginBottom: 15,
-        color: '#222',
+        color: "#222",
         fontSize: 17,
         borderRadius: 10,
         padding: 10,
         borderWidth: 2,
-        borderColor: '#000'
+        borderColor: "#000",
       },
       label: {
         marginBottom: 5,
         fontSize: 17,
         color: '#fff',
-        // alignSelf: 'flex-start',
+        alignSelf: 'flex-start',
         width: '90%'
+      },
+      changeView: {
+        marginBottom: 30,
+        marginTop: 30,
       },
       btnRegister: {
         backgroundColor: '#7b83ff',
@@ -91,8 +110,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        marginBottom: 30,
-        marginTop: 30,
         borderColor: '#000',
         borderWidth: 2,
         fontWeight: 'bold',

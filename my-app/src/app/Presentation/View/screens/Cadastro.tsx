@@ -12,6 +12,7 @@ import {
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { CadastroStateController } from "../../Controllers/CadastroStateController";
+import AuthErrorMessage from "../components/AuthErrorMessage";
 
 export default function Cadastro() {
   const {
@@ -25,7 +26,7 @@ export default function Cadastro() {
     handleCadastro,
   } = CadastroStateController();
 
-  const [erroA, setErroA] = useState('');
+  const [erroA, setErroA] = useState("");
   const [erroB, setErroB] = useState("");
   const [erroC, setErroC] = useState("");
   const [erroD, setErroD] = useState("");
@@ -44,10 +45,17 @@ export default function Cadastro() {
       if (cadastro.valido === false) {
         throw new Error(cadastro.error as string);
       }
+      if (cadastro.valido === true) {
       console.log(`${cadastro.value}. Cadastro realizado com sucesso!`);
-      router.push("./Presentation/View/screens/Login")
+      router.push("./Login")
+      }
     } catch (error) {
       console.error("Erro ao realizar cadastro:", error);
+      if (error instanceof Error) {
+        setErroCadastro(error.message)
+      } else {
+        setErroCadastro('An unknown error occurred')
+      }
 
     }
   };
@@ -55,6 +63,7 @@ export default function Cadastro() {
   return (
     <KeyboardAvoidingView style={styles.background}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
+        
         <View style={styles.containerLogo}>
           <Image
             style={{
@@ -69,6 +78,7 @@ export default function Cadastro() {
 
         <View style={styles.container}>
           <Text style={styles.label}>Nome:</Text>
+          <AuthErrorMessage ErrorMessage={erroA} />
           <TextInput
             style={styles.input}
             placeholder=""
@@ -82,7 +92,9 @@ export default function Cadastro() {
               }
             }}
           />
+
           <Text style={styles.label}>Sobrenome:</Text>
+          <AuthErrorMessage ErrorMessage={erroB} />
           <TextInput
             style={styles.input}
             placeholder=""
@@ -98,6 +110,7 @@ export default function Cadastro() {
           />
 
           <Text style={styles.label}>Email:</Text>
+          <AuthErrorMessage ErrorMessage={erroC} />
           <TextInput
             style={styles.input}
             placeholder=""
@@ -113,6 +126,7 @@ export default function Cadastro() {
           />
 
           <Text style={styles.label}>Senha:</Text>
+          <AuthErrorMessage ErrorMessage={erroD} />
           <TextInput
             style={styles.input}
             placeholder=""
@@ -129,6 +143,7 @@ export default function Cadastro() {
           />
 
           <Text style={styles.label}>Confirmar Senha:</Text>
+          <AuthErrorMessage ErrorMessage={erroE} />
           <TextInput
             style={styles.input}
             placeholder=""
@@ -147,9 +162,12 @@ export default function Cadastro() {
             }}
           />
 
-          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
-            <Text style={styles.submitText}>Cadastrar</Text>
-          </TouchableOpacity>
+          <View style={styles.registerView}>
+            <AuthErrorMessage ErrorMessage={erroCadastro}/>
+            <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
+              <Text style={styles.submitText}>Cadastrar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -191,7 +209,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#000",
   },
-
+  registerView: {
+    marginTop: 30,
+    marginBottom: 30,
+  },
   btnRegister: {
     backgroundColor: "#7b83ff",
     width: "100%",
@@ -199,8 +220,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 30,
+    marginBottom: 5,
     borderColor: "#000",
     borderWidth: 2,
     fontWeight: "bold",

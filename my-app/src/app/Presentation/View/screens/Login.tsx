@@ -12,10 +12,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LoginStateController } from "../../Controllers/LoginStateController";
+import AuthErrorMessage from "../components/AuthErrorMessage";
 
 export default function Login() {
-  const { email, password, handleFieldChange, handleLogin } =
-    LoginStateController();
+  const { 
+    email, 
+    password, 
+    handleFieldChange, 
+    handleLogin 
+  } = LoginStateController();
+
+  //11/05/2024
+  const [erroA, setErroA] = useState("");
+  const [erroB, setErroB] = useState("");
+  const [erroLogin, setErroLogin] = useState("")
+  //end
 
   const handlePress = async () => {
     try {
@@ -27,6 +38,11 @@ export default function Login() {
       router.push("./Feed");
     } catch (error) {
       console.error("Erro ao realizar cadastro:", error);
+      if (error instanceof Error) {
+        setErroLogin(error.message)
+      } else {
+        setErroLogin('An unknown error occurred')
+      }
     }
   };
 
@@ -45,28 +61,51 @@ export default function Login() {
 
         <View style={style.container}>
           <Text style={style.label}>Email:</Text>
+          {/* 11/05/2024 */}
+          <AuthErrorMessage ErrorMessage={erroA} />
+          {/* end */}
           <TextInput
             style={style.input}
             placeholder=""
             autoCorrect={false}
-            onChangeText={(email) => {
-              handleFieldChange("email", email);
+            //11/05/2024
+            onChangeText={async (email) => {
+              const handle = await handleFieldChange("email", email);
+              if (handle.valido === false) {
+                setErroA(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroA("");
+              }
+            //end
             }}
           />
           <Text style={style.label}>Senha:</Text>
+          {/* 11/05/2024 */}
+          <AuthErrorMessage ErrorMessage={erroB} />
+          {/* end */}
           <TextInput
             style={style.input}
             placeholder=""
             secureTextEntry={true}
             autoCorrect={false}
-            onChangeText={(password) => {
-              handleFieldChange("password", password);
+            //11/05/2024
+            onChangeText={async (password) => {
+              const handle = await handleFieldChange("password", password);
+              if (handle.valido === false) {
+                setErroB(handle.error as string);
+              } else if (handle.valido === true) {
+                setErroB("");
+              }
+            //end
             }}
           />
 
-          <TouchableOpacity style={style.btnSubmit} onPress={handlePress}>
-            <Text style={style.submitText}>Entrar</Text>
-          </TouchableOpacity>
+          <View style={style.submitView}>
+            <AuthErrorMessage ErrorMessage={erroLogin} />
+            <TouchableOpacity style={style.btnSubmit} onPress={handlePress}>
+              <Text style={style.submitText}>Entrar</Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={style.btnRegister}
@@ -135,7 +174,9 @@ const style = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#000000",
   },
-
+  submitView: {
+    marginTop: 20,
+  },
   btnSubmit: {
     backgroundColor: "#7b83ff",
     width: "100%",
@@ -145,7 +186,6 @@ const style = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#000000",
-    marginTop: 30,
   },
   submitText: {
     color: "#fff",
