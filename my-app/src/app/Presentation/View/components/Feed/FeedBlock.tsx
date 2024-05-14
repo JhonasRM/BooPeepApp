@@ -8,7 +8,13 @@ import ContainerOptions from "../ContainerOptions";
 import React from "react";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
+import { Entypo } from '@expo/vector-icons';
 import feedController from "../../../Controllers/feedController";
+
+const fetchFeed = async () => {                                 //Chamar a API
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    return response.json();
+}
 
 export function FeedQuery() {
     const { data, isLoading, isError, error } = feedController();
@@ -46,13 +52,16 @@ export function FeedQuery() {
                 </View>
 
                <View style={styles.endline}>
-                   <View style={styles.status} dataSet={{media: ids.status}}/>
-                    <Text style={styles.statustext}>Status: 
-                        {item.status == 0 ? (<>Perdido</>) : 
-                        item.status == 1 ? (<>Achado</>) :
-                        item.status == 2 ? (<>Devolvido</>) :
-                        (<></>)}
-                    </Text>
+                    { item.status == "0" ? (
+                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                    ) : item.status == "1" ? (
+                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                    ) : item.status == "2" ? (
+                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                    ) : (
+                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                    )}
+                    <Text style={styles.statustext}>Status: {item.status}</Text>
                     <CommentButton btnStyle={styles.chaticon} />
                 </View>
                 <Text style={styles.time}>Há: <>{item.createdAt}</> </Text>

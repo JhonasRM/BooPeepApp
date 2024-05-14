@@ -4,6 +4,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import FeedBlock from "./Feed/FeedBlock";
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
+import { FontAwesome } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
@@ -40,39 +43,34 @@ const CreatePost = () => {
             <View style={isTouched ? styles.formOn : styles.formOff}>
                 <TouchableWithoutFeedback>
                     <ScrollView keyboardShouldPersistTaps={"handled"}>
-                        
-                        <Text style={styles.labeltext}>Criar postagem</Text>
+                        <FontAwesome name="user-circle" size={40} color="black" style={{marginBottom: -40}} />
 
                         <TextInput 
                         placeholder={"Título da postagem"} 
-                        placeholderTextColor={"slateblue"}
-                        style={styles.textInput}
+                        placeholderTextColor={"#303030"}
+                        style={[styles.textInput, {marginTop: hp(7)}]}
                         /> 
                         {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
-                        placeholderTextColor={"slateblue"}
+                        placeholderTextColor={"#303030"}
                         multiline
                         numberOfLines={10}
-                        style={styles.textInput}
+                        style={[styles.textInput, {marginBottom: hp(2.5), paddingHorizontal: 3}]}
                         />
                         {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TouchableOpacity style={styles.postbtn}>
-                            <Text style={styles.btntext}>Postar</Text>
+                            <Text style={styles.btntext}>Publicar</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
-                            <Image source={require("../../../../../assets/icons/icons8-imagem-100.png")} 
-                            style={styles.imageimg}
-                            />
+                        <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
-                            <Image source={require("../../../../../assets/icons/icons8-fechar-janela-100.png")} 
-                            style={styles.exitimg}
-                            />
+                            <MaterialCommunityIcons name="exit-to-app" size={40} color="#400096" />
                         </TouchableOpacity>
 
                     </ScrollView>
@@ -139,19 +137,18 @@ const styles = StyleSheet.create ({
     textInput: {
         backgroundColor: "#d4d7ff", //Precisa do isDark useState
         paddingHorizontal: wp(2),
-        paddingTop: hp(1),
+        paddingVertical: hp(1),
         marginVertical: hp(1),
         textAlignVertical: "top",
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: "#000", //Precisa do isDark useState
-
-        color: "slateblue",
+        borderRadius: 10,
+        fontSize: 15,
+        textAlign: "justify",
+        
     },
     imagebutton: {
         position: "absolute",
         bottom: 0,
-        right: wp(22),
+        right: wp(29),
         height: 40,
         width: 40,
         paddingTop: 1,
@@ -162,16 +159,16 @@ const styles = StyleSheet.create ({
     },
     postbtn: {
         backgroundColor: "#400096",
-        borderWidth: 2,
-        borderRadius: 5,
+        borderRadius: 10,
 
-        marginLeft: wp(70),
+        marginLeft: wp(68),
         paddingVertical: hp(1),
     },
     btntext: {
         color: "#FFF",
         textAlign: "center",
-        fontSize: 17
+        fontSize: 17,
+        fontWeight: "bold"
     },
     exitbutton: {
         position: "absolute",

@@ -6,7 +6,7 @@ import React from "react";
 const UserConfig = () => {
     return (
     <ScrollView>
-        <UserConfigProps optType="header" optText="Configurações de Usuário" optLink="./Feed"
+        <UserConfigProps optType="header" optText="Configurações de Usuário" optLink="./User"
         optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
         />
 
