@@ -1,15 +1,24 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, Pressable } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
 import { ids } from "./FeedBlockResponsivity";
+import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
 import React from "react";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
+<<<<<<< HEAD
 import { Entypo } from '@expo/vector-icons';
 import feedController from "../../../Controllers/feedController";
+=======
+
+const fetchFeed = async () => {                                 //Chamar a API
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    return response.json();
+}
+>>>>>>> parent of 654822d5 (feat: Partes de conexão do Feed separadas e conexão com a API verdadeira.)
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -17,7 +26,10 @@ const fetchFeed = async () => {                                 //Chamar a API
 }
 
 export function FeedQuery() {
-    const { data, isLoading, isError, error } = feedController();
+    const {data, isLoading, isError, error} = useQuery({
+        queryKey: ['data'],
+        queryFn: fetchFeed,
+    });
 
     if (isLoading) {
         return (
@@ -33,18 +45,18 @@ export function FeedQuery() {
 
     return (
         <View>
-            {data && data.map((item: any) => (
-            <View style={styles.feedblock} key={item.postId}>
+            {data && data.map(item => (
+            <View style={styles.feedblock} key={item.id}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-                     <Text style={styles.usertext}> {/*item.userId*/} User </Text>
+                     <Text style={styles.usertext}> {item.userId} </Text>
                      <ContainerOptions style={styles.options}/>
                 </View>
                  <Text style={styles.titletext}>
-                    {item.local}
+                    {item.userId}
                  </Text>
                  <Text style={styles.infotext}> 
-                 {item.description}
+                 {item.body}
                  </Text>
 
                 <View style={styles.middleline}>
@@ -52,6 +64,7 @@ export function FeedQuery() {
                 </View>
 
                <View style={styles.endline}>
+<<<<<<< HEAD
                     { item.status == "0" ? (
                     <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
                     ) : item.status == "1" ? (
@@ -62,9 +75,13 @@ export function FeedQuery() {
                     <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
                     )}
                     <Text style={styles.statustext}>Status: {item.status}</Text>
+=======
+                   <View style={styles.status} dataSet={{media: ids.status}}/>
+                    <Text style={styles.statustext}>Status: {item.title}</Text>
+>>>>>>> parent of 654822d5 (feat: Partes de conexão do Feed separadas e conexão com a API verdadeira.)
                     <CommentButton btnStyle={styles.chaticon} />
                 </View>
-                <Text style={styles.time}>Há: <>{item.createdAt}</> </Text>
+                <Text style={styles.time}>Há: <>{item.id}</> </Text>
             </View>
             ))
             }
