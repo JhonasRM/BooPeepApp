@@ -12,16 +12,8 @@ import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
 import feedController from "../../../Controllers/feedController";
 
-const fetchFeed = async () => {                                 //Chamar a API
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    return response.json();
-}
-
 export function FeedQuery() {
-    const {data, isLoading, isError, error} = useQuery({
-        queryKey: ['data'],
-        queryFn: fetchFeed,
-    });
+    const {data, isError, error, isLoading} = feedController();
 
     if (isLoading) {
         return (
@@ -38,17 +30,17 @@ export function FeedQuery() {
     return (
         <View>
             {data && data.map(item => (
-            <View style={styles.feedblock} key={item.id}>
+            <View style={styles.feedblock} key={item.postId}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-                     <Text style={styles.usertext}> {item.userId} </Text>
+                     <Text style={styles.usertext}> {item.UserID} </Text>
                      <ContainerOptions style={styles.options}/>
                 </View>
                  <Text style={styles.titletext}>
-                    {item.userId}
+                    {item.local}
                  </Text>
                  <Text style={styles.infotext}> 
-                 {item.body}
+                 {item.description}
                  </Text>
 
                 <View style={styles.middleline}>
@@ -68,7 +60,7 @@ export function FeedQuery() {
                     <Text style={styles.statustext}>Status: {item.status}</Text>
                     <CommentButton btnStyle={styles.chaticon} />
                 </View>
-                <Text style={styles.time}>Há: <>{item.id}</> </Text>
+                <Text style={styles.time}>Criado em: {item.createdAt}</Text>
             </View>
             ))
             }
