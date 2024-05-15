@@ -115,7 +115,7 @@ const styles = StyleSheet.create ({
         right: 0,
         left: 0,
         top: hp(40),     //"MUDE ISSO CASO SAIA QUEBRADO EM OUTROS TAMANHOS" - Bolt
-        bottom: hp(9),   //"ISSO ESTAVA ME ENGANANDO COM O TRECO DO SCROLLVIEW DO TEXTINPUT BRUH" - Bolt
+        bottom: 0,   //"ISSO ESTAVA ME ENGANANDO COM O TRECO DO SCROLLVIEW DO TEXTINPUT BRUH" - Bolt
         borderTopStartRadius: 30,
     },
     containerOff: {

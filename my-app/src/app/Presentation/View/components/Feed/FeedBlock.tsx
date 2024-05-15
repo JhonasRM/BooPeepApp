@@ -29,7 +29,7 @@ export function FeedQuery() {
 
     return (
         <View>
-            {data && data.map(item => (
+            {data && data.map((item: any) => (  //Conversar com o Jonathan referente ao Warning
             <View style={styles.feedblock} key={item.postId}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
