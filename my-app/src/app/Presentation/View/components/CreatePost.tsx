@@ -7,6 +7,7 @@ import React from "react";
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Link } from "expo-router";
 
 const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
@@ -35,47 +36,55 @@ const CreatePost = () => {
         behavior="padding"
         style={isTouched ? styles.containerOn : styles.containerOff}
         >
-            <TouchableOpacity style={isTouched ? styles.buttonOff : styles.buttonOn}
+        { isTouched == false ? (
+            <TouchableOpacity style={styles.buttonOn}
             onPress={pressHandler}>
                 <Text style={styles.plustext}>+</Text>
             </TouchableOpacity>
+        ) : (null)
+        }
 
-            <View style={isTouched ? styles.formOn : styles.formOff}>
+{isTouched == true ? (
+            <View style={styles.formOn}>
                 <TouchableWithoutFeedback>
                     <ScrollView keyboardShouldPersistTaps={"handled"}>
+                    <View style={styles.topView}>
                         <FontAwesome name="user-circle" size={40} color="black" style={{marginBottom: -40}} />
 
+                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
+                            <MaterialCommunityIcons name="exit-to-app" size={40} color="#400096" />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View style={styles.inputView}>
                         <TextInput 
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"#303030"}
-                        style={[styles.textInput, {marginTop: hp(7)}]}
+                        style={styles.textInput}
                         /> 
-                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
                         placeholderTextColor={"#303030"}
                         multiline
-                        numberOfLines={10}
-                        style={[styles.textInput, {marginBottom: hp(2.5), paddingHorizontal: 3}]}
+                        numberOfLines={20}
+                        style={styles.textInput}
                         />
-                        {/* "Esse não troca a cor automaticamente no Dark Mode do Expo" - Bolt */}
+                    </View>
 
+                    <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.postbtn}>
                             <Text style={styles.btntext}>Publicar</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
-                        <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
+                            <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
                         </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
-                            <MaterialCommunityIcons name="exit-to-app" size={40} color="#400096" />
-                        </TouchableOpacity>
-
+                    </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </View>
+) : (null)}
         </KeyboardAvoidingView>
     )
 }
@@ -88,7 +97,7 @@ const styles = StyleSheet.create ({
         right: 0,
         left: 0,
         top: hp(40),     //"MUDE ISSO CASO SAIA QUEBRADO EM OUTROS TAMANHOS" - Bolt
-        bottom: 0,
+        bottom: hp(9),   //"ISSO ESTAVA ME ENGANANDO COM O TRECO DO SCROLLVIEW DO TEXTINPUT BRUH" - Bolt
         borderTopStartRadius: 30,
     },
     containerOff: {
@@ -125,6 +134,10 @@ const styles = StyleSheet.create ({
     formOff: {
         display: "none"
     },
+    topView: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
     labeltext: {
         fontSize: 30,
         marginBottom: hp(2),
@@ -134,6 +147,10 @@ const styles = StyleSheet.create ({
         borderRadius: 5,
         borderBottomColor: "#000", //Precisa do isDark useState
     },
+    inputView: {
+        marginTop: hp(7),
+        marginBottom: hp(2.5)
+    },
     textInput: {
         backgroundColor: "#d4d7ff", //Precisa do isDark useState
         paddingHorizontal: wp(2),
@@ -141,14 +158,19 @@ const styles = StyleSheet.create ({
         marginVertical: hp(1),
         textAlignVertical: "top",
         borderRadius: 10,
+        borderTopLeftRadius: 0,
+        borderBottomRightRadius: 0,
         fontSize: 15,
         textAlign: "justify",
-        
+    },
+    buttonView: {
+        marginBottom: hp(2),
+        marginRight: wp(2)
     },
     imagebutton: {
         position: "absolute",
         bottom: 0,
-        right: wp(29),
+        right: wp(27),
         height: 40,
         width: 40,
         paddingTop: 1,
