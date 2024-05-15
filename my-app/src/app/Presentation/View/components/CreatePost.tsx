@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FeedBlock from "./Feed/FeedBlock";
 import * as ImagePicker from 'expo-image-picker';
@@ -13,8 +13,12 @@ const CreatePost = () => {
     const [isTouched, setIsTouched] = useState(false)
     const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
 
-    const pressHandler = () => {
-        setIsTouched(!isTouched)
+    const handleTouch = () => {
+        setIsTouched(true)
+    }
+
+    const handleExit = () => {
+        setIsTouched(false)
     }
 
     const imageHandler = async() => {
@@ -32,30 +36,33 @@ const CreatePost = () => {
     
 
     return (
-        <KeyboardAvoidingView 
-        behavior="padding"
-        style={isTouched ? styles.containerOn : styles.containerOff}
-        >
-        { isTouched == false ? (
-            <TouchableOpacity style={styles.buttonOn}
-            onPress={pressHandler}>
-                <Text style={styles.plustext}>+</Text>
+    <>
+    { isTouched == false ? (
+        <>
+        <TouchableOpacity style={styles.buttonOn} onPress={handleTouch}>
+            <Text style={styles.plustext}>+</Text>
+        </TouchableOpacity>
+        </>
+    ) : (
+        <>
+        <Modal onRequestClose={handleExit} animationType="slide" transparent={true}>
+            <TouchableOpacity onPress={handleExit} style={styles.outsideModal} activeOpacity={0}>
+                <Text />
             </TouchableOpacity>
-        ) : (null)
-        }
 
-{isTouched == true ? (
+            <KeyboardAvoidingView behavior="padding" style={styles.containerOn}>
             <View style={styles.formOn}>
                 <TouchableWithoutFeedback>
                     <ScrollView keyboardShouldPersistTaps={"handled"}>
                     <View style={styles.topView}>
                         <FontAwesome name="user-circle" size={40} color="black" style={{marginBottom: -40}} />
 
-                        <TouchableOpacity style={styles.exitbutton} onPress={pressHandler}>
+                        <TouchableOpacity style={styles.exitbutton} onPress={handleExit}>
                             <MaterialCommunityIcons name="exit-to-app" size={40} color="#400096" />
                         </TouchableOpacity>
                     </View>
-                    
+
+                { isTouched == true ? (
                     <View style={styles.inputView}>
                         <TextInput 
                         placeholder={"Título da postagem"} 
@@ -71,6 +78,8 @@ const CreatePost = () => {
                         style={styles.textInput}
                         />
                     </View>
+                ) : (null)
+                }
 
                     <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.postbtn}>
@@ -84,12 +93,21 @@ const CreatePost = () => {
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </View>
-) : (null)}
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </Modal>
+        </>
+    )
+    }
+    </>
     )
 }
 
 const styles = StyleSheet.create ({
+    outsideModal: {   
+        backgroundColor: "#00000080",
+        position: "absolute",
+        top: 0, bottom: 0, left: 0, right: 0
+    },
     containerOn: {        //<View>
         backgroundColor: "#ffffff",
         flex: 1,
