@@ -9,16 +9,8 @@ import ContainerOptions from "../ContainerOptions";
 import React from "react";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
-<<<<<<< HEAD
 import { Entypo } from '@expo/vector-icons';
 import feedController from "../../../Controllers/feedController";
-=======
-
-const fetchFeed = async () => {                                 //Chamar a API
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    return response.json();
-}
->>>>>>> parent of 654822d5 (feat: Partes de conexão do Feed separadas e conexão com a API verdadeira.)
 
 const fetchFeed = async () => {                                 //Chamar a API
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -64,7 +56,6 @@ export function FeedQuery() {
                 </View>
 
                <View style={styles.endline}>
-<<<<<<< HEAD
                     { item.status == "0" ? (
                     <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
                     ) : item.status == "1" ? (
@@ -75,10 +66,6 @@ export function FeedQuery() {
                     <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
                     )}
                     <Text style={styles.statustext}>Status: {item.status}</Text>
-=======
-                   <View style={styles.status} dataSet={{media: ids.status}}/>
-                    <Text style={styles.statustext}>Status: {item.title}</Text>
->>>>>>> parent of 654822d5 (feat: Partes de conexão do Feed separadas e conexão com a API verdadeira.)
                     <CommentButton btnStyle={styles.chaticon} />
                 </View>
                 <Text style={styles.time}>Há: <>{item.id}</> </Text>
