@@ -26,8 +26,6 @@ export default function Cadastro() {
     handleCadastro,
   } = CadastroStateController();
 
-  const [erroA, setErroA] = useState("");
-  const [erroB, setErroB] = useState("");
   const [erroC, setErroC] = useState("");
   const [erroD, setErroD] = useState("");
   const [erroE, setErroE] = useState("");
@@ -78,34 +76,23 @@ export default function Cadastro() {
 
         <View style={styles.container}>
           <Text style={styles.label}>Nome:</Text>
-          <AuthErrorMessage ErrorMessage={erroA} />
+          
           <TextInput
             style={styles.input}
             placeholder=""
             autoCorrect={false}
             onChangeText={async (nome) => {
               const handle = await handleFieldChange("nome", nome);
-              if (handle.valido === false) {
-                setErroA(handle.error as string);
-              } else if (handle.valido === true) {
-                setErroA("");
-              }
             }}
           />
 
           <Text style={styles.label}>Sobrenome:</Text>
-          <AuthErrorMessage ErrorMessage={erroB} />
           <TextInput
             style={styles.input}
             placeholder=""
             autoCorrect={false}
             onChangeText={async (sobrenome) => {
               const handle = await handleFieldChange("sobrenome", sobrenome);
-              if (handle.valido === false) {
-                setErroB(handle.error as string);
-              } else if (handle.valido === true) {
-                setErroB("");
-              }
             }}
           />
 

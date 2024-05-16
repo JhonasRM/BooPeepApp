@@ -4,7 +4,7 @@ export class userService{
     private endpointuser: string;
     private endpointest: string
     constructor(){
-        this.endpointuser = 'https://boopeepapir.onrender.com/user'
+        this.endpointuser = 'https://boopeepapir.onrender.com/loginuser'
         this.endpointest = 'https://crispy-carnival-w6gwxvwqggrhr7g-3000.app.github.dev/user'
         };
     
@@ -42,7 +42,7 @@ export class userService{
     async login(email: string, password: string):Promise<{valido: boolean, value?: number, error?: string | Error, data?: User}>{
       try {
         console.log('bateu...')
-        const resp = await axios.get(this.endpointest, {
+        const resp = await axios.get(this.endpointuser, {
           params: {
             email: email,
             password: password

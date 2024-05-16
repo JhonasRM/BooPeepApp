@@ -17,8 +17,6 @@ export class userValidator {
         })
 
         this.userValByField = {
-            nome: z.string().min(5, "O nome deve ter mais de 5 caracteres."),
-            sobrenome: z.string().min(5, "O sobrenome deve ter mais de 5 caracteres."),
             email: z.string().email("Email precisa ser válido"),
             password: z.string()
             .min(8, 'A senha deve ter pelo menos 8 caracteres')
@@ -33,6 +31,9 @@ export class userValidator {
     }
 
     async valByField(field: string, value: string): Promise<{valido: boolean, value?: string, erro?: string }> {
+      if(field === 'nome' || field === 'sobrenome'){
+        return { valido: true, value: 'ok', erro: undefined };
+      }
         const validator = this.userValByField[field]; // Obtém o esquema de validação para o field
         if (!validator) {
           return { valido: false, erro: 'Esquema de validação não encontrado para o campo especificado.' };
