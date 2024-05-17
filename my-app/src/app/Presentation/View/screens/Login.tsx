@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
+import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
 
 export default function Login() {
   const { 
@@ -22,11 +23,15 @@ export default function Login() {
     handleLogin 
   } = LoginStateController();
 
-  //11/05/2024
+  const {handleResetRequest} = RedefinirStateController()
+
   const [erroA, setErroA] = useState("");
   const [erroB, setErroB] = useState("");
   const [erroLogin, setErroLogin] = useState("")
-  //end
+  const [erroReset, setErroReset] = useState('')
+  let tentativa: number = 0
+
+
 
   const handlePress = async () => {
     try {
@@ -35,16 +40,48 @@ export default function Login() {
         throw new Error(login.error as string);
       }
       console.log(`${login.value}. Login realizado com sucesso!`);
+      tentativa = 0
       router.push("./Feed");
     } catch (error) {
       console.error("Erro ao realizar cadastro:", error);
       if (error instanceof Error) {
         setErroLogin(error.message)
       } else {
-        setErroLogin('An unknown error occurred')
+        setErroLogin('Ocorreu um erro desconnhecido! Tente Novamente')
+        tentativa = tentativa +  1
+        if(tentativa === 3){
+          setErroLogin('Persiste um erro desconhecido. Estamos contatando o suporte.')
+        }
       }
     }
   };
+
+  const handleReset = async () => {
+    try {
+      const reset = await handleResetRequest(email, password)
+      if(email === null){
+        throw new Error('Preencha o email do Usuário para redefinir a senha')
+      }
+      if(reset.valido === false){
+        throw new Error(reset.error as string)
+      }
+      console.log(reset.data)
+      tentativa = 0
+    } catch (error) {
+      if (error instanceof Error) {
+        if(error.message === 'Preencha o email do Usuário para redefinir a senha'){
+          setErroA('Preencha o email do Usuário para redefinir a senha.')
+        }
+        setErroReset(error.message)
+      } else {
+        setErroReset('Ocorreu um erro desconhecido! Tente Novamente')
+        tentativa = tentativa + 1
+        if(tentativa === 3){
+          setErroLogin('Persiste um erro desconhecido. Estamos contatando o suporte.')
+        }
+      }
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={style.background}>
@@ -61,9 +98,7 @@ export default function Login() {
 
         <View style={style.container}>
           <Text style={style.label}>Email:</Text>
-          {/* 11/05/2024 */}
           <AuthErrorMessage ErrorMessage={erroA} />
-          {/* end */}
           <TextInput
             style={style.input}
             placeholder=""
@@ -76,13 +111,11 @@ export default function Login() {
               } else if (handle.valido === true) {
                 setErroA("");
               }
-            //end
+        
             }}
           />
           <Text style={style.label}>Senha:</Text>
-          {/* 11/05/2024 */}
           <AuthErrorMessage ErrorMessage={erroB} />
-          {/* end */}
           <TextInput
             style={style.input}
             placeholder=""
@@ -96,7 +129,6 @@ export default function Login() {
               } else if (handle.valido === true) {
                 setErroB("");
               }
-            //end
             }}
           />
 
@@ -109,7 +141,7 @@ export default function Login() {
 
           <TouchableOpacity
             style={style.btnRegister}
-            onPress={() => router.push("./Redefinir")}
+            onPress={handleReset}
           >
             <Text style={style.registerText}>Recuperar Senha</Text>
           </TouchableOpacity>

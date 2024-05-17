@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/types/Interfaces/StateAndSetters";
@@ -20,9 +20,13 @@ const CadastroStateController = () => {
     email: setEmail,
     password: setPassword,
     confirmarSenha: setConfirmarSenha,
+    redefinirSenha: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    }
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
+    console.log(`validando ${field} ...`);
     if (field in setState) {
       setState[field as keyof StateAndSetters](value);
       const valfield = await validator.valByField(field, value);
@@ -30,6 +34,7 @@ const CadastroStateController = () => {
         console.log(valfield.erro);
         return { valido: false, value: 401, error: valfield.erro}
       }
+      console.log("validação concluída");
       return { valido: true, value: 200 }
     } 
       console.error(
@@ -47,7 +52,7 @@ const CadastroStateController = () => {
     const valconf = validator.confirmarSenha(senha, confirmsenha);
     if (valconf.valido === false) {
       console.log("As senhas não coincidem");
-      return { valido: false,  value: 401, error: 'As senhas não coincidem' };
+      return { valido: false,  value: 401, error: valconf.erro };
     }
     console.log("validação concluída");
     return { valido: true, value: 200 };

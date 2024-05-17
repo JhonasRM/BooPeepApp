@@ -12,17 +12,20 @@ const LoginStateController = () => {
   const UserService: userService = new userService();
 
   const setState: StateAndSetters = {
-      email: setEmail,
-      password: setPassword,
-      nome: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      },
-      sobrenome: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      },
-      confirmarSenha: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      }
+    email: setEmail,
+    password: setPassword,
+    nome: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    sobrenome: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    confirmarSenha: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    redefinirSenha: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    }
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
@@ -65,12 +68,13 @@ const LoginStateController = () => {
       return { valido: false, value: 500, error: "Internal Server Error" };
     }
   };
+  
 
   return {
     email,
     password,
     handleFieldChange,
-    handleLogin,
+    handleLogin
   };
 };
 
