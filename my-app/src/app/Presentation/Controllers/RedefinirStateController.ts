@@ -34,7 +34,7 @@ const RedefinirStateController = () => {
       const valfield = await validator.valByField(field, value);
       if (valfield.valido === false) {
         console.log(valfield.erro);
-        return { valido: true, value: 401, error: valfield.erro}
+        return { valido: false, value: 401, error: valfield.erro}
       }
       console.log("validação concluída");
       return { valido: true, value: 200}
@@ -54,7 +54,7 @@ const RedefinirStateController = () => {
     const valconf = validator.confirmarSenha(senha, confirmsenha);
     if (valconf.valido === false) {
       console.log("As senhas não coincidem");
-      return { valido: false,  value: 401, error: valconf.erro };
+      return { valido: false,  value: 401, error: "As senhas não coincidem." };
     }
     console.log("validação concluída");
     return { valido: true, value: 200 };
@@ -87,16 +87,18 @@ const RedefinirStateController = () => {
     }
   };
 
-  const handleRedefinir =  async (email: string, password: string, confirmarSenha: string): Promise<{
+  const handleRedefinir =  async (email: string, password: string, confirmarSenha: string, token: any): Promise<{
     valido: boolean;
     value?: number;
     error?: string | Error;
     data?: User;
   }>  => {
     try {
-      const req = await UserService.update(email, 'password', password)
-
+      const req = await UserService.update(email, 'password', password, token)
     if (req.valido === false) {
+      if(req.error === 'Unauthorized'){
+        throw new Error(('Unauthorized'))
+      }
         throw new Error("Bad Request");
       }
       return { valido: true, value: 201, data: req.data };

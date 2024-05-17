@@ -4,6 +4,7 @@ import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, Touchab
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
 import AuthErrorMessage from '../components/AuthErrorMessage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Redefinir() {
   const {
@@ -16,17 +17,19 @@ export default function Redefinir() {
 
   const [erroC, setErroC] = useState("");
   const [erroD, setErroD] = useState("");
-  const [erroE, setErroE] = useState("");
   const [erroReset, setErroReset] = useState('')
 
-  const email = 'jhons@trabalhos.com' // email de exemplo => alterar com a lógica AsyncStorage
+  const email = 'dias44520@gmail.com' // email de exemplo => alterar com a lógica AsyncStorage
 
   const handlePress = async () => {
     try {
+      const token = AsyncStorage.getItem('token')
+      console.log(token)
       const redefinir = await handleRedefinir(
         email,
         password,
-        confirmarSenha
+        confirmarSenha,
+        token
       );
       if (redefinir.valido === false) {
         throw new Error(redefinir.error as string);
@@ -42,7 +45,6 @@ export default function Redefinir() {
       } else {
         setErroReset('An unknown error occurred')
       }
-
     }
   };
 
@@ -86,6 +88,7 @@ export default function Redefinir() {
          />
          
           <View style={styles.btnSubmit}>
+         <AuthErrorMessage ErrorMessage={erroReset} />
          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>

@@ -14,6 +14,7 @@ import {
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const { 
@@ -65,7 +66,12 @@ export default function Login() {
       if(reset.valido === false){
         throw new Error(reset.error as string)
       }
-      console.log(reset.data)
+      const tokenReset = reset.data
+      console.log(tokenReset)
+      AsyncStorage.setItem(
+        'token',
+        tokenReset as string
+      )
       tentativa = 0
     } catch (error) {
       if (error instanceof Error) {
