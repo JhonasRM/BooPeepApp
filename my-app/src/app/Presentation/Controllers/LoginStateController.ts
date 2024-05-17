@@ -51,6 +51,9 @@ const LoginStateController = () => {
     data?: User;
   }> => {
     try {
+      if( email === '' || password === ''){
+        return { valido: false, value: 400, error: `Preencha todos os campos para realizar o login.`}
+      }
       const req = await UserService.login(email, password);
       if (req.valido === false) {
         throw new Error("Bad Request");

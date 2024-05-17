@@ -55,16 +55,6 @@ export default function Redefinir() {
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
-        </View>
-
-         <View style={styles.container}>
-         <Text style={styles.label}>Senha:</Text>
-            <TextInput style={styles.input}
-                autoCorrect={false}
-                secureTextEntry={true}
-                onChangeText={() => { }}
-         />
-
          <Text style={styles.label}>Nova Senha:</Text>
          <AuthErrorMessage ErrorMessage={erroC} />
             <TextInput style={styles.input}

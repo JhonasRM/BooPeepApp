@@ -26,7 +26,6 @@ const CadastroStateController = () => {
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
-    console.log(`validando ${field} ...`);
     if (field in setState) {
       setState[field as keyof StateAndSetters](value);
       const valfield = await validator.valByField(field, value);
@@ -52,7 +51,7 @@ const CadastroStateController = () => {
     const valconf = validator.confirmarSenha(senha, confirmsenha);
     if (valconf.valido === false) {
       console.log("As senhas não coincidem");
-      return { valido: false,  value: 401, error: valconf.erro };
+      return { valido: false,  value: 401, error: "As senhas não coincidem" };
     }
     console.log("validação concluída");
     return { valido: true, value: 200 };
@@ -70,6 +69,9 @@ const CadastroStateController = () => {
     error?: string | Error;
     data?: User;
   }> => {
+    if( email === '' || password === '' || nome === '' || sobrenome === '' || confirmarSenha === ''){
+      return { valido: false, value: 400, error: `Preencha todos os campos para realizar o cadastro.`}
+    }
     const user: User = new User(
       nome,
       sobrenome,

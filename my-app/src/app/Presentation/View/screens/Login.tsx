@@ -58,10 +58,10 @@ export default function Login() {
 
   const handleReset = async () => {
     try {
-      const reset = await handleResetRequest(email, password)
-      if(email === null){
+      if(email === ''){
         throw new Error('Preencha o email do Usuário para redefinir a senha')
       }
+      const reset = await handleResetRequest(email, password)
       if(reset.valido === false){
         throw new Error(reset.error as string)
       }
@@ -70,7 +70,7 @@ export default function Login() {
     } catch (error) {
       if (error instanceof Error) {
         if(error.message === 'Preencha o email do Usuário para redefinir a senha'){
-          setErroA('Preencha o email do Usuário para redefinir a senha.')
+          setErroA(error.message)
         }
         setErroReset(error.message)
       } else {

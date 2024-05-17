@@ -76,11 +76,11 @@ export class userService{
     async resetPwd(email: string, password: string):Promise<{valido: boolean, value?: number, error?: string | Error, data?: string}>{
       try {
         console.log('bateu...')
-        const resp = await axios.get(this.endpointreset, {
-          params: {
-            email: email,
-            password: password
-          },
+        const resetData = {
+          email: email,
+          password:  password
+        }
+        const resp = await axios.post(this.endpointreset, resetData, {
           headers: {                  
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "Authorization", 
