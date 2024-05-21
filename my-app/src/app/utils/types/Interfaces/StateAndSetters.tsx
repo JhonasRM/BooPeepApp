@@ -4,5 +4,4 @@ export interface StateAndSetters {
   email: React.Dispatch<React.SetStateAction<string>>;
   password: React.Dispatch<React.SetStateAction<string>>;
   confirmarSenha: React.Dispatch<React.SetStateAction<string>>;
-  redefinirSenha: React.Dispatch<React.SetStateAction<string>>;
 }

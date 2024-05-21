@@ -22,9 +22,6 @@ const LoginStateController = () => {
     },
     confirmarSenha: function (value: SetStateAction<string>): void {
       throw new Error("Function not implemented.");
-    },
-    redefinirSenha: function (value: SetStateAction<string>): void {
-      throw new Error("Function not implemented.");
     }
   };
 

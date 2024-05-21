@@ -19,10 +19,7 @@ const CadastroStateController = () => {
     sobrenome: setSobrenome,
     email: setEmail,
     password: setPassword,
-    confirmarSenha: setConfirmarSenha,
-    redefinirSenha: function (value: SetStateAction<string>): void {
-      throw new Error("Function not implemented.");
-    }
+    confirmarSenha: setConfirmarSenha
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {

@@ -8,19 +8,19 @@ export class userService {
   constructor() {
     this.endpointuser = 'https://boopeepapir.onrender.com/user'
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser'
-    this.endpointreset = 'https://organic-yodel-r9pjw7j5ppj3pw6r-3000.app.github.dev/resetpwd'
+    this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd'
     this.endpointest = 'https://organic-yodel-r9pjw7j5ppj3pw6r-3000.app.github.dev/user'
   };
 
   async cadastro(user: User): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: User }> {
     const userData = {
-      name: user.name,
+      displayName: user.name,
       email: user.email,
       password: user.password
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointuser, userData, {
+      const resp = await axios.post(this.endpointest, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -46,11 +46,11 @@ export class userService {
   async login(email: string, password: string): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: User }> {
     try {
       console.log('bateu...')
-      const resp = await axios.get(this.endpointlogin, {
-        params: {
-          email: email,
-          password: password
-        },
+      const loginData = {
+        email: email,
+        password: password
+      }
+      const resp = await axios.post(this.endpointlogin, loginData,{
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -73,12 +73,11 @@ export class userService {
     }
 
   }
-  async resetPwd(email: string, password: string): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: string }> {
+  async resetPwd(email: string): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: string }> {
     try {
       console.log('bateu...')
       const resetData = {
-        email: email,
-        password: password
+        email: email
       }
       const resp = await axios.post(this.endpointreset, resetData, {
         headers: {
@@ -91,7 +90,7 @@ export class userService {
       if (resp.status !== 200) {
         throw new Error(resp.statusText)
       }
-      return { valido: true, value: 201, data: resp.data}
+      return { valido: true, value: 201, data: 'Email enviado com sucesso!'}
     } catch (error) {
       if (error instanceof Error) {
         return { valido: false, value: 400, error: error.message }

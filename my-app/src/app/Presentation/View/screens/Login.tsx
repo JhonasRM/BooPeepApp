@@ -24,8 +24,6 @@ export default function Login() {
     handleLogin 
   } = LoginStateController();
 
-  const {handleResetRequest} = RedefinirStateController()
-
   const [erroA, setErroA] = useState("");
   const [erroB, setErroB] = useState("");
   const [erroLogin, setErroLogin] = useState("")
@@ -59,35 +57,18 @@ export default function Login() {
 
   const handleReset = async () => {
     try {
-      if(email === ''){
-        throw new Error('Preencha o email do Usuário para redefinir a senha')
+      if(email !== ''){
+        AsyncStorage.setItem(
+          'email',
+          JSON.stringify(email)
+        )
+        router.push('./Redefinir')
       }
-      const reset = await handleResetRequest(email, password)
-      if(reset.valido === false){
-        throw new Error(reset.error as string)
-      }
-      const tokenReset = reset.data
-      console.log(tokenReset)
-      AsyncStorage.setItem(
-        'token',
-        tokenReset as string
-      )
-      tentativa = 0
+      router.push('./Redefinir')
     } catch (error) {
-      if (error instanceof Error) {
-        if(error.message === 'Preencha o email do Usuário para redefinir a senha'){
-          setErroA(error.message)
-        }
-        setErroReset(error.message)
-      } else {
-        setErroReset('Ocorreu um erro desconhecido! Tente Novamente')
-        tentativa = tentativa + 1
-        if(tentativa === 3){
-          setErroLogin('Persiste um erro desconhecido. Estamos contatando o suporte.')
-        }
+     setErroA('Erro interno do servidor. Tente novamente')
       }
     }
-  }
 
   return (
     <KeyboardAvoidingView style={style.background}>
@@ -192,7 +173,7 @@ const style = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // justifyContent: "center",
+     justifyContent: "center",
     width: "90%",
     // alignItems: "center",
     // paddingTop: 28,

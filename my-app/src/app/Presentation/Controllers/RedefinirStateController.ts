@@ -5,26 +5,26 @@ import { StateAndSetters } from "../../utils/types/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 
 const RedefinirStateController = () => {
-  const [ redefinirSenha, setRedefinirSenha ] = useState('')
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
   const validator: userValidator = new userValidator();
   const UserService: userService = new userService();
 
   const setState: StateAndSetters = {
-      redefinirSenha: setRedefinirSenha,
-      password: setPassword,
-      confirmarSenha: setConfirmarSenha,
-      nome: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      },
-      sobrenome: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      },
-      email: function (value: SetStateAction<string>): void {
-          throw new Error("Function not implemented.");
-      }
+    email: setEmail,
+    nome: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    sobrenome: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    password: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    confirmarSenha: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    }
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
@@ -46,23 +46,8 @@ const RedefinirStateController = () => {
     
   };
 
-  const handleConfirmarSenhaChange = async (
-    senha: string,
-    confirmsenha: string
-  ): Promise<{ valido: boolean, value: number, error?: string | Error}>=> {
-    setConfirmarSenha(confirmsenha);
-    const valconf = validator.confirmarSenha(senha, confirmsenha);
-    if (valconf.valido === false) {
-      console.log("As senhas não coincidem");
-      return { valido: false,  value: 401, error: "As senhas não coincidem." };
-    }
-    console.log("validação concluída");
-    return { valido: true, value: 200 };
-  };
-
   const handleResetRequest = async (
-    email: string,
-    password: string
+    email: string
   ): Promise<{
     valido: boolean;
     value?: number;
@@ -70,7 +55,7 @@ const RedefinirStateController = () => {
     data?: string;
   }> => {
     try {
-      const req = await UserService.resetPwd(email, password);
+      const req = await UserService.resetPwd(email);
       if (req.valido === false) {
         throw new Error("Bad Request");
       }
@@ -87,40 +72,10 @@ const RedefinirStateController = () => {
     }
   };
 
-  const handleRedefinir =  async (email: string, password: string, confirmarSenha: string, token: any): Promise<{
-    valido: boolean;
-    value?: number;
-    error?: string | Error;
-    data?: User;
-  }>  => {
-    try {
-      const req = await UserService.update(email, 'password', password, token)
-    if (req.valido === false) {
-      if(req.error === 'Unauthorized'){
-        throw new Error(('Unauthorized'))
-      }
-        throw new Error("Bad Request");
-      }
-      return { valido: true, value: 201, data: req.data };
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === "Unauthorized") {
-          return { valido: false, value: 401, error: error };
-        } else if (error.message === "Bad Request") {
-          return { valido: false, value: 400, error: error };
-        }
-      }
-      return { valido: false, value: 500, error: "Internal Server Error" };
-    }
-  }
-
   return {
-    password,
-    confirmarSenha,
+    email,
     handleFieldChange,
-    handleConfirmarSenhaChange,
-    handleResetRequest,
-    handleRedefinir
+    handleResetRequest
   };
 };
 

@@ -1,53 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
 import { Link, router }  from "expo-router";
-import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity, Alert, Pressable, Modal} from 'react-native';
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
-import AuthErrorMessage from '../components/AuthErrorMessage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Redefinir() {
   const {
-    password,
-    confirmarSenha,
+    email,
     handleFieldChange,
-    handleConfirmarSenhaChange,
-    handleRedefinir
+    handleResetRequest
   } = RedefinirStateController()
 
-  const [erroC, setErroC] = useState("");
-  const [erroD, setErroD] = useState("");
-  const [erroReset, setErroReset] = useState('')
+  const [erro, setErro ] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [contentModal, setContentModal] = useState('')
 
-  const email = 'dias44520@gmail.com' // email de exemplo => alterar com a lógica AsyncStorage
-
-  const handlePress = async () => {
+  const handlePress = async() => {
     try {
-      const token = AsyncStorage.getItem('token')
-      console.log(token)
-      const redefinir = await handleRedefinir(
-        email,
-        password,
-        confirmarSenha,
-        token
-      );
-      if (redefinir.valido === false) {
-        throw new Error(redefinir.error as string);
+      if(email === '' || email === undefined){
+        throw new Error('Preencha os campos necessários.')
       }
-      if (redefinir.valido === true) {
-      console.log('Redefinição de senha realizado com sucesso!');
-      router.push("./Login")
+      const resetEmail = await handleResetRequest(email)
+      if(resetEmail.valido === false){
+        throw new Error('Erro ao enviar o email')
       }
-    } catch (error) {
-      console.error("Erro ao realizar redefinir:", error);
-      if (error instanceof Error) {
-        setErroReset(error.message)
-      } else {
-        setErroReset('An unknown error occurred')
-      }
-    }
-  };
+      setContentModal('Enviamos um email para você')
+      setModalVisible(true)
 
+    } catch (error) {
+      if(error instanceof Error){
+        setErro(error.message)
+      }
+      setErro('Erro interno do servidor. Tente novamente mais tarde')
+    }
+  }
+  const handleConfirm = () => {
+    setModalVisible(false)
+    setTimeout(() => {
+      router.push('./Login')
+    }, 10)
+  }
     return(
         <KeyboardAvoidingView style={styles.background}>
         <View style={styles.containerLogo}>
@@ -57,43 +50,44 @@ export default function Redefinir() {
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
-         <Text style={styles.label}>Nova Senha:</Text>
-         <AuthErrorMessage ErrorMessage={erroC} />
+        </View>
+         <View style={styles.container}>
+
+         <Text style={styles.label}>Email:</Text>
             <TextInput style={styles.input}
                 autoCorrect={false}
-                secureTextEntry={true}
-                onChangeText={async (password) => {
-                  const handle = await handleFieldChange("password", password);
-                  if (handle.valido === false) {
-                    setErroC(handle.error as string);
-                  } else if (handle.valido === true) {
-                    setErroC("");
+                onChangeText={async(email) => { 
+                  const handle = await handleFieldChange('email', email)
+                  if(handle.valido === false){
+                    setErro(handle.error as string)
                   }
                 }}
          />
-
-        <Text style={styles.label}>Confirmar nova senha:</Text>
-        <AuthErrorMessage ErrorMessage={erroD} />
-            <TextInput style={styles.input}
-                autoCorrect={false}
-                secureTextEntry={true}
-                onChangeText={ async(confirmarSenha) => { 
-                  const handle = await handleConfirmarSenhaChange(password, confirmarSenha)
-                  if (handle.valido === false) {
-                    setErroD(handle.error as string);
-                  } else if (handle.valido === true) {
-                    setErroD("");
-                  }
-                }}  
-         />
-         
           <View style={styles.btnSubmit}>
-         <AuthErrorMessage ErrorMessage={erroReset} />
          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>
          </View>
          </View>
+         <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{contentModal}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleConfirm}>
+              <Text style={styles.textStyle}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
     );
 };
@@ -107,7 +101,7 @@ const styles = StyleSheet.create({
       },
       containerLogo: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         position: "relative"
       },
@@ -140,10 +134,10 @@ const styles = StyleSheet.create({
         width: 300,
         height: 55,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         borderRadius: 10,
-        marginBottom: 30,
-        marginTop: 30,
+        marginBottom: 70,
+        marginTop: 70,
         borderColor: '#000',
         borderWidth: 2,
         fontWeight: 'bold',
@@ -155,5 +149,46 @@ const styles = StyleSheet.create({
       btnSubmit: {
         alignItems: 'center',
         justifyContent: "center"
-      }
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+      },
+      buttonOpen: {
+        backgroundColor: '#F194FF',
+      },
+      buttonClose: {
+        backgroundColor: '#7b83ff',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+      },
 })
