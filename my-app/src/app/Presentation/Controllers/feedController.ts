@@ -3,11 +3,12 @@ import postServices from "../../Service/API/postAPIService";
 
 const feedController = () => {
     const {data, isLoading, isError, error} = useQuery({
-        queryKey: ['data'],
-        queryFn: async () => {const queryFunction = new postServices();
-            return await queryFunction.fetchPosts();
+        queryKey: ['feeddata'],
+        queryFn: async () => {const feedQueryFunction = new postServices();
+            return await feedQueryFunction.fetchPosts();
         },
     });
+    
     return { data, isLoading, isError, error }
 }
 

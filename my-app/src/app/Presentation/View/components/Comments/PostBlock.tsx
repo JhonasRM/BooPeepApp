@@ -4,40 +4,35 @@ import { Image, StyleSheet, Text, View } from "react-native"
 import ContainerOptions from "../ContainerOptions";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Entypo } from '@expo/vector-icons';
+import commentPostController from "../../../Controllers/commentPostController";
 
-const PostBlock = () => {
-    const fetchPost = async () => {                                 //Chamar a API
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
-        return response.json();
-    }
-
-    const {data} = useQuery({
-        queryKey: ['PostData'],
-        queryFn: fetchPost
-    })
+const PostBlock = ({postId}: any) => {
+    const {data, isLoading, isError, error} = commentPostController(postId)
 
     return (
         <View style={styles.container}>
             
+            {data && data.map((item: any) => (
             <View style={styles.feedblock}>
                 <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                     style={styles.user}/>
 
                     <View>
-                        <Text style={styles.usertext}>Lorenza de Souza Aburquerque Gomez</Text>
-                        <Text style={styles.userinfo}>2°Lógistica - Noite</Text>
+                        <Text style={styles.usertext}>{item.UserID}</Text>
+                        <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                     </View>
 
                     <ContainerOptions style={styles.options}/>
                 </View>
                 
                  <Text style={[styles.titletext, styles.beyondfirstline]}>
-                    Perdi o meu Relogio :(
+                    Perdi o meu Relogio :( {/*{item.}*/}
                  </Text>
                  <Text style={[styles.infotext, styles.beyondfirstline]}> 
-                    O meu relogio ele é feito de aluminio, tem um LED daora e toca até musiquinha. Perdi ele lá
-                    na sala de aula 10, alguém poderia me informar aonde ele está? :(
+                    {/* O meu relogio ele é feito de aluminio, tem um LED daora e toca até musiquinha. Perdi ele lá
+                    na sala de aula 10, alguém poderia me informar aonde ele está? :( */}
+                    {item.description}
                  </Text>
 
                 <View style={styles.middleline}>
@@ -47,16 +42,24 @@ const PostBlock = () => {
 
                <View style={styles.endline}>
                     <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                      <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                      <Text>Status: Perdido </Text>
+                    { item.status == "0" ? (
+                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                    ) : item.status == "1" ? (
+                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                    ) : item.status == "2" ? (
+                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                    ) : (
+                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                    )}
+                    <Text>Status: {item.status}</Text>
                     </View>
 
                     <View style={{marginHorizontal: wp(2)}}>
-                        <Text>Criado em: 30/10/2024 11:52</Text>
+                        <Text>Criado em: {item.createdAt}</Text>
                     </View>
                 </View>
             </View>
-            
+            ))}
         </View>
     )
 }

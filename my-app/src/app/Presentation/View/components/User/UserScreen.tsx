@@ -1,6 +1,9 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
-import React = require('react');
+import React from 'react';
+import FeedBlock from '../Feed/FeedBlock';
+import UserBlock from './UserBlock';
+
 
 const UserProfileScreen: React.FC = () => {
   return (
@@ -35,6 +38,11 @@ const UserProfileScreen: React.FC = () => {
           {/* Adicione mais informações conforme necessário */}
         </View>
       </View>
+
+    <View>
+      <Text style={styles.userPostBlock}>UML é foda :(</Text>
+        <UserBlock />  
+    </View>
     </ScrollView>
     </>
   );
@@ -146,6 +154,11 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 10,
   },
+  userPostBlock: {
+    marginBottom: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
 
 export default UserProfileScreen;
