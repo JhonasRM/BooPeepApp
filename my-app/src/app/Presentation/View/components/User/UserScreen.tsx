@@ -1,6 +1,6 @@
-import React from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from '@expo/vector-icons/FontAwesome';
+import React = require('react');
 
 const UserProfileScreen: React.FC = () => {
   return (
@@ -23,9 +23,6 @@ const UserProfileScreen: React.FC = () => {
               Desenvolvedor de software apaixonado por tecnologia.
             </Text>
           </View>
-          <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.followButtonText}>Seguir</Text>
-          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.additionalInfoContainer}>
@@ -33,6 +30,8 @@ const UserProfileScreen: React.FC = () => {
         <View style={styles.additionalInfoContent}>
           <Text style={styles.additionalInfo}>Email: igorrocha@gamil.com</Text>
           <Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>
+          <Text style={styles.additionalInfo}>Curso: Desenvolvimento de Sistemas</Text>
+          <Text style={styles.additionalInfo}>Turno: Noite</Text>
           {/* Adicione mais informações conforme necessário */}
         </View>
       </View>

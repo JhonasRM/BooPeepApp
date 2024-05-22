@@ -1,5 +1,6 @@
 import { Link } from "expo-router"
-import React from "react"
+import React = require("react");
+//import React from "react"
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
@@ -30,7 +31,7 @@ const UserConfigProps = (props: optProps) => {
         ) : props.optType === "option" ? (
             <>
                 <Link href={`${props.optLink}`} asChild>
-                    <TouchableOpacity style={props.optImgUrl != undefined ? styles.optionChild : styles.buttonChild}>
+                    <TouchableOpacity style={props.optImgUrl == undefined ? styles.buttonChild : styles.optionChild}>
                         {props.optImgUrl != undefined ? 
                             (<Image source={props.optImgUrl} style={styles.img}/>)
                         : (null)}
