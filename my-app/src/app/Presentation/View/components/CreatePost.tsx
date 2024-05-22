@@ -74,7 +74,7 @@ const CreatePost = () => {
                         placeholder={"Me diga o que ocorreu..."} 
                         placeholderTextColor={"#303030"}
                         multiline
-                        numberOfLines={20}
+                        numberOfLines={10}
                         style={styles.textInput}
                         />
                     </View>
