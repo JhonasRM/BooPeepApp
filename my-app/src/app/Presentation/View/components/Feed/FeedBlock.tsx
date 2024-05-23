@@ -6,7 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
-import React from "react";
+
+//import React from "react";
+import React = require("react");
+
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
