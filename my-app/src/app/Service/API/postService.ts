@@ -1,5 +1,6 @@
 import axios from "axios"
 import { Post } from "../Entities/postEntities"
+import { useState } from "react"
 
 export class postServices {
     private endpointpost: string
@@ -10,12 +11,12 @@ export class postServices {
     /*Falar com o Jonathan sobre isso -> */ private postId: any
 
     constructor() {
-        /*Falar com o Jonathan sobre isso -> */ this.UserID = ""
-        /*Falar com o Jonathan sobre isso -> */ this.postId = ""
+        /*Falar com o Jonathan sobre isso -> */ this.UserID = null
+        /*Falar com o Jonathan sobre isso -> */ this.postId = null
         
         this.endpointpost = "https://boopeepapir.onrender.com/posts"
-        this.endpointuserpost = `https://boopeepapir.onrender.com/posts?UserID=${this.UserID}`,
-        this.endpointspecificpost = `https://boopeepapir.onrender.com/posts?UserID=${this.postId}`
+        this.endpointuserpost = `https://boopeepapir.onrender.com/posts?UserID=`,
+        this.endpointspecificpost = `https://boopeepapir.onrender.com/posts?postId=`
     };
 
     //------------------------------------------------------------------
@@ -58,9 +59,11 @@ export class postServices {
     //------------------------------------------------------------------
 
     async getPostFromUser(post: Post): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: Post }> {
+        this.UserID = post.UserID
+        
         try {
             console.log("getPostFromUser for chamado!")
-            const resp = await axios.get(this.endpointuserpost, {
+            const resp = await axios.get(this.endpointuserpost+this.UserID, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "GET",
@@ -86,9 +89,11 @@ export class postServices {
     //------------------------------------------------------------------
 
     async getSpecificPost(post: Post): Promise<{valido: boolean, value?: number, error?: string | Error, data?: Post}> {
+        this.postId = post.postId
+        
         try {
             console.log("getSpecificPost foi chamado!")
-            const resp = await axios.get(this.endpointspecificpost, {
+            const resp = await axios.get(this.endpointspecificpost+this.postId, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "GET",
