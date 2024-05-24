@@ -1,4 +1,4 @@
-import React from "react"
+import React = require("react")
 import FooterBar from "../components/FooterBar"
 import HeaderBar from "../components/HeaderBar"
 import UserProfileScreen from "../components/User/UserScreen"
