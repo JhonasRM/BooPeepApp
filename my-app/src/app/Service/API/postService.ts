@@ -10,7 +10,7 @@ export class postServices {
 
     //------------------------------------------------------------------
 
-    async getPosts(post: Post): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: Post }> {
+    async getPosts(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
         const allPosts = {
             UserID: post.UserID,
             postId: post.postId,
@@ -25,6 +25,7 @@ export class postServices {
             const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
                     "Access-Control-Allow-Methods": "GET",
                     "Content-Type": "application/json;charset=UTF-8"
                 }
@@ -39,20 +40,21 @@ export class postServices {
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, error: error.message }
+                return { valido: false, value: 400, erro: error.message }
             }
-            return { valido: false, value: 500, error: 'Internal Server Error' }
+            return { valido: false, value: 500, erro: 'Internal Server Error' }
         }
     }
 
     //------------------------------------------------------------------
 
-    async getPostFromUser(post: Post): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: Post }> {
+    async getPostFromUser(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
         try {
             console.log("getPostFromUser for chamado!")
             const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
                     "Access-Control-Allow-Methods": "GET",
                     "Content-Type": "application/json;charset=UTF-8"
                 },
@@ -70,20 +72,21 @@ export class postServices {
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, error: error.message }
+                return { valido: false, value: 400, erro: error.message }
             }
-            return { valido: false, value: 500, error: 'Internal Server Error' }
+            return { valido: false, value: 500, erro: 'Internal Server Error' }
         }
     }
 
     //------------------------------------------------------------------
 
-    async getSpecificPost(post: Post): Promise<{valido: boolean, value?: number, error?: string | Error, data?: Post}> {        
+    async getSpecificPost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {        
         try {
             console.log("getSpecificPost foi chamado!")
             const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
                     "Access-Control-Allow-Methods": "GET",
                     "Content-Type": "application/json;charset=UTF-8"
                 },
@@ -101,13 +104,82 @@ export class postServices {
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, error: error.message }
+                return { valido: false, value: 400, erro: error.message }
             }
-            return { valido: false, value: 500, error: 'Internal Server Error' }
+            return { valido: false, value: 500, erro: 'Internal Server Error' }
         }
     }
 
     //------------------------------------------------------------------
+
+    async createPost(/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+        try {
+            console.log("createPost foi chamado!")
+            const sendPost = {
+                //title: title
+                description: description,
+                local: local,
+                status: status,
+                createdAt: createdAt,
+            }
+            const resp = await axios.post(this.endpointpost, sendPost, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+            })
+
+            if (resp.status !== 200) {
+                console.log("createPost respondeu com ERRO!")
+                throw new Error(resp.statusText)
+            }
+
+            console.log("createPost respondeu com SUCESSO!")
+            console.log(resp.data)
+            return {valido: true, value: 201, data: resp.data}
+
+        } catch (error) {
+            if (error instanceof Error) {
+                return {valido: false, value: 400, erro: error.message}
+            }
+            return {valido: false, value: 500, erro: 'Internal Server Error'}
+        }
+    }
+
+    //------------------------------------------------------------------
+    //Melhor ver isso com o Jonathan:
+    async deletePost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+        try {
+            console.log("deletePost for chamado!")
+            const resp = await axios.delete(this.endpointpost, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+                    "Content-Type": "application/json;charset=UTF-8"
+                },
+                //Lembre-se, DELETE/UPDATE tem que ter WHERE se não a vaca vai pro brejo
+                params: {
+                    postId: post.postId
+                }
+            })
+
+            if (resp.status !== 201) {
+                console.log('deletePost respondeu com ERRO!')
+                throw new Error(resp.statusText)
+            }
+            console.log('deletePost respondeu com SUCESSO!')
+            return { valido: true, value: 201, data: resp.data }
+
+        } catch (error) {
+            if (error instanceof Error) {
+                return { valido: false, value: 400, erro: error.message }
+            }
+            return { valido: false, value: 500, erro: 'Internal Server Error' }
+        }   
+    }
 };
 
 
