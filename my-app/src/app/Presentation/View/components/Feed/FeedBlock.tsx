@@ -8,27 +8,51 @@ import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
 
 //import React from "react";
-import React = require("react");
+
 
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
-import feedController from "../../../Controllers/feedController";
+import React, { useEffect, useState } from "react";
+import { feedStateController } from "../../../Controllers/feedStateController";
 
 export function FeedQuery() {
-    const {data, isError, error, isLoading} = feedController();
+    const {description, UserID, postId, local, status, createdAt, handleFeedFetch} = feedStateController()
+    const [data, setData] = useState<any>(null)
+    const [erro, setErro] = useState(false)
+    const [loading, setLoading] = useState(true)
+    
+    const [erroFetch, setErroFetch] = useState("")
 
-    if (isLoading) {
-        return (
-            <LoadingBox whatPage="Feed"/>
-        )
-    }
+    useEffect(() => {
+        console.log("useEffect is running")
 
-    if (isError && error) {
-        return (
-            <ErrorMessage message={error.message} />
-        )
+    const incomingData = async () => {
+        console.log("incomingData is running")
+
+        try {
+            const data = await handleFeedFetch (createdAt, UserID, postId, local, status, description)
+
+            if (data.valido === false) {
+                throw new Error(data.erro as string);
+            }
+
+            if (data.valido === true) {
+                console.log(`${data.value}. GET realizado com sucesso!`);
+            }
+
+        } catch (error) {
+            console.error("Erro ao realizar requisição:", error);
+            if (error instanceof Error) {
+                setErroFetch(error.message)
+            } else {
+                setErroFetch('An unknown error occurred')
+            }
+        }
+        setData(data)
     }
+    incomingData()
+    }, []);
 
     return (
         <View>

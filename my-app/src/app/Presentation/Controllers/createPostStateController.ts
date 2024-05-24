@@ -1,0 +1,5 @@
+const createPostStateController = () => {
+
+}
+
+export { createPostStateController }

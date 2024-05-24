@@ -4,22 +4,20 @@ import { Image, StyleSheet, Text, View } from "react-native"
 import ContainerOptions from "../ContainerOptions";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Entypo } from '@expo/vector-icons';
-import commentPostController from "../../../Controllers/commentPostController";
+
 
 const PostBlock = ({postId}: any) => {
-    const {data, isLoading, isError, error} = commentPostController(postId)
-
     return (
         <View style={styles.container}>
             
-            {data && data.map((item: any) => (
+            
             <View style={styles.feedblock}>
                 <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                     style={styles.user}/>
 
                     <View>
-                        <Text style={styles.usertext}>{item.UserID}</Text>
+                        <Text style={styles.usertext}>Augusto{/*{item.UserID}*/}</Text>
                         <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                     </View>
 
@@ -30,9 +28,9 @@ const PostBlock = ({postId}: any) => {
                     Perdi o meu Relogio :( {/*{item.}*/}
                  </Text>
                  <Text style={[styles.infotext, styles.beyondfirstline]}> 
-                    {/* O meu relogio ele é feito de aluminio, tem um LED daora e toca até musiquinha. Perdi ele lá
-                    na sala de aula 10, alguém poderia me informar aonde ele está? :( */}
-                    {item.description}
+                    O meu relogio ele é feito de aluminio, tem um LED daora e toca até musiquinha. Perdi ele lá
+                    na sala de aula 10, alguém poderia me informar aonde ele está? :(
+                    {/*item.description*/}
                  </Text>
 
                 <View style={styles.middleline}>
@@ -42,7 +40,7 @@ const PostBlock = ({postId}: any) => {
 
                <View style={styles.endline}>
                     <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                    { item.status == "0" ? (
+                    {/* { item.status == "0" ? (
                     <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
                     ) : item.status == "1" ? (
                     <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
@@ -50,16 +48,16 @@ const PostBlock = ({postId}: any) => {
                     <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                     ) : (
                     <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                    )}
-                    <Text>Status: {item.status}</Text>
+                    )} */}
+                    <Text>Status: 2</Text>
                     </View>
 
                     <View style={{marginHorizontal: wp(2)}}>
-                        <Text>Criado em: {item.createdAt}</Text>
+                        <Text>Criado em: 10/30/2010 11:32</Text>
                     </View>
                 </View>
             </View>
-            ))}
+            )
         </View>
     )
 }
