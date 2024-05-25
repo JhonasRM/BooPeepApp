@@ -77,7 +77,7 @@ export class postServices {
                 throw new Error(resp.statusText);
             };
             console.log('getPostFromUser respondeu com SUCESSO!');
-            return { valido: true, value: 201, data: resp.data };
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
@@ -118,7 +118,7 @@ export class postServices {
                 throw new Error(resp.statusText);
             };
             console.log('getSpecificPost respondeu com SUCESSO!');
-            return { valido: true, value: 201, data: resp.data };
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
@@ -130,13 +130,23 @@ export class postServices {
 
     //------------------------------------------------------------------
 
-    async createPost(/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+    async createPost(
+        /*title: string,*/ 
+        createdAt: number,
+        //UserID: string,
+        description: string, 
+        //postId: string,
+        local: string, 
+        status: number 
+    ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         try {
             console.log("createPost foi chamado!");
             const sendPost = {
                 //title: title
                 createdAt: createdAt,
+                //UserID: UserID,
                 description: description,
+                //postId: postId,
                 local: local,
                 status: status,
             };
@@ -156,7 +166,7 @@ export class postServices {
 
             console.log("createPost respondeu com SUCESSO!");
             console.log(resp.data);
-            return {valido: true, value: 201, data: resp.data};
+            return {valido: true, value: 200, data: resp.data};
 
         } catch (error) {
             if (error instanceof Error) {
@@ -189,7 +199,7 @@ export class postServices {
                 throw new Error(resp.statusText);
             }
             console.log('deletePost respondeu com SUCESSO!');
-            return { valido: true, value: 201, data: resp.data };
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {

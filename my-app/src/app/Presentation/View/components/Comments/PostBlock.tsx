@@ -1,17 +1,69 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
-import ContainerOptions from "../ContainerOptions";
+import React, { useEffect, useState } from "react"
+import { Image, Text, View, StyleSheet } from "react-native"
+import ContainerOptions from "../ContainerOptions"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Entypo } from '@expo/vector-icons';
+import { Post } from "../../../../Service/Entities/postEntities";
+import { commentPostBlockStateController } from "../../../Controllers/commentPostBlockStateController";
 
 
-const PostBlock = ({postId}: any) => {
+const PostBlock = () => {
+    const {
+        createdAt, 
+        UserID, 
+        description, 
+        postId, 
+        local, 
+        status, 
+        handleFetchSpecificPost
+    } = commentPostBlockStateController()
+    const [data, setData] = useState<Post[]>()
+    const [erro, setErro] = useState(false)
+    const [loading, setLoading] = useState(true)
+    
+    const [erroFetch, setErroFetch] = useState("")
+
+    useEffect(() => {
+        console.log("useEffect is running")
+
+    const incomingData = async () => {
+        console.log("incomingData is running")
+
+        try {
+            const data = await handleFetchSpecificPost (
+                createdAt,
+                UserID, 
+                description,
+                postId, 
+                local, 
+                status
+            )
+
+            if (data.valido === false) {
+                throw new Error(data.erro as string);
+            }
+
+            if (data.valido === true) {
+                console.log(`${data.value}. GET realizado com sucesso!`);
+            }
+
+        } catch (error) {
+            console.error("Erro ao realizar requisição:", error);
+            if (error instanceof Error) {
+                setErroFetch(error.message)
+            } else {
+                setErroFetch('An unknown error occurred')
+            }
+        }
+        setData(data)
+    }
+    incomingData()
+    }, []);
+
     return (
-        <View style={styles.container}>
-            
-            
-            <View style={styles.feedblock}>
+        <>
+        <View style={styles.container}>            
+            <View style={styles.postblock}>
                 <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                     style={styles.user}/>
@@ -59,6 +111,7 @@ const PostBlock = ({postId}: any) => {
             </View>
             )
         </View>
+        </>
     )
 }
 
@@ -70,7 +123,7 @@ const styles = StyleSheet.create ({
         borderBottomColor: "black",
         borderBottomWidth: 2,
     },
-    feedblock: {
+    postblock: {
         backgroundColor: "#eeeeee",
         padding: 6,
         borderRadius: 10,

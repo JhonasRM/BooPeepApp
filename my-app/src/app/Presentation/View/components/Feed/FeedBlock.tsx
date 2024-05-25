@@ -71,26 +71,36 @@ export function FeedQuery() {
     }, []);
 
     return (
-        <View>
-            {data && data.map((item: any) => (  //Conversar com o Jonathan referente ao Warning
-            <View style={styles.feedblock} key={item.postId}>
-                <View style={styles.firstline}>
-                    <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-                     <Text style={styles.usertext}> {item.UserID} </Text>
-                     <ContainerOptions style={styles.options}/>
+        <>
+        <View style={styles.container}>  
+            {data && data.map((item: any) => (
+            <View style={styles.userblock}>
+                <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
+                    <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
+                    style={styles.user}/>
+
+                    <View>
+                        <Text style={styles.usertext}>{item.UserID}</Text>
+                        <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
+                    </View>
+
+                    <ContainerOptions style={styles.options}/>
                 </View>
-                 <Text style={styles.titletext}>
-                    {item.local}
+                
+                 <Text style={[styles.titletext, styles.beyondfirstline]}>
+                    Perdi o meu Relogio :( {/*{item.}*/}
                  </Text>
-                 <Text style={styles.infotext}> 
-                 {item.description}
+                 <Text style={[styles.infotext, styles.beyondfirstline]}> 
+                    {item.description}
                  </Text>
 
                 <View style={styles.middleline}>
-                    <ImageCarousel ImgStyle={styles.missingpic} ImgDataset={{media: ids.missingpic}} ImgSource={require('../../../../../../assets/pictures/riff.jpg')}/>
+                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
+                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
                 </View>
 
                <View style={styles.endline}>
+                    <View style={[styles.status, {marginHorizontal: wp(2)}]}>
                     { item.status == "0" ? (
                     <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
                     ) : item.status == "1" ? (
@@ -99,15 +109,19 @@ export function FeedQuery() {
                     <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                     ) : (
                     <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                    )}
-                    <Text style={styles.statustext}>Status: {item.status}</Text>
-                    <CommentButton btnStyle={styles.chaticon} />
+                    )} 
+                    <Text>Status: {item.status}</Text>
+                    </View>
+
+                    <View style={{marginHorizontal: wp(2)}}>
+                        <Text>Criado em: {item.createdAt}</Text>
+                    </View>
                 </View>
-                <Text style={styles.time}>Criado em: {item.createdAt}</Text>
             </View>
             ))
-            }
+        }
         </View>
+        </>
     )
 }
 
@@ -121,18 +135,26 @@ const FeedBlock = () => {
 
 const {styles} = StyleSheet.create ({
     container: {
-        flex: 1,
-        position: "relative",
+        marginVertical: hp(1),
+        paddingBottom: hp(2),
+
+        borderBottomColor: "black",
+        borderBottomWidth: 2,
     },
-    feedblock: {
-        backgroundColor: "#ffffff",
-        marginHorizontal: wp(5),
-        marginVertical: hp(2),
+    userblock: {
+        backgroundColor: "#eeeeee",
         padding: 6,
-        borderRadius: 10
+        borderRadius: 10,
     },
     firstline: {
+        flex: 1,
         flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center"
+    },
+    beyondfirstline: {
+        marginLeft: wp(7),
+        marginRight: wp(2),
     },
     user: {
         width: 30,
@@ -141,12 +163,16 @@ const {styles} = StyleSheet.create ({
     },
     usertext: {
         fontWeight: "bold",
+        marginLeft: wp(1)
+    },
+    userinfo: {
+      marginLeft: wp(1)
     },
     options: {
         position: "absolute",
         right: 0,  
         marginRight: 10,
-        zIndex: 1,
+        zIndex: 2,
         //backgroundColor: "#dbdbdb",
         borderRadius: 5,
     },
@@ -154,6 +180,7 @@ const {styles} = StyleSheet.create ({
         paddingHorizontal: wp(5),
         paddingTop: wp(2),
         fontSize: 18,
+        fontWeight: "bold"
     },
     infotext: {
         paddingHorizontal: wp(5),
@@ -169,27 +196,22 @@ const {styles} = StyleSheet.create ({
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center",
-        marginVertical: hp(1),
-        marginHorizontal: wp(2),
+        justifyContent: "center"
     },
     status: {
-        borderWidth: wp(2),
-        borderRadius: 50,
-        width: wp(1),
-        height: hp(1),
-        borderColor: "#ce1e1e",
-        marginRight: wp(1),
-    },
-    statustext: {
-        marginRight: wp(18),
+        // borderWidth: wp(2),
+        // borderRadius: 50,
+        // width: wp(1),
+        // height: hp(1),
+        // borderColor: "#ce1e1e",
+        // marginRight: wp(1),
+        flexDirection: "row",
+        alignItems: "center",
     },
     time: {
-        marginLeft: 10,
+        marginLeft: 4,
     },
-    chaticon: {
-        width: 35,
-        height: 35,        
+    chaticon: {     
         position: "absolute",
         right: 0,
         paddingBottom: 10,
@@ -197,7 +219,8 @@ const {styles} = StyleSheet.create ({
     },
     endline: {
         flexDirection: "row",
-        marginLeft: 10,
+        alignItems: "center",
+        alignSelf: "center",
     },
 })
 
