@@ -39,4 +39,19 @@ export class postValidator {
             }
         }   
     }
+
+    //Verifica se a descrição é valida:
+    descriptionValCheck(description: string, checkdescription: string) {
+        try {
+            const valconf = z.literal(description).parse(checkdescription);
+            return {valido: true, value: valconf};
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                const mensagemErro = error.errors[0].message;
+                return {valido: false, erro: mensagemErro};
+            } else {
+                return {valido: false, erro: 'Erro desconhecido ao validar o texto'};
+            }
+        }
+    }
 }
