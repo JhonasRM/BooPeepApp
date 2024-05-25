@@ -6,7 +6,9 @@ export class postValidator {
     constructor() {
         this.postValByField = {
             //title: z.string().regex(/.+/, 'Preencha esse campo!')
+            //.regex(/[a-zA-z]/, 'Esse campo precisa ter no minimo letras!')
             description: z.string().regex(/.+/, 'Preencha esse campo!')
+            .regex(/[a-zA-z]/, 'Esse campo precisa ter no minimo letras!')
         }
     }
 

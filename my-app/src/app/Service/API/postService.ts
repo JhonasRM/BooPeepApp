@@ -131,24 +131,18 @@ export class postServices {
     //------------------------------------------------------------------
 
     async createPost(
-        /*title: string,*/ 
-        createdAt: number,
-        //UserID: string,
-        description: string, 
-        //postId: string,
-        local: string, 
-        status: number 
+        post: Post 
     ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         try {
             console.log("createPost foi chamado!");
             const sendPost = {
                 //title: title
-                createdAt: createdAt,
+                createdAt: post.createdAt,
                 //UserID: UserID,
-                description: description,
+                description: post.description,
                 //postId: postId,
-                local: local,
-                status: status,
+                local: post.local,
+                status: post.status,
             };
             const resp = await axios.post(this.endpointpost, sendPost, {
                 headers: {
