@@ -15,10 +15,19 @@ import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
 import React, { useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
+import { Post } from "../../../../Service/Entities/postEntities";
 
 export function FeedQuery() {
-    const {description, UserID, postId, local, status, createdAt, handleFeedFetch} = feedStateController()
-    const [data, setData] = useState<any>(null)
+    const {
+        createdAt, 
+        UserID, 
+        description, 
+        postId, 
+        local, 
+        status, 
+        handleFeedFetch
+    } = feedStateController()
+    const [data, setData] = useState<Post[]>()
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -31,7 +40,14 @@ export function FeedQuery() {
         console.log("incomingData is running")
 
         try {
-            const data = await handleFeedFetch (createdAt, UserID, postId, local, status, description)
+            const data = await handleFeedFetch (
+                createdAt,
+                UserID, 
+                description,
+                postId, 
+                local, 
+                status
+            )
 
             if (data.valido === false) {
                 throw new Error(data.erro as string);

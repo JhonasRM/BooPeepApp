@@ -11,14 +11,14 @@ export class postServices {
     //------------------------------------------------------------------
 
     async getPosts(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
-        const allPosts = {
+        const Posts = {
+            createdAt: post.createdAt,
             UserID: post.UserID,
-            postId: post.postId,
             description: post.description,
+            postId: post.postId,
             local: post.local,
             status: post.status,
-            createdAt: post.createdAt,
-        }
+        };
 
         try {
             console.log("getPosts foi chamado!");
@@ -29,28 +29,37 @@ export class postServices {
                     "Access-Control-Allow-Methods": "GET",
                     "Content-Type": "application/json;charset=UTF-8"
                 }
-            })
+            });
 
             if (resp.status !== 201) {
                 console.log('getPosts respondeu com ERRO!')
                 throw new Error(resp.statusText)
-            }
-            console.log('getPosts respondeu com SUCESSO!')
-            return { valido: true, value: 201, data: resp.data }
+            };
+            console.log('getPosts respondeu com SUCESSO!');
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
                 return { valido: false, value: 400, erro: error.message }
-            }
-            return { valido: false, value: 500, erro: 'Internal Server Error' }
-        }
-    }
+            };
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
+        };
+    };
 
     //------------------------------------------------------------------
 
     async getPostFromUser(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
+        const Posts = {
+            createdAt: post.createdAt,
+            UserID: post.UserID,
+            description: post.description,
+            postId: post.postId,
+            local: post.local,
+            status: post.status,
+        };
+        
         try {
-            console.log("getPostFromUser for chamado!")
+            console.log("getPostFromUser for chamado!");
             const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -61,28 +70,37 @@ export class postServices {
                 params: {
                     UserID: post.UserID
                 }
-            })
+            });
 
             if (resp.status !== 201) {
-                console.log('getPostFromUser respondeu com ERRO!')
-                throw new Error(resp.statusText)
-            }
-            console.log('getPostFromUser respondeu com SUCESSO!')
-            return { valido: true, value: 201, data: resp.data }
+                console.log('getPostFromUser respondeu com ERRO!');
+                throw new Error(resp.statusText);
+            };
+            console.log('getPostFromUser respondeu com SUCESSO!');
+            return { valido: true, value: 201, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message }
-            }
-            return { valido: false, value: 500, erro: 'Internal Server Error' }
+                return { valido: false, value: 400, erro: error.message };
+            };
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
         }
     }
 
     //------------------------------------------------------------------
 
     async getSpecificPost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {        
+        const Posts = {
+            createdAt: post.createdAt,
+            UserID: post.UserID,
+            description: post.description,
+            postId: post.postId,
+            local: post.local,
+            status: post.status,
+        };
+        
         try {
-            console.log("getSpecificPost foi chamado!")
+            console.log("getSpecificPost foi chamado!");
             const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -93,35 +111,35 @@ export class postServices {
                 params: {
                     postId: post.postId
                 }
-            })
+            });
 
             if (resp.status !== 201) {
-                console.log('getSpecificPost respondeu com ERRO!')
-                throw new Error(resp.statusText)
-            }
-            console.log('getSpecificPost respondeu com SUCESSO!')
-            return { valido: true, value: 201, data: resp.data }
+                console.log('getSpecificPost respondeu com ERRO!');
+                throw new Error(resp.statusText);
+            };
+            console.log('getSpecificPost respondeu com SUCESSO!');
+            return { valido: true, value: 201, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message }
-            }
-            return { valido: false, value: 500, erro: 'Internal Server Error' }
-        }
-    }
+                return { valido: false, value: 400, erro: error.message };
+            };
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
+        };
+    };
 
     //------------------------------------------------------------------
 
     async createPost(/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         try {
-            console.log("createPost foi chamado!")
+            console.log("createPost foi chamado!");
             const sendPost = {
                 //title: title
+                createdAt: createdAt,
                 description: description,
                 local: local,
                 status: status,
-                createdAt: createdAt,
-            }
+            };
             const resp = await axios.post(this.endpointpost, sendPost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -129,30 +147,30 @@ export class postServices {
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
                     "Content-Type": "application/json;charset=UTF-8"
                 }
-            })
+            });
 
             if (resp.status !== 200) {
-                console.log("createPost respondeu com ERRO!")
-                throw new Error(resp.statusText)
-            }
+                console.log("createPost respondeu com ERRO!");
+                throw new Error(resp.statusText);
+            };
 
-            console.log("createPost respondeu com SUCESSO!")
-            console.log(resp.data)
-            return {valido: true, value: 201, data: resp.data}
+            console.log("createPost respondeu com SUCESSO!");
+            console.log(resp.data);
+            return {valido: true, value: 201, data: resp.data};
 
         } catch (error) {
             if (error instanceof Error) {
-                return {valido: false, value: 400, erro: error.message}
-            }
-            return {valido: false, value: 500, erro: 'Internal Server Error'}
-        }
+                return {valido: false, value: 400, erro: error.message};
+            };
+            return {valido: false, value: 500, erro: 'Internal Server Error'};
+        };
     }
 
     //------------------------------------------------------------------
     //Melhor ver isso com o Jonathan:
     async deletePost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         try {
-            console.log("deletePost for chamado!")
+            console.log("deletePost for chamado!");
             const resp = await axios.delete(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -164,22 +182,22 @@ export class postServices {
                 params: {
                     postId: post.postId
                 }
-            })
+            });
 
             if (resp.status !== 201) {
-                console.log('deletePost respondeu com ERRO!')
-                throw new Error(resp.statusText)
+                console.log('deletePost respondeu com ERRO!');
+                throw new Error(resp.statusText);
             }
-            console.log('deletePost respondeu com SUCESSO!')
-            return { valido: true, value: 201, data: resp.data }
+            console.log('deletePost respondeu com SUCESSO!');
+            return { valido: true, value: 201, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message }
-            }
-            return { valido: false, value: 500, erro: 'Internal Server Error' }
-        }   
-    }
+                return { valido: false, value: 400, erro: error.message };
+            };
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
+        };
+    };
 };
 
 

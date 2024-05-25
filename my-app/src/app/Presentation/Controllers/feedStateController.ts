@@ -6,37 +6,47 @@ import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSe
 
 const feedStateController = () => {
     //const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
+    const [createdAt, setCreatedAt] = useState(0)
     const [UserID, setUserID] = useState("")
+    const [description, setDescription] = useState("")
     const [postId, setPostId] = useState("")
     const [local, setLocal] = useState("")
     const [status, setStatus] = useState(0)
-    const [createdAt, setCreatedAt] = useState(0)
 
     // const validator: postValidator = new postValidator()
     const postService: postServices = new postServices()
 
     const setState: postStateAndSetters = {
         //title: setTitle,
+        createdAt: setCreatedAt,
+        UserID: setUserID,
         description: setDescription,
+        postId: setPostId,
         local: setLocal,
-        status: setStatus,
-        createdAt: setCreatedAt
+        status: setStatus
     }
 
     // const handleFeedFetch = async (/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         
     // }
 
-    const handleFeedFetch = async (createdAt: number, UserID: string, postId: string, local: string, status: number, description: string): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
-        const post: Post = new Post (
+    const handleFeedFetch = async (
+        createdAt: number,
+        UserID: string, 
+        description: string, 
+        postId: string, 
+        local: string, 
+        status: number 
+    ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
+        
+         const post: Post = new Post (
             createdAt,
             UserID,
+            description,
             postId,
             local,
-            status,
-            description        
-        );   
+            status
+         );   
         
         try {
             console.log(post)
@@ -44,8 +54,10 @@ const feedStateController = () => {
             if (req.valido === false) {
                 throw new Error("Bad Request");
             }
-            return { valido: true, value: 201, data: post };
+            return { valido: true, value: 200, data: post };
         } catch (error) {
+            console.log("handleFeedFetch respondeu com ERRO!")
+
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
                   return { valido: false, value: 401, erro: error };
@@ -57,7 +69,14 @@ const feedStateController = () => {
         }
     }
 
-    return {description, local, status, createdAt, UserID, postId, handleFeedFetch};
+    return {
+        createdAt,
+        UserID, 
+        description, 
+        postId, 
+        local, 
+        status, 
+        handleFeedFetch};
 };
 
 export { feedStateController }
