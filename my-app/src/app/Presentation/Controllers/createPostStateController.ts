@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator";
 import { postServices } from "../../Service/API/postService";
-import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters";
 import { Post } from "../../Service/Entities/postEntities";
+import { createPostStateAndSetters } from "../../utils/types/Interfaces/createPostStateAndSetters";
 
 const createPostStateController = () => {
     //const [title, setTitle] = useState("")
@@ -18,7 +18,7 @@ const createPostStateController = () => {
     const validator: postValidator = new postValidator();
     const postService: postServices = new postServices();
 
-    const setState: postStateAndSetters = {
+    const setState: createPostStateAndSetters = {
         createdAt: setCreatedAt,
         UserID: setUserID,
         description: setDescription,
@@ -33,7 +33,7 @@ const createPostStateController = () => {
         value: number & string,
     ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
         if (field in setState) {
-            setState[field as keyof postStateAndSetters](value);
+            setState[field as keyof createPostStateAndSetters](value);
             const valfield = await validator.valByField(field, value);
             
             if (valfield.valido === false) {
