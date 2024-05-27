@@ -52,6 +52,21 @@ const createPostStateController = () => {
         return {valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em postStateAndSetters.`}
     }
 
+    const handleCheckDescriptionChange = async (
+        description: string,
+        checkdescription: string
+    ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
+        setCheckDescription(checkdescription);
+        const valconf = validator.descriptionValCheck(description, checkdescription)
+        
+        if (valconf.valido === false) {
+            console.log("Condições do validador não batem.");
+            return {valido: false, value: 401, erro: "Condições do validador não batem."};
+        }
+        console.log("validação concluida!")
+        return {valido: true, value: 200}
+    }
+
     const handleCreatePost = async (
         createdAt: number,
         UserID: string,
