@@ -1,5 +1,6 @@
 import axios from "axios";
 import { User } from "../Entities/userEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 export class userService {
   private endpointuser: string;
   private endpointlogin: string;
@@ -12,7 +13,7 @@ export class userService {
     this.endpointest = 'https://organic-yodel-r9pjw7j5ppj3pw6r-3000.app.github.dev/user'
   };
 
-  async cadastro(user: User): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: User }> {
+  async cadastro(user: User): Promise<IReturnAdapter> {
     const userData = {
       displayName: user.name,
       email: user.email,
@@ -33,17 +34,17 @@ export class userService {
         throw new Error(resp.statusText)
       }
       console.log('voltou')
-      return { valido: true, value: 201, data: resp.data }
+      return { val: true, data: resp.data }
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false, value: 400, error: error.message }
+        return { val: false, erro: error.message }
       }
-      return { valido: false, value: 500, error: 'Internal Server Error' }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
 
   }
 
-  async login(email: string, password: string): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: User }> {
+  async login(email: string, password: string): Promise<IReturnAdapter> {
     try {
       console.log('bateu...')
       const loginData = {
@@ -64,16 +65,16 @@ export class userService {
       }
       console.log('voltou')
       console.log(resp.data)
-      return { valido: true, value: 201, data: resp.data }
+      return { val: true, data: resp.data }
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false, value: 400, error: error.message }
+        return { val: false, erro: error.message }
       }
-      return { valido: false, value: 500, error: 'Internal Server Error' }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
 
   }
-  async resetPwd(email: string): Promise<{ valido: boolean, value?: number, error?: string | Error, data?: string }> {
+  async resetPwd(email: string): Promise<IReturnAdapter> {
     try {
       console.log('bateu...')
       const resetData = {
@@ -90,39 +91,21 @@ export class userService {
       if (resp.status !== 200) {
         throw new Error(resp.statusText)
       }
-      return { valido: true, value: 201, data: 'Email enviado com sucesso!'}
+      return { val: true, data: 'Email enviado com sucesso!'}
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false, value: 400, error: error.message }
+        return { val: false,  erro: error.message }
       }
-      return { valido: false, value: 500, error: 'Internal Server Error' }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
   }
 
-  async update(email: string, fieldToUpdate: string, newValue: string, token?: string): Promise<{
-    valido: boolean;
-    value?: number;
-    error?: string | Error;
-    data?: User;
-  }> {
-    let updateData
-
-    if (fieldToUpdate === 'password') {
-      if(token === '' || token === null){
-        throw new Error('Unauthorized')
-      }
-      updateData = {
-        email: email,
-        fieldToUpdate: fieldToUpdate,
-        newValue: newValue,
-        token: token
-      }
-    } else if (fieldToUpdate !== 'password') {
-      updateData = {
+  async update(email: string, fieldToUpdate: string, newValue: string, token?: string): Promise<IReturnAdapter> {
+    
+    const  updateData = {
         email: email,
         fieldToUpdate: fieldToUpdate,
         newValue: newValue
-      }
     }
     try {
       console.log('bateu...')
@@ -140,12 +123,12 @@ export class userService {
       }
       console.log('voltou')
       console.log(resp.data)
-      return { valido: true, value: 201, data: resp.data }
+      return { val: true, data: resp.data }
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false, value: 400, error: error.message }
+        return { val: false, erro: error.message }
       }
-      return { valido: false, value: 500, error: 'Internal Server Error' }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
   }
 }

@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
-import { StateAndSetters } from "../../utils/types/Interfaces/StateAndSetters";
+import { StateAndSetters } from "../../utils/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 
 const LoginStateController = () => {

@@ -4,7 +4,7 @@ import { User } from "../Entities/userEntities";
 export class userValidator {
     private UserSchema;
     private userValByField: { [key: string]: z.ZodString }
-    constructor() {
+    constructor(){
         this.UserSchema = z.object({
             nome: z.string().min(2, "O nome deve ter mais de 5 caracteres."),
             sobrenome: z.string().min(2, "O sobrenome deve ter mais de 5 caracteres."),
