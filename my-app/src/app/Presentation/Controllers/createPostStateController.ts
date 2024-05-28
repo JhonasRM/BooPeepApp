@@ -1,16 +1,16 @@
-import { useState } from "react"
+import { SetStateAction, useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator";
 import { postServices } from "../../Service/API/postService";
 import { Post } from "../../Service/Entities/postEntities";
-import { createPostStateAndSetters } from "../../utils/types/Interfaces/createPostStateAndSetters";
+import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters";
 
 const createPostStateController = () => {
     //const [title, setTitle] = useState("")
-    //const [checkTitle, setCheckTitle] = useState("")
+    // //const [checkTitle, setCheckTitle] = useState("")
     const [createdAt, setCreatedAt] = useState(0);
     const [UserID, setUserID] = useState("");
     const [description, setDescription] = useState("");
-    const [checkDescription, setCheckDescription] = useState("")
+    // const [checkDescription, setCheckDescription] = useState("")
     const [postId, setPostId] = useState("");
     const [local, setLocal] = useState("");
     const [status, setStatus] = useState(0);
@@ -18,22 +18,18 @@ const createPostStateController = () => {
     const validator: postValidator = new postValidator();
     const postService: postServices = new postServices();
 
-    const setState: createPostStateAndSetters = {
-        createdAt: setCreatedAt,
-        UserID: setUserID,
+    const setState: postStateAndSetters = {
+        //title: setTitle
         description: setDescription,
-        checkdescription: setCheckDescription,
-        postId: setPostId,
         local: setLocal,
-        status: setStatus
     }
 
     const handleFieldChange = async (
         field: string,
-        value: number & string,
+        value: string,
     ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
         if (field in setState) {
-            setState[field as keyof createPostStateAndSetters](value);
+            setState[field as keyof postStateAndSetters](value);
             const valfield = await validator.valByField(field, value);
             
             if (valfield.valido === false) {
@@ -41,6 +37,9 @@ const createPostStateController = () => {
                 return {valido: false, value: 401, erro: valfield.erro}
             }
 
+            console.log("")
+            console.log("-----createPostStateController-----");
+            console.log(`field: ${field}, value: ${value}`)
             console.log("validação concluída");
             return { valido: true, value: 200 };
         }
@@ -52,40 +51,38 @@ const createPostStateController = () => {
         return {valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em postStateAndSetters.`}
     }
 
-    const handleCheckDescriptionChange = async (
-        description: string,
-        checkdescription: string
-    ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
-        setCheckDescription(checkdescription);
-        const valconf = validator.descriptionValCheck(description, checkdescription)
+    // const handleCheckDescriptionChange = async (
+    //     description: string,
+    //     checkdescription: string
+    // ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
+    //     //setCheckDescription(checkdescription);
+    //     const valconf = validator.valByField(description, checkdescription)
         
-        if (valconf.valido === false) {
-            console.log("Condições do validador não batem.");
-            return {valido: false, value: 401, erro: "Condições do validador não batem."};
-        }
-        console.log("validação concluida!")
-        return {valido: true, value: 200}
-    }
+    //     if (valconf.valido === false) {
+    //         console.log("Condições do validador não batem.");
+    //         return {valido: false, value: 401, erro: "Condições do validador não batem."};
+    //     }
+    //     console.log("validação concluida!")
+    //     return {valido: true, value: 200}
+    // }
 
     const handleCreatePost = async (
-        createdAt: number,
-        UserID: string,
+        //title: string
         description: string,
-        postId: string,
         local: string,
-        status: number
     ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
         }
 
         const post: Post = new Post(
+            //title,
             createdAt,
             UserID,
             description,
             postId,
             local,
-            status
+            status,
         );
         try {
             console.log(post);
@@ -109,12 +106,11 @@ const createPostStateController = () => {
     };
 
     return {
-        createdAt,
-        UserID,
+        //title,
         description,
-        postId,
         local,
-        status,
+        handleFieldChange,
+        //handleCheckDescriptionChange,
         handleCreatePost
     };
 };

@@ -14,16 +14,6 @@ const commentPostBlockStateController = () => {
     
         const postService: postServices = new postServices()
     
-        const setState: postStateAndSetters = {
-            //title: setTitle,
-            createdAt: setCreatedAt,
-            UserID: setUserID,
-            description: setDescription,
-            postId: setPostId,
-            local: setLocal,
-            status: setStatus
-        }
-    
         const handleFetchSpecificPost = async (
             createdAt: number,
             UserID: string, 

@@ -16,16 +16,6 @@ const feedStateController = () => {
     // const validator: postValidator = new postValidator()
     const postService: postServices = new postServices()
 
-    const setState: postStateAndSetters = {
-        //title: setTitle,
-        createdAt: setCreatedAt,
-        UserID: setUserID,
-        description: setDescription,
-        postId: setPostId,
-        local: setLocal,
-        status: setStatus
-    }
-
     // const handleFeedFetch = async (/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         
     // }

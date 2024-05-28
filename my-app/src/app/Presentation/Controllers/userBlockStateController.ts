@@ -14,16 +14,6 @@ const userBlockStateController = () => {
 
     const postService: postServices = new postServices()
 
-    const setState: postStateAndSetters = {
-        //title: setTitle,
-        createdAt: setCreatedAt,
-        UserID: setUserID,
-        description: setDescription,
-        postId: setPostId,
-        local: setLocal,
-        status: setStatus
-    }
-
     const handleFetchUserPosts = async (
         createdAt: number,
         UserID: string, 

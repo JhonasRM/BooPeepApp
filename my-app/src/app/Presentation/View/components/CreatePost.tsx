@@ -8,8 +8,21 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
+import { createPostStateController } from "../../Controllers/createPostStateController";
 
 const CreatePost = () => {
+    const {
+        description,
+        local,
+        handleFieldChange,
+        //handleCheckDescriptionChange,
+        handleCreatePost
+    } = createPostStateController()
+    
+    const [erroA, setErroA] = useState("");
+    const [erroB, setErroB] = useState("");
+    const [erroCreatePost, setErroCreatePost] = useState('')
+
     const [isTouched, setIsTouched] = useState(false)
     const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
 
@@ -33,7 +46,35 @@ const CreatePost = () => {
         }
     };
 
-    
+    const handleSendPost = async () => {
+        try {
+            const createPost = await handleCreatePost(
+                //title,
+                description,
+                local,
+            )
+
+            if (createPost.valido === false) {
+                throw new Error(createPost.erro as string)
+            }
+
+            if (createPost.valido === true) {
+                console.log(`${createPost.value}. Postagem criada com sucesso!`);
+                handleExit()
+            }
+        }
+
+        catch (error) {
+            console.error("Erro ao criar postagem:", error);
+            if (error instanceof Error) {
+              setErroCreatePost(error.message)
+            } else {
+              setErroCreatePost('An unknown error occurred')
+            }
+        }
+
+        console.log(erroB);
+    }
 
     return (
     <>
@@ -67,6 +108,15 @@ const CreatePost = () => {
                         <TextInput 
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"#303030"}
+                        autoCorrect={false}
+                        // onChangeText={async (title) => {
+                        //     const handle = await handleFieldChange("nome", nome);
+                        //      if (handle.valido === false) {
+                        //          setErroA(handle.erro as string);
+                        //      } else if (handle.valido === true) {
+                        //          setErroA("")
+                        //      }
+                        //}}
                         style={styles.textInput}
                         /> 
 
@@ -75,6 +125,15 @@ const CreatePost = () => {
                         placeholderTextColor={"#303030"}
                         multiline
                         numberOfLines={10}
+                        autoCorrect={false}
+                        onChangeText={async (description) => {
+                            const handle = await handleFieldChange("description", description)
+                            if (handle.valido === false) {
+                                setErroB(handle.erro as string);
+                            } else if (handle.valido === true) {
+                                setErroB("")
+                            }
+                        }}
                         style={styles.textInput}
                         />
                     </View>
@@ -82,7 +141,7 @@ const CreatePost = () => {
                 }
 
                     <View style={styles.buttonView}>
-                        <TouchableOpacity style={styles.postbtn}>
+                        <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
                             <Text style={styles.btntext}>Publicar</Text>
                         </TouchableOpacity>
 
