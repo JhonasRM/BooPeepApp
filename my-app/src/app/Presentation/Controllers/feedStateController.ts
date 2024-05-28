@@ -2,7 +2,6 @@ import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator"
 import { postServices } from "../../Service/API/postService"
 import { Post } from "../../Service/Entities/postEntities"
-import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters"
 
 const feedStateController = () => {
     //const [title, setTitle] = useState("")
@@ -39,8 +38,9 @@ const feedStateController = () => {
          );   
         
         try {
-            console.log(post)
             const req = await postService.getPosts(post)
+            console.log(`Post: ${post}`);
+            console.log(`Request: ${req}`);
             if (req.valido === false) {
                 throw new Error("Bad Request");
             }

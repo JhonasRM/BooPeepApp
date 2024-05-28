@@ -27,7 +27,8 @@ export function FeedQuery() {
         status, 
         handleFeedFetch
     } = feedStateController()
-    const [data, setData] = useState<Post[]>()
+
+    const [data, setData] = useState<any>([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -40,21 +41,23 @@ export function FeedQuery() {
         console.log("incomingData is running")
 
         try {
-            const data = await handleFeedFetch (
+            const response = await handleFeedFetch (
                 createdAt,
                 UserID, 
                 description,
                 postId, 
                 local, 
                 status
-            )
+            ) 
 
-            if (data.valido === false) {
-                throw new Error(data.erro as string);
+            if (response.valido === false) {
+                throw new Error(response.erro as string);
             }
 
-            if (data.valido === true) {
-                console.log(`${data.value}. GET realizado com sucesso!`);
+            if (response.valido === true) {
+                console.log(`${response.value}. GET realizado com sucesso!`);
+
+                setData(response.data)                
             }
 
         } catch (error) {
@@ -65,15 +68,16 @@ export function FeedQuery() {
                 setErroFetch('An unknown error occurred')
             }
         }
-        setData(data)
     }
     incomingData()
+    console.log(`FeedBlock Response: ${data}`)
+    console.log(`typeof data: ${typeof data}`)
     }, []);
 
     return (
         <>
         <View style={styles.container}>  
-            {data && data.map((item: any) => (
+            {data && Array.isArray(data) && data.map((item: any) => (
             <View style={styles.userblock}>
                 <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
@@ -118,8 +122,9 @@ export function FeedQuery() {
                     </View>
                 </View>
             </View>
-            ))
-        }
+            )
+          )
+        } 
         </View>
         </>
     )

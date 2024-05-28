@@ -11,14 +11,14 @@ export class postServices {
     //------------------------------------------------------------------
 
     async getPosts(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
-        const Posts = {
-            createdAt: post.createdAt,
-            UserID: post.UserID,
-            description: post.description,
-            postId: post.postId,
-            local: post.local,
-            status: post.status,
-        };
+        // const Posts = {
+        //     createdAt: post.createdAt,
+        //     UserID: post.UserID,
+        //     description: post.description,
+        //     postId: post.postId,
+        //     local: post.local,
+        //     status: post.status,
+        // };
 
         try {
             console.log("getPosts foi chamado!");
@@ -31,7 +31,10 @@ export class postServices {
                 }
             });
 
-            if (resp.status !== 201) {
+            console.log('Response from API:');
+            console.log(resp);
+
+            if (resp.status !== 200) {
                 console.log('getPosts respondeu com ERRO!')
                 throw new Error(resp.statusText)
             };
