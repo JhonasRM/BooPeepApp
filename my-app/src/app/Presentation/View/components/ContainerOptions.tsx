@@ -42,10 +42,15 @@ const ContainerOptions = (props: Props) => {
 
                     <Text style={styles.headerText}>Opções da Postagem</Text>
                 </View>
+
+                <TouchableOpacity style={styles.optioncontainer}>
+                    <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
+                    <Text style={[styles.btnText]}>Editar Postagem</Text>
+                </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.optioncontainer}>
                     <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
-                    <Text style={[styles.btnText, {color: "red"}]}>Denunciar Post</Text>
+                    <Text style={[styles.btnText, {color: "red"}]}>Deletar Postagem</Text>
                 </TouchableOpacity>
             </View>
         </Modal>
