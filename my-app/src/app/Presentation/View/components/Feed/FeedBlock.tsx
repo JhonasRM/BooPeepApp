@@ -17,12 +17,10 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 
-const photos = [
-    'https://picsum.photos/500/300',
-    'https://picsum.photos/501/300',
-    'https://picsum.photos/502/300',
-    'https://picsum.photos/503/300'
-]
+const photos: string[] = ['https://picsum.photos/500/300',
+'https://picsum.photos/501/300',
+'https://picsum.photos/502/300',
+'https://picsum.photos/503/300']
 
 export function FeedQuery() {
     const {
@@ -92,15 +90,15 @@ export function FeedQuery() {
                         <ContainerOptions style={styles.options}/>
                     </View>
                     
-                    <Text style={[styles.titletext, styles.beyondfirstline]}>
+                    <Text style={[styles.titletext]}>
                         Perdi o meu Relogio :( {/*{item.}*/}
                     </Text>
-                    <Text style={[styles.infotext, styles.beyondfirstline]}> 
+                    <Text style={[styles.infotext]}> 
                         {item.description}
                     </Text>
 
                     <View style={styles.middleline}>
-                        <ImageCarousel ImgSource={{uri: photos}}/>
+                        <ImageCarousel ImgSource={photos}/>
                     </View>
 
                 <View style={styles.endline}>
@@ -120,6 +118,8 @@ export function FeedQuery() {
                         <View style={{marginHorizontal: wp(2)}}>
                             <Text>Criado em: {item.createdAt}</Text>
                         </View>
+
+                        <CommentButton btnStyle={styles.chaticon} />
                     </View>
                 </View>
                 )
@@ -203,7 +203,8 @@ const {styles} = StyleSheet.create ({
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: hp(2)
     },
     status: {
         // borderWidth: wp(2),
@@ -227,7 +228,7 @@ const {styles} = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         alignItems: "center",
-        alignSelf: "center",
+        marginBottom: hp(1)
     },
 })
 

@@ -12,7 +12,7 @@ import { AntDesign } from '@expo/vector-icons';
 type ImageCarouselProps = {
     ImgStyle?: StyleProp<ImageStyle>
     ImgDataset?: Record<string, string> | undefined
-    ImgSource: ImageSourcePropType | undefined
+    ImgSource: string[]
 }
 
 const GalleryItem = styled(YStack, {
@@ -39,19 +39,14 @@ const GalleryItem = styled(YStack, {
   } as const,
 })
 
-const photos = [
-  'https://picsum.photos/500/300',
-  'https://picsum.photos/501/300',
-  'https://picsum.photos/502/300',
-  'https://picsum.photos/503/300'
-]
-
 const wrap = (min: number, max: number, v: number) => {
   const rangeSize = max - min
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
 }
 
 const ImageCarousel = (props: ImageCarouselProps) => {
+    const photos: any = props.ImgSource
+
     const tamaguiConfig = createTamagui(config)
     
     const [[page, going], setPage] = useState([0, 0])
@@ -62,8 +57,14 @@ const ImageCarousel = (props: ImageCarouselProps) => {
         setPage([page + going, going])
     }
 
+    useEffect(() => {
+      console.log(photos.length)
+    }, [])
+
      return (
+      
        <TamaguiProvider config={tamaguiConfig}>
+    { photos.length > 0 ? (
     <XStack
       overflow="hidden"
       //backgroundColor="#000"
@@ -105,6 +106,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
       {/* <Button accessibilityLabel="Carousel right" icon={ArrowRight} size="$5" position="absolute" right="$1" circular elevate zIndex={100}/> */}
 
     </XStack>
+    ) : (<></>)}
     </TamaguiProvider>
   )
 }
