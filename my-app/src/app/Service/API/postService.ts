@@ -10,7 +10,7 @@ export class postServices {
 
     //------------------------------------------------------------------
 
-    async getPosts(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
+    async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
         // const Posts = {
         //     createdAt: post.createdAt,
         //     UserID: post.UserID,
@@ -32,14 +32,14 @@ export class postServices {
             });
 
             console.log('Response from API:');
-            console.log(resp);
+            console.log(resp.data);
 
             if (resp.status !== 200) {
                 console.log('getPosts respondeu com ERRO!')
                 throw new Error(resp.statusText)
             };
             console.log('getPosts respondeu com SUCESSO!');
-            return { valido: true, value: 200, data: resp.data };
+            return { valido: true, value: 200, data: resp.data as Post[] };
 
         } catch (error) {
             if (error instanceof Error) {

@@ -19,32 +19,40 @@ const feedStateController = () => {
         
     // }
 
-    const handleFeedFetch = async (
-        createdAt: number,
-        UserID: string, 
-        description: string, 
-        postId: string, 
-        local: string, 
-        status: number 
-    ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
-        
-         const post: Post = new Post (
-            createdAt,
-            UserID,
-            description,
-            postId,
-            local,
-            status
-         );   
-        
+    const handleFeedFetch = async (): Promise<{
+        valido: boolean, 
+        value?: number, 
+        erro?: string | Error, 
+        data?: Post[]
+    }> => {    
         try {
-            const req = await postService.getPosts(post)
-            console.log(`Post: ${post}`);
+            const req = await postService.getPosts()
             console.log(`Request: ${req}`);
             if (req.valido === false) {
                 throw new Error("Bad Request");
             }
-            return { valido: true, value: 200, data: post };
+
+            const postData = req.data as Post[]
+
+            let posts: Post[] = []
+            postData.forEach(post => {
+                const newPost = new Post(
+                    post.createdAt, 
+                    post.UserID, 
+                    post.description, 
+                    post.postId, 
+                    post.local, 
+                    post.status
+                )
+
+                posts.push(newPost)
+            });
+
+            if (posts[0] instanceof Post) {
+                return { valido: true, value: 200, data: posts };
+            }
+
+            throw new Error('Nenhum post encontrado.')
         } catch (error) {
             console.log("handleFeedFetch respondeu com ERRO!")
 
