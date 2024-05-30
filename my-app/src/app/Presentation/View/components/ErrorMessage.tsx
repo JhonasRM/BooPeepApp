@@ -3,14 +3,18 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import StyleSheet from "react-native-media-query"
 import React from "react";
 
-const ErrorMessage = ({ message }) => {
+type messageType = {
+    message: string
+}
+
+const ErrorMessage = ({ message }: messageType) => {
 
     return (
         <View style={styles.Errorbox}>
             <Image source={require('../../../../../assets/icons/icons8-erro-100.png')} style={styles.Warningimg}/>
             <Text style={styles.Wrongtext}>Algo deu errado.</Text>
             <View style={styles.Errorview}>
-                <Text style={styles.Errortext}> Erro: {message} </Text>
+                <Text style={styles.Errortext}> {message} </Text>
             </View>
             <Text style={styles.Wrongtext}>Puxe para cima para tentar recarregar novamente.</Text>
         </View>            

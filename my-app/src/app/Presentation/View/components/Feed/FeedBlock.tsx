@@ -46,14 +46,17 @@ export function FeedQuery() {
         console.log("incomingData is running")
 
         try {
+            setLoading(true)
             const response = await handleFeedFetch()
 
             if (response.valido === false) {
+                setErro(true)
                 throw new Error(response.erro as string);
             }
 
             if (response.valido === true) {
                 console.log(`${response.value}. GET realizado com sucesso!`);
+
 
                 setData(response.data)                
                 console.log(`Data from setData: ${data}`)
@@ -67,15 +70,28 @@ export function FeedQuery() {
                 setErroFetch('An unknown error occurred')
             }
         }
+        finally {
+            setLoading(false)
+        }
     }
     incomingData()
     console.log(`FeedBlock Response: ${data}`)
-    console.log(`typeof data: ${typeof data}`)
+    console.log(`erro Response: ${erro}`)
     }, []);
 
     return (
         <>
         <View style={styles.container}>
+            { loading ? (
+                <>
+                    <LoadingBox whatPage="Feed" />
+                </>
+            ) : erro ? (
+                <>
+                    <ErrorMessage message={erroFetch}/>
+                </>
+            ) : (
+            <>
             {data && data.map((item: any) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
@@ -125,6 +141,8 @@ export function FeedQuery() {
                 )
             )
             } 
+            </>
+            )}
         </View>
         </>
     )

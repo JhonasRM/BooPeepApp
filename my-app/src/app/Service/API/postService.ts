@@ -51,15 +51,20 @@ export class postServices {
 
     //------------------------------------------------------------------
 
-    async getPostFromUser(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
-        const Posts = {
-            createdAt: post.createdAt,
-            UserID: post.UserID,
-            description: post.description,
-            postId: post.postId,
-            local: post.local,
-            status: post.status,
-        };
+    async getPostFromUser(param: string): Promise<{ 
+        valido: boolean, 
+        value?: number, 
+        erro?: string | Error, 
+        data?: Post[] 
+    }> {
+        // const postParams: Post = {
+        //     createdAt: 0,
+        //     UserID: "",
+        //     description: "",
+        //     postId: "",
+        //     local: "",
+        //     status: 0
+        // };
         
         try {
             console.log("getPostFromUser for chamado!");
@@ -71,11 +76,13 @@ export class postServices {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    UserID: post.UserID
+                    UserID: String(param)
                 }
             });
 
-            if (resp.status !== 201) {
+            console.log(`resp: ${resp}`)
+
+            if (resp.status !== 200) {
                 console.log('getPostFromUser respondeu com ERRO!');
                 throw new Error(resp.statusText);
             };
@@ -92,16 +99,12 @@ export class postServices {
 
     //------------------------------------------------------------------
 
-    async getSpecificPost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {        
-        const Posts = {
-            createdAt: post.createdAt,
-            UserID: post.UserID,
-            description: post.description,
-            postId: post.postId,
-            local: post.local,
-            status: post.status,
-        };
-        
+    async getSpecificPost(param: string): Promise<{
+        valido: boolean, 
+        value?: number, 
+        erro?: string | Error, 
+        data?: Post[]
+    }> {                
         try {
             console.log("getSpecificPost foi chamado!");
             const resp = await axios.get(this.endpointpost, {
@@ -112,11 +115,11 @@ export class postServices {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    postId: post.postId
+                    postId: String(param)
                 }
             });
 
-            if (resp.status !== 201) {
+            if (resp.status !== 200) {
                 console.log('getSpecificPost respondeu com ERRO!');
                 throw new Error(resp.statusText);
             };

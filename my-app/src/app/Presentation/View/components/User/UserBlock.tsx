@@ -1,11 +1,27 @@
-import React, { useEffect, useState } from "react"
-import { Image, Text, View } from "react-native"
-import ContainerOptions from "../ContainerOptions"
+import { Text, View, Image, Pressable } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { Entypo } from '@expo/vector-icons';
-import { userBlockStateController } from "../../../Controllers/userBlockStateController";
-import { Post } from "../../../../Service/Entities/postEntities";
 import StyleSheet from 'react-native-media-query';
+import { ids } from "./UserBlockResponsivity";
+import { useQuery } from "@tanstack/react-query";
+import LoadingBox from "../LoadingIcon";
+import ErrorMessage from "../ErrorMessage";
+import ContainerOptions from "../ContainerOptions";
+
+//import React from "react";
+
+
+import CommentButton from "../CommentButton";
+import ImageCarousel from "../ImageCarousel";
+import { Entypo } from '@expo/vector-icons';
+import React, { SetStateAction, useEffect, useState } from "react";
+import { feedStateController } from "../../../Controllers/feedStateController";
+import { Post } from "../../../../Service/Entities/postEntities";
+import { userBlockStateController } from "../../../Controllers/userBlockStateController";
+
+const photos: string[] = ['https://picsum.photos/500/300',
+'https://picsum.photos/501/300',
+'https://picsum.photos/502/300',
+'https://picsum.photos/503/300']
 
 const UserBlock = () => {
     const {
@@ -17,7 +33,7 @@ const UserBlock = () => {
         status, 
         handleFetchUserPosts
     } = userBlockStateController()
-    const [data, setData] = useState<Post[]>()
+    const [data, setData] = useState<Post[] | undefined>([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -30,21 +46,20 @@ const UserBlock = () => {
         console.log("incomingData is running")
 
         try {
-            const data = await handleFetchUserPosts (
-                createdAt,
-                UserID, 
-                description,
-                postId, 
-                local, 
-                status
-            )
+            setLoading(true)
+            const response = await handleFetchUserPosts()
 
-            if (data.valido === false) {
-                throw new Error(data.erro as string);
+            if (response.valido === false) {
+                setErro(true)
+                throw new Error(response.erro as string);
             }
 
-            if (data.valido === true) {
-                console.log(`${data.value}. GET realizado com sucesso!`);
+            if (response.valido === true) {
+                console.log(`${response.value}. GET realizado com sucesso!`);
+                
+                setData(response.data)
+                console.log(`Data from setData: ${data}`)
+                console.log(`Response from response: ${response}`)
             }
 
         } catch (error) {
@@ -55,61 +70,77 @@ const UserBlock = () => {
                 setErroFetch('An unknown error occurred')
             }
         }
-        setData(data)
+        finally {
+            setLoading(false)
+        }
     }
     incomingData()
     }, []);
 
     return (
         <>
-        <View style={styles.container}>  
+        <View style={styles.container}>
+            { loading ? (
+                <>
+                    <LoadingBox whatPage="Comment" />
+                </>
+            ) : erro ? (
+                <>
+                    <ErrorMessage message={erroFetch}/>
+                </>
+            ) : (
+            <>
             {data && data.map((item: any) => (
-            <View style={styles.userblock}>
-                <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
-                    <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
-                    style={styles.user}/>
+                <View style={styles.userblock}>
+                    <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
+                        <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
+                        style={styles.user}/>
 
-                    <View>
-                        <Text style={styles.usertext}>{item.UserID}</Text>
-                        <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
+                        <View>
+                            <Text style={styles.usertext}>{item.UserID}</Text>
+                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
+                        </View>
+
+                        <ContainerOptions style={styles.options}/>
+                    </View>
+                    
+                    <Text style={[styles.titletext]}>
+                        Perdi o meu Relogio :( {/*{item.}*/}
+                    </Text>
+                    <Text style={[styles.infotext]}> 
+                        {item.description}
+                    </Text>
+
+                    <View style={styles.middleline}>
+                        <ImageCarousel ImgSource={photos}/>
                     </View>
 
-                    <ContainerOptions style={styles.options}/>
-                </View>
-                
-                 <Text style={[styles.titletext, styles.beyondfirstline]}>
-                    Perdi o meu Relogio :( {/*{item.}*/}
-                 </Text>
-                 <Text style={[styles.infotext, styles.beyondfirstline]}> 
-                    {item.description}
-                 </Text>
+                <View style={styles.endline}>
+                        <View style={[styles.status, {marginHorizontal: wp(2)}]}>
+                        { item.status == "0" ? (
+                        <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                        ) : item.status == "1" ? (
+                        <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                        ) : item.status == "2" ? (
+                        <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                        ) : (
+                        <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                        )} 
+                        <Text>Status: {item.status}</Text>
+                        </View>
 
-                <View style={styles.middleline}>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
-                </View>
+                        <View style={{marginHorizontal: wp(2)}}>
+                            <Text>Criado em: {item.createdAt}</Text>
+                        </View>
 
-               <View style={styles.endline}>
-                    <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                    { item.status == "0" ? (
-                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                    ) : item.status == "1" ? (
-                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                    ) : item.status == "2" ? (
-                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                    ) : (
-                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                    )} 
-                    <Text>Status: {item.status}</Text>
-                    </View>
-
-                    <View style={{marginHorizontal: wp(2)}}>
-                        <Text>Criado em: {item.createdAt}</Text>
+                        <CommentButton btnStyle={styles.chaticon} />
                     </View>
                 </View>
-            </View>
-            ))
-        }
+                )
+            )
+            } 
+            </>
+            )}
         </View>
         </>
     )
@@ -127,6 +158,8 @@ const {styles} = StyleSheet.create ({
         backgroundColor: "#eeeeee",
         padding: 6,
         borderRadius: 10,
+        marginBottom: hp(3),
+        marginHorizontal: wp(3)
     },
     firstline: {
         flex: 1,
@@ -178,7 +211,8 @@ const {styles} = StyleSheet.create ({
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: hp(2)
     },
     status: {
         // borderWidth: wp(2),
@@ -202,7 +236,7 @@ const {styles} = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         alignItems: "center",
-        alignSelf: "center",
+        marginBottom: hp(1)
     },
 })
 

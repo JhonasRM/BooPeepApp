@@ -5,7 +5,12 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import { Entypo } from '@expo/vector-icons';
 import { Post } from "../../../../Service/Entities/postEntities";
 import { commentPostBlockStateController } from "../../../Controllers/commentPostBlockStateController";
+import ImageCarousel from "../ImageCarousel";
 
+const photos: string[] = ['https://picsum.photos/500/300',
+'https://picsum.photos/501/300',
+'https://picsum.photos/502/300',
+'https://picsum.photos/503/300']
 
 const PostBlock = () => {
     const {
@@ -17,7 +22,8 @@ const PostBlock = () => {
         status, 
         handleFetchSpecificPost
     } = commentPostBlockStateController()
-    const [data, setData] = useState<Post[]>()
+
+    const [data, setData] = useState<Post[] | undefined>([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -30,21 +36,16 @@ const PostBlock = () => {
         console.log("incomingData is running")
 
         try {
-            const data = await handleFetchSpecificPost (
-                createdAt,
-                UserID, 
-                description,
-                postId, 
-                local, 
-                status
-            )
+            const response = await handleFetchSpecificPost ()
 
-            if (data.valido === false) {
-                throw new Error(data.erro as string);
+            if (response.valido === false) {
+                throw new Error(response.erro as string);
             }
 
-            if (data.valido === true) {
-                console.log(`${data.value}. GET realizado com sucesso!`);
+            if (response.valido === true) {
+                console.log(`${response.value}. GET realizado com sucesso!`);
+                setData(response.data)
+                console.log(`Data from setData: ${data}`)
             }
 
         } catch (error) {
@@ -55,14 +56,14 @@ const PostBlock = () => {
                 setErroFetch('An unknown error occurred')
             }
         }
-        setData(data)
     }
     incomingData()
     }, []);
 
     return (
         <>
-        <View style={styles.container}>            
+        <View style={styles.container}>    
+         {data && data.map((item: any) => (    
             <View style={styles.postblock}>
                 <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
@@ -86,8 +87,7 @@ const PostBlock = () => {
                  </Text>
 
                 <View style={styles.middleline}>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} />
+                    <ImageCarousel ImgSource={photos}/>
                 </View>
 
                <View style={styles.endline}>
@@ -109,7 +109,7 @@ const PostBlock = () => {
                     </View>
                 </View>
             </View>
-            )
+            ))}
         </View>
         </>
     )
