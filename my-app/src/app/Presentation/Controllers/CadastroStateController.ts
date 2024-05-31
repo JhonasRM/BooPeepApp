@@ -73,17 +73,14 @@ const CadastroStateController = () => {
       console.log(user);
       const req = await UserService.cadastro(user);
       if (req.val === false) {
-        throw new Error("Bad Request");
+        throw new Error(req.erro as string);
       }
       return { val: true, data: req.data };
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === "Unauthorized") {
-          return { val: false, erro: error };
-        } else if (error.message === "Bad Request") {
-          return { val: false, erro: error };
+          return { val: false, erro: error.message };
         }
-      }
+      
       return { val: false, erro: "Internal Server Error" };
     }
   };

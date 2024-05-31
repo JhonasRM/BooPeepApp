@@ -63,11 +63,7 @@ const LoginStateController = () => {
       return { val: true, data: user };
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === "Unauthorized") {
           return { val: false, erro: error };
-        } else if (error.message === "Bad Request") {
-          return { val: false, erro: error };
-        }
       }
       return { val: false, erro: "Internal Server Error" };
     }
