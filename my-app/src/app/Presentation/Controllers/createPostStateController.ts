@@ -12,7 +12,7 @@ const createPostStateController = () => {
     const [description, setDescription] = useState("");
     // const [checkDescription, setCheckDescription] = useState("")
     const [postId, setPostId] = useState("");
-    const [local, setLocal] = useState("");
+    const [local, setLocal] = useState("ETEC ZONA LESTE");
     const [status, setStatus] = useState(0);
 
     const validator: postValidator = new postValidator();
@@ -68,8 +68,12 @@ const createPostStateController = () => {
 
     const handleCreatePost = async (
         //title: string
+        createdAt: number,
+        UserID: string,
         description: string,
+        postId: string,
         local: string,
+        status: number,
     ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
@@ -107,8 +111,12 @@ const createPostStateController = () => {
 
     return {
         //title,
+        createdAt,
+        UserID,
         description,
+        postId,
         local,
+        status,
         handleFieldChange,
         //handleCheckDescriptionChange,
         handleCreatePost

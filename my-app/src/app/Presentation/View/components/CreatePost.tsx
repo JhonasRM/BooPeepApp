@@ -12,8 +12,12 @@ import { createPostStateController } from "../../Controllers/createPostStateCont
 
 const CreatePost = () => {
     const {
+        createdAt,
+        UserID,
         description,
+        postId,
         local,
+        status,
         handleFieldChange,
         //handleCheckDescriptionChange,
         handleCreatePost
@@ -50,8 +54,12 @@ const CreatePost = () => {
         try {
             const createPost = await handleCreatePost(
                 //title,
+                createdAt,
+                UserID,
                 description,
+                postId,
                 local,
+                status
             )
 
             if (createPost.valido === false) {
