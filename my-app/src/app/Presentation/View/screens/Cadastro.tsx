@@ -40,11 +40,11 @@ export default function Cadastro() {
         password,
         confirmarSenha
       );
-      if (cadastro.valido === false) {
-        throw new Error(cadastro.error as string);
+      if (cadastro.val === false) {
+        throw new Error(cadastro.erro as string);
       }
-      if (cadastro.valido === true) {
-      console.log(`${cadastro.value}. Cadastro realizado com sucesso!`);
+      if (cadastro.val === true) {
+      console.log(` Cadastro realizado com sucesso!`);
       router.push("./Login")
       }
     } catch (error) {
@@ -104,9 +104,9 @@ export default function Cadastro() {
             autoCorrect={false}
             onChangeText={async (email) => {
               const handle = await handleFieldChange("email", email);
-              if (handle.valido === false) {
-                setErroC(handle.error as string);
-              } else if (handle.valido === true) {
+              if (handle.val === false) {
+                setErroC(handle.erro as string);
+              } else if (handle.val === true) {
                 setErroC("");
               }
             }}
@@ -121,9 +121,9 @@ export default function Cadastro() {
             autoCorrect={false}
             onChangeText={async (password) => {
               const handle = await handleFieldChange("password", password);
-              if (handle.valido === false) {
-                setErroD(handle.error as string);
-              } else if (handle.valido === true) {
+              if (handle.val === false) {
+                setErroD(handle.erro as string);
+              } else if (handle.val === true) {
                 setErroD("");
               }
             }}
@@ -141,9 +141,9 @@ export default function Cadastro() {
                 password,
                 confirmarSenha
               );
-              if (handle.valido === false) {
-                setErroE(handle.error as string);
-              } else if (handle.valido === true) {
+              if (handle.val === false) {
+                setErroE(handle.erro as string);
+              } else if (handle.val === true) {
                 setErroE("");
               }
             }}

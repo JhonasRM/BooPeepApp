@@ -14,7 +14,6 @@ import {
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const { 
@@ -35,10 +34,9 @@ export default function Login() {
   const handlePress = async () => {
     try {
       const login = await handleLogin(email, password);
-      if (login.valido === false) {
-        throw new Error(login.error as string);
+      if (login.val === false) {
+        throw new Error(login.erro as string);
       }
-      console.log(`${login.value}. Login realizado com sucesso!`);
       tentativa = 0
       router.push("./Feed");
     } catch (error) {
@@ -58,10 +56,6 @@ export default function Login() {
   const handleReset = async () => {
     try {
       if(email !== ''){
-        AsyncStorage.setItem(
-          'email',
-          JSON.stringify(email)
-        )
         router.push('./Redefinir')
       }
       router.push('./Redefinir')
@@ -93,9 +87,9 @@ export default function Login() {
             //11/05/2024
             onChangeText={async (email) => {
               const handle = await handleFieldChange("email", email);
-              if (handle.valido === false) {
-                setErroA(handle.error as string);
-              } else if (handle.valido === true) {
+              if (handle.val === false) {
+                setErroA(handle.erro as string);
+              } else if (handle.val === true) {
                 setErroA("");
               }
         
@@ -111,9 +105,9 @@ export default function Login() {
             //11/05/2024
             onChangeText={async (password) => {
               const handle = await handleFieldChange("password", password);
-              if (handle.valido === false) {
-                setErroB(handle.error as string);
-              } else if (handle.valido === true) {
+              if (handle.val === false) {
+                setErroB(handle.erro as string);
+              } else if (handle.val === true) {
                 setErroB("");
               }
             }}

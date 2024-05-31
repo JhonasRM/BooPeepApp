@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { User } from "../Entities/userEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
 export class userValidator {
     private UserSchema;
@@ -30,50 +31,50 @@ export class userValidator {
         return await validator.parseAsync(value);
     }
 
-    async valByField(field: string, value: string): Promise<{valido: boolean, value?: string, erro?: string }> {
+    async valByField(field: string, value: string): Promise<IReturnAdapter> {
       if(field === 'nome' || field === 'sobrenome'){
-        return { valido: true, value: 'ok', erro: undefined };
+        return { val: true, data: 'ok'};
       }
-        const validator = this.userValByField[field]; // Obtém o esquema de validação para o field
-        if (!validator) {
-          return { valido: false, erro: 'Esquema de validação não encontrado para o campo especificado.' };
-        }
         try {
+          const validator = this.userValByField[field]; // Obtém o esquema de validação para o field
+        if (!validator) {
+          return { val: false, erro: 'Esquema de validação não encontrado para o campo especificado.' };
+        }
           const valueValidado = await this.validateField(validator, value);;
-          return { valido: true, value: String(valueValidado), erro: undefined }; // Retorno válido
+          return { val: true, data: String(valueValidado)}; // Retorno válido
         } catch (error) {
           if (error instanceof z.ZodError) {
             const mensagemErro = error.errors[0].message; 
-            return { valido: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
+            return { val: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
           } else {
-            return { valido: false, erro: 'Erro desconhecido ao validar o texto' };
+            return { val: false, erro: 'Erro desconhecido ao validar o texto' };
           }
         }
       }
-        confirmarSenha(senha: string, confirmsenha: string) {
+      async confirmarSenha(senha: string, confirmsenha: string): Promise<IReturnAdapter>{
             try {
                 const valconf = z.literal(senha).parse(confirmsenha)
-                return { valido: true, value: valconf }; // Retorno válido
+                return { val: true, data: valconf }; // Retorno válido
             } catch (error) {
               if (error instanceof z.ZodError) {
                 const mensagemErro = error.errors[0].message; 
-                return { valido: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
+                return { val: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
               } else {
-                return { valido: false, erro: 'Erro desconhecido ao validar o texto' };
+                return { val: false, erro: 'Erro desconhecido ao validar o texto' };
               }
 
         }
     }
-        validarUser(user: User) {
+        async validarUser(user: User): Promise<IReturnAdapter> {
             try {
                 const valuser = this.UserSchema.parse(user)
-            return { valido: true, value: valuser }; // Retorno válido
+            return { val: true, data: valuser }; // Retorno válido
         } catch (error) {
           if (error instanceof z.ZodError) {
             const mensagemErro = error.errors[0].message; 
-            return { valido: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
+            return { val: false, erro: mensagemErro }; // Retorno inválido com mensagem de erro do Zod
           } else {
-            return { valido: false, erro: 'Erro desconhecido ao validar o texto' };
+            return { val: false, erro: 'Erro desconhecido ao validar o texto' };
           }
 
         }

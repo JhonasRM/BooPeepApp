@@ -3,6 +3,7 @@ import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
 const CadastroStateController = () => {
   const [nome, setNome] = useState("");
@@ -22,36 +23,33 @@ const CadastroStateController = () => {
     confirmarSenha: setConfirmarSenha
   };
 
-  const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
+  const handleFieldChange = async (field: string, value: string): Promise<IReturnAdapter> => {
     if (field in setState) {
       setState[field as keyof StateAndSetters](value);
       const valfield = await validator.valByField(field, value);
-      if (valfield.valido === false) {
+      if (valfield.val === false) {
         console.log(valfield.erro);
-        return { valido: false, value: 401, error: valfield.erro}
+        return { val: false,  erro: valfield.erro}
       }
-      console.log("validação concluída");
-      return { valido: true, value: 200 }
+      return { val: true, data: "Validação concluída" }
     } 
       console.error(
         `Campo "${field}" não é uma chave válida em StateAndSetters.`
       );
-      return { valido: false, value: 400, error: `Campo "${field}" não é uma chave válida em StateAndSetters.`}
+      return { val: false, erro: `Campo "${field}" não é uma chave válida em StateAndSetters.`}
     
   };
 
   const handleConfirmarSenhaChange = async (
     senha: string,
     confirmsenha: string
-  ): Promise<{ valido: boolean, value: number, error?: string | Error}>=> {
+  ): Promise<IReturnAdapter>=> {
     setConfirmarSenha(confirmsenha);
-    const valconf = validator.confirmarSenha(senha, confirmsenha);
-    if (valconf.valido === false) {
-      console.log("As senhas não coincidem");
-      return { valido: false,  value: 401, error: "As senhas não coincidem" };
+    const valconf = await validator.confirmarSenha(senha, confirmsenha);
+    if (valconf.val === false) {
+      return { val: false,  erro: "As senhas não coincidem" };
     }
-    console.log("validação concluída");
-    return { valido: true, value: 200 };
+    return { val: true, data: "validação concluída"};
   };
 
   const handleCadastro = async (
@@ -60,14 +58,9 @@ const CadastroStateController = () => {
     email: string,
     password: string,
     confirmarSenha: string
-  ): Promise<{
-    valido: boolean;
-    value?: number;
-    error?: string | Error;
-    data?: User;
-  }> => {
+  ): Promise<IReturnAdapter> => {
     if( email === '' || password === '' || nome === '' || sobrenome === '' || confirmarSenha === ''){
-      return { valido: false, value: 400, error: `Preencha todos os campos para realizar o cadastro.`}
+      return { val: false, erro: `Preencha todos os campos para realizar o cadastro.`}
     }
     const user: User = new User(
       nome,
@@ -79,19 +72,19 @@ const CadastroStateController = () => {
     try {
       console.log(user);
       const req = await UserService.cadastro(user);
-      if (req.valido === false) {
+      if (req.val === false) {
         throw new Error("Bad Request");
       }
-      return { valido: true, value: 201, data: user };
+      return { val: true, data: req.data };
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Unauthorized") {
-          return { valido: false, value: 401, error: error };
+          return { val: false, erro: error };
         } else if (error.message === "Bad Request") {
-          return { valido: false, value: 400, error: error };
+          return { val: false, erro: error };
         }
       }
-      return { valido: false, value: 500, error: "Internal Server Error" };
+      return { val: false, erro: "Internal Server Error" };
     }
   };
 

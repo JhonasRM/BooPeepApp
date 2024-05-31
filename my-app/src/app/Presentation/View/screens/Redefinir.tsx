@@ -22,7 +22,7 @@ export default function Redefinir() {
         throw new Error('Preencha os campos necessários.')
       }
       const resetEmail = await handleResetRequest(email)
-      if(resetEmail.valido === false){
+      if(resetEmail.val === false){
         throw new Error('Erro ao enviar o email')
       }
       setContentModal('Enviamos um email para você')
@@ -58,8 +58,8 @@ export default function Redefinir() {
                 autoCorrect={false}
                 onChangeText={async(email) => { 
                   const handle = await handleFieldChange('email', email)
-                  if(handle.valido === false){
-                    setErro(handle.error as string)
+                  if(handle.val === false){
+                    setErro(handle.erro as string)
                   }
                 }}
          />

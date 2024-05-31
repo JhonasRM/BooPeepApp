@@ -3,6 +3,7 @@ import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
 const RedefinirStateController = () => {
   const [email, setEmail] = useState("");
@@ -27,48 +28,43 @@ const RedefinirStateController = () => {
     }
   };
 
-  const handleFieldChange = async (field: string, value: string): Promise<{ valido: boolean, value: number, error?: string | Error}> => {
-    console.log(`validando ${field} ...`);
-    if (field in setState) {
-      setState[field as keyof StateAndSetters](value);
-      const valfield = await validator.valByField(field, value);
-      if (valfield.valido === false) {
-        console.log(valfield.erro);
-        return { valido: false, value: 401, error: valfield.erro}
+  const handleFieldChange = async (field: string, value: string): Promise<IReturnAdapter> => {
+    try {
+      if (field in setState) {
+        setState[field as keyof StateAndSetters](value);
+        const valfield = await validator.valByField(field, value);
+        if (valfield.val === false) {
+          console.log(valfield.erro);
+          throw new Error(valfield.erro as string)
+        }
+        return { val: true, data: "Validação concluída"}
       }
-      console.log("validação concluída");
-      return { valido: true, value: 200}
-    } 
-      console.error(
-        `Campo "${field}" não é uma chave válida em StateAndSetters.`
-      );
-      return { valido: false, value: 400, error: `Campo "${field}" não é uma chave válida em StateAndSetters.`}
+      throw new Error(`Campo "${field}" não é uma chave válida em StateAndSetters.`)    
+    } catch (error) {
+      if(error instanceof Error){
+        return { val: false, erro: error.message}
+      }
+      return{val: false, erro: `Erro interno da aplicação: ${error}`}
+
+    }
     
   };
 
   const handleResetRequest = async (
     email: string
-  ): Promise<{
-    valido: boolean;
-    value?: number;
-    error?: string | Error;
-    data?: string;
-  }> => {
+  ): Promise<IReturnAdapter> => {
     try {
       const req = await UserService.resetPwd(email);
-      if (req.valido === false) {
+      if (req.val === false) {
         throw new Error("Bad Request");
       }
-      return { valido: true, value: 201, data: req.data };
+      return { val: true, data: req.data };
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === "Unauthorized") {
-          return { valido: false, value: 401, error: error };
-        } else if (error.message === "Bad Request") {
-          return { valido: false, value: 400, error: error };
-        }
+          return { val: false,  erro: error };
+        
       }
-      return { valido: false, value: 500, error: "Internal Server Error" };
+      return { val: false, erro: "Internal Server Error" };
     }
   };
 
