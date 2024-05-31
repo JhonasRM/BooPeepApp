@@ -11,22 +11,22 @@ type whatPage = {
 
 const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pagina" - Bolt
     return (
-        <View style={styles.footer} dataSet={{ media: ids.footer }}>
+        <View style={props.whatScreen === "feed" ? [styles.footer, {backgroundColor: "#d4d7ff"}] : styles.footer} dataSet={{ media: ids.footer }}>
              {props.whatScreen === "feed" ? (
                 <>
-                <Link href={"./UserConfig"} asChild>
+                <Link href={"./User"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                     </Pressable>
                 </Link>
             
                 <View style={styles.button} dataSet={{media: ids.button}}>
-                <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
+                <Pressable style={[styles.button2, {backgroundColor: '#FFF'}]} dataSet={{ media: ids.button2 }}>
                     <Image source={require('../../../../../assets/icons/icons8-casa-100.png')} style={styles.img2}/>
                 </Pressable>
                 </View>
             
-                <Link href={"./Mensagens"} asChild>
+                <Link href={"./ChatApp"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
@@ -34,7 +34,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </>
              ) : props.whatScreen === "chat" ? (
                 <>
-                <Link href={"./UserConfig"} asChild>
+                <Link href={"./User"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                     </Pressable>
@@ -47,7 +47,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </Link>
             
                 <View style={styles.button} dataSet={{media: ids.button}}>
-                    <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
+                    <Pressable style={[styles.button2, {backgroundColor: '#d4d7ff'}]} dataSet={{ media: ids.button2 }}>
                         <Image source={require('../../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
                 </View>
@@ -55,9 +55,8 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                 </>
              ) : (
                 <>
-                
                 <View style={styles.button} dataSet={{media: ids.button}}>
-                <Pressable style={styles.button2} dataSet={{ media: ids.button2 }}>
+                <Pressable style={[styles.button2, {backgroundColor: '#d4d7ff'}]} dataSet={{ media: ids.button2 }}>
                     <Image source={require('../../../../../assets/icons/icons8-usuário-homem-com-círculo-100.png')} style={styles.img1}/>
                 </Pressable>
                 </View>
@@ -68,7 +67,7 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
                     </Pressable>
                 </Link>
             
-                <Link href={"./Mensagens"} asChild>
+                <Link href={"./ChatApp"} asChild>
                     <Pressable style={styles.button} dataSet={{ media: ids.button }}>
                         <Image source={require('../../../../../assets/icons/icons8-mensagens-100.png')} style={styles.img3}/>
                     </Pressable>
@@ -82,7 +81,6 @@ const FooterBar = (props: whatPage) => {            //"Verifica qual é a sua pa
 const {styles} = StyleSheet.create ({
     footer: {
         position: "relative",
-        backgroundColor: "#d4d7ff",
         flexDirection: "row",
         justifyContent: "space-evenly",
         paddingHorizontal: wp(2),
@@ -104,7 +102,6 @@ const {styles} = StyleSheet.create ({
         alignItems: "center",  
     },
     button2: {
-        backgroundColor: '#FFF',
         width: wp(15),
         height: hp(5),
         borderRadius: 10,

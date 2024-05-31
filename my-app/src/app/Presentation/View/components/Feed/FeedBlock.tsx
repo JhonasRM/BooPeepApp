@@ -5,23 +5,19 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
-import ContainerOptions from "./ContainerOptions";
+import ContainerOptions from "../ContainerOptions";
 import React from "react";
-
-const fetchFeed = async () => {                                 //Chamar a API
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    return response.json();
-}
+import CommentButton from "../CommentButton";
+import ImageCarousel from "../ImageCarousel";
+import { Entypo } from '@expo/vector-icons';
+import feedController from "../../../Controllers/feedController";
 
 export function FeedQuery() {
-    const {data, isLoading, isError, error} = useQuery({
-        queryKey: ['data'],
-        queryFn: fetchFeed,
-    });
+    const {data, isError, error, isLoading} = feedController();
 
     if (isLoading) {
         return (
-            <LoadingBox />
+            <LoadingBox whatPage="Feed"/>
         )
     }
 
@@ -33,31 +29,38 @@ export function FeedQuery() {
 
     return (
         <View>
-            {data && data.map(item => (
-            <View style={styles.feedblock} key={item.id}>
+            {data && data.map((item: any) => (  //Conversar com o Jonathan referente ao Warning
+            <View style={styles.feedblock} key={item.postId}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-                     <Text style={styles.usertext}> {item.userId} </Text>
+                     <Text style={styles.usertext}> {item.UserID} </Text>
                      <ContainerOptions style={styles.options}/>
                 </View>
                  <Text style={styles.titletext}>
-                    {item.userId}
+                    {item.local}
                  </Text>
                  <Text style={styles.infotext}> 
-                 {item.body}
+                 {item.description}
                  </Text>
 
                 <View style={styles.middleline}>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
-                    <Image source={require('../../../../../../assets/pictures/riff.jpg')} style={styles.missingpic} dataSet={{media: ids.missingpic}}/>
+                    <ImageCarousel ImgStyle={styles.missingpic} ImgDataset={{media: ids.missingpic}} ImgSource={require('../../../../../../assets/pictures/riff.jpg')}/>
                 </View>
 
                <View style={styles.endline}>
-                   <View style={styles.status} dataSet={{media: ids.status}}/>
-                    <Text style={styles.statustext}>Status: {item.title}</Text>
-                    <Image source={require('../../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.chaticon} />
+                    { item.status == "0" ? (
+                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                    ) : item.status == "1" ? (
+                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                    ) : item.status == "2" ? (
+                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                    ) : (
+                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                    )}
+                    <Text style={styles.statustext}>Status: {item.status}</Text>
+                    <CommentButton btnStyle={styles.chaticon} />
                 </View>
-                <Text style={styles.time}>Há: {item.id} {item.id < 2 ? 'hora atrás' : 'horas atrás'}</Text>
+                <Text style={styles.time}>Criado em: {item.createdAt}</Text>
             </View>
             ))
             }
@@ -123,7 +126,9 @@ const {styles} = StyleSheet.create ({
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: hp(1),
+        marginHorizontal: wp(2),
     },
     status: {
         borderWidth: wp(2),
