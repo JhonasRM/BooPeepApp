@@ -30,10 +30,8 @@ export class userService {
         }
       })
       if (resp.status !== 201) {
-        console.log('voltou')
         throw new Error(resp.statusText)
       }
-      console.log('voltou')
       return { val: true, data: resp.data }
     } catch (error) {
       if (error instanceof Error) {
@@ -60,10 +58,8 @@ export class userService {
         }
       })
       if (resp.status !== 200) {
-        console.log('voltou')
         throw new Error(resp.statusText)
       }
-      console.log('voltou')
       console.log(resp.data)
       return { val: true, data: resp.data }
     } catch (error) {
