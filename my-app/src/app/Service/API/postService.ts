@@ -2,10 +2,12 @@ import axios from "axios"
 import { Post } from "../Entities/postEntities"
 
 export class postServices {
+    private endpointposts: string
     private endpointpost: string
 
     constructor() {        
-        this.endpointpost = "https://boopeepapir.onrender.com/posts"
+        this.endpointposts = "https://boopeepapir.onrender.com/posts"
+        this.endpointpost = "https://boopeepapir.onrender.com/post"
     };
 
     //------------------------------------------------------------------
@@ -22,7 +24,7 @@ export class postServices {
 
         try {
             console.log("getPosts foi chamado!");
-            const resp = await axios.get(this.endpointpost, {
+            const resp = await axios.get(this.endpointposts, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",

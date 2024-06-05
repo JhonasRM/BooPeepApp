@@ -1,5 +1,5 @@
 export class Post {
-    public createdAt: number;
+    public createdAt: Date;
     public UserID: string;
     public description: string;
     public postId: string;
@@ -8,20 +8,25 @@ export class Post {
     public status: number;
     
     constructor(
-        createdAt: number,
         UserID: string, 
         description: string, 
-        postId: string, 
         /*title: string,*/ 
-        local: string, 
-        status: number 
+        local: string,
+        postID?: string,
+        status?: number,
     ) {
-        this.createdAt = createdAt,
+        this.createdAt = new Date(),
         this.UserID = UserID,
         this.description = description,
-        this.postId = postId,
+        this.postId = "",
         //this.title = title,
         this.local = local,
-        this.status = status
+        this.status = 0
+        if(status){
+            this.status = status
+        }
+        if(postID){
+            this.postId = postID
+        }
     }
 }

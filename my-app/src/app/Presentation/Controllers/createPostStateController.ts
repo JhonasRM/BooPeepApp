@@ -3,6 +3,8 @@ import { postValidator } from "../../Service/Validators/postValidator";
 import { postServices } from "../../Service/API/postService";
 import { Post } from "../../Service/Entities/postEntities";
 import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { User } from "../../Service/Entities/userEntities";
 
 const createPostStateController = () => {
     //const [title, setTitle] = useState("")
@@ -51,42 +53,20 @@ const createPostStateController = () => {
         return {valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em postStateAndSetters.`}
     }
 
-    // const handleCheckDescriptionChange = async (
-    //     description: string,
-    //     checkdescription: string
-    // ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
-    //     //setCheckDescription(checkdescription);
-    //     const valconf = validator.valByField(description, checkdescription)
-        
-    //     if (valconf.valido === false) {
-    //         console.log("Condições do validador não batem.");
-    //         return {valido: false, value: 401, erro: "Condições do validador não batem."};
-    //     }
-    //     console.log("validação concluida!")
-    //     return {valido: true, value: 200}
-    // }
-
     const handleCreatePost = async (
         //title: string
-        createdAt: number,
-        UserID: string,
         description: string,
-        postId: string,
         local: string,
-        status: number,
     ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
         }
-
+        const user = GetOnStorage('user') as unknown as User
+        setUserID(user.uid)
         const post: Post = new Post(
-            //title,
-            createdAt,
             UserID,
             description,
-            postId,
-            local,
-            status,
+            local
         );
         try {
             console.log(post);

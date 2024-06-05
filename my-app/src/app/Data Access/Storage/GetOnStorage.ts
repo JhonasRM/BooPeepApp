@@ -2,7 +2,7 @@ import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const searchOnStorage = async (key: string): Promise<{val: boolean, info?: any, erro?: string }> => {
+const GetOnStorage = async (key: string): Promise<{val: boolean, info?: any, erro?: string }> => {
   try {
     const info = await AsyncStorage.getItem(`@asyncStorage:${key}`);
     if (info === null || info === undefined) {
@@ -19,4 +19,4 @@ const searchOnStorage = async (key: string): Promise<{val: boolean, info?: any, 
 };
 
 
-export { searchOnStorage};
+export { GetOnStorage };

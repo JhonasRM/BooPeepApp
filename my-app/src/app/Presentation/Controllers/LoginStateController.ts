@@ -4,6 +4,7 @@ import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/Interfaces/StateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import SetOnStorage from "../../Data Access/Storage/SetOnStorage";
 
 const LoginStateController = () => {
   const [email, setEmail] = useState("");
@@ -59,8 +60,8 @@ const LoginStateController = () => {
       if (req.val === false) {
         throw new Error(req.erro as string);
       }
-      const user = req.data
-      return { val: true, data: user };
+      SetOnStorage("user", req.data)
+      return { val: true, data: 'Usuário Logado com sucesso' };
     } catch (error) {
       if (error instanceof Error) {
           return { val: false, erro: error };

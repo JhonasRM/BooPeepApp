@@ -9,15 +9,12 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { createPostStateController } from "../../Controllers/createPostStateController";
+import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
 
 const CreatePost = () => {
     const {
-        createdAt,
-        UserID,
         description,
-        postId,
         local,
-        status,
         handleFieldChange,
         //handleCheckDescriptionChange,
         handleCreatePost
@@ -54,12 +51,8 @@ const CreatePost = () => {
         try {
             const createPost = await handleCreatePost(
                 //title,
-                createdAt,
-                UserID,
                 description,
-                postId,
-                local,
-                status
+                local
             )
 
             if (createPost.valido === false) {

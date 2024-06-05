@@ -14,6 +14,8 @@ import {
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
+import { User } from "../../../Service/Entities/userEntities";
+import SetOnStorage from "../../../Data Access/Storage/SetOnStorage";
 
 export default function Login() {
   const { 
@@ -37,7 +39,7 @@ export default function Login() {
       if (login.val === false) {
         throw new Error(login.erro as string);
       }
-      tentativa = 0
+      tentativa = 0 
       router.push("./Feed");
     } catch (error) {
       console.error("Erro ao realizar cadastro:", error);
