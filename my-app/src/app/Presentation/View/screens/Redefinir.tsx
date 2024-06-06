@@ -3,6 +3,7 @@ import { Link, router }  from "expo-router";
 import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity, Alert, Pressable, Modal} from 'react-native';
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
+import LoadingBox from '../components/LoadingIcon';
 
 
 export default function Redefinir() {
@@ -12,12 +13,14 @@ export default function Redefinir() {
     handleResetRequest
   } = RedefinirStateController()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [erro, setErro ] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [contentModal, setContentModal] = useState('')
 
   const handlePress = async() => {
     try {
+      setIsLoading(true);
       if(email === '' || email === undefined){
         throw new Error('Preencha os campos necessários.')
       }
@@ -29,6 +32,7 @@ export default function Redefinir() {
       setModalVisible(true)
 
     } catch (error) {
+      setIsLoading(false);
       if(error instanceof Error){
         setErro(error.message)
       }
@@ -43,6 +47,8 @@ export default function Redefinir() {
   }
     return(
         <KeyboardAvoidingView style={styles.background}>
+        {isLoading == false ? (
+        <>
         <View style={styles.containerLogo}>
          <Image
          style={{
@@ -88,6 +94,12 @@ export default function Redefinir() {
           </View>
         </View>
       </Modal>
+      </>
+   ) : (
+    <>
+      <LoadingBox whatPage='Auth'/>
+    </>
+   )}
     </KeyboardAvoidingView>
     );
 };

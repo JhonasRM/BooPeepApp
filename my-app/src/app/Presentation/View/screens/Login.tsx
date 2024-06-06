@@ -14,6 +14,7 @@ import {
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
+import LoadingBox from "../components/LoadingIcon";
 
 export default function Login() {
   const { 
@@ -23,6 +24,7 @@ export default function Login() {
     handleLogin 
   } = LoginStateController();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [erroA, setErroA] = useState("");
   const [erroB, setErroB] = useState("");
   const [erroLogin, setErroLogin] = useState("")
@@ -33,6 +35,8 @@ export default function Login() {
 
   const handlePress = async () => {
     try {
+      setIsLoading(true);
+
       const login = await handleLogin(email, password);
       if (login.val === false) {
         throw new Error(login.erro as string);
@@ -40,6 +44,8 @@ export default function Login() {
       tentativa = 0
       router.push("./Feed");
     } catch (error) {
+      setIsLoading(false);
+
       console.error("Erro ao realizar cadastro:", error);
       if (error instanceof Error) {
         setErroLogin(error.message)
@@ -66,6 +72,7 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView style={style.background}>
+    { isLoading == false ? (
       <ScrollView contentContainerStyle={style.contentContainer}>
         <View style={style.containerLogo}>
           <Image
@@ -143,6 +150,11 @@ export default function Login() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+    ) : (
+    <>
+      <LoadingBox whatPage="Auth" />
+    </>
+  )}
     </KeyboardAvoidingView>
   );
 }
