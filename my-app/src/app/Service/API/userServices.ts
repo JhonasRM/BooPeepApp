@@ -21,7 +21,7 @@ export class userService {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointest, userData, {
+      const resp = await axios.post(this.endpointuser, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
