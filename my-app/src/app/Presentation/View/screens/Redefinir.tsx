@@ -30,6 +30,7 @@ export default function Redefinir() {
       }
       setContentModal('Enviamos um email para você')
       setModalVisible(true)
+      setIsLoading(false);
 
     } catch (error) {
       setIsLoading(false);

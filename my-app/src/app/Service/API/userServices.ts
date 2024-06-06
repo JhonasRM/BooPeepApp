@@ -1,6 +1,7 @@
 import axios from "axios";
 import { User } from "../Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { useEffect } from "react";
 export class userService {
   private endpointuser: string;
   private endpointlogin: string;

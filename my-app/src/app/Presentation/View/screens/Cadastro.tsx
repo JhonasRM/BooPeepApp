@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CadastroStateController } from "../../Controllers/CadastroStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import LoadingBox from "../components/LoadingIcon";
@@ -43,6 +43,7 @@ export default function Cadastro() {
         password,
         confirmarSenha
       );
+      
       if (cadastro.val === false) {
         throw new Error(cadastro.erro as string);
       }
@@ -50,6 +51,7 @@ export default function Cadastro() {
       console.log(` Cadastro realizado com sucesso!`);
       router.push("./Login")
       }
+      
     } catch (error) {
       setIsLoading(false);
       console.error("Erro ao realizar cadastro:", error);
