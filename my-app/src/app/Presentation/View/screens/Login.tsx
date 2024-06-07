@@ -87,7 +87,7 @@ export default function Login() {
 
         <View style={style.container}>
           <Text style={style.label}>Email:</Text>
-          <AuthErrorMessage ErrorMessage={erroA} />
+          <AuthErrorMessage ErrorMessage={erroA} style={{width: '100%'}}/>
           <TextInput
             style={style.input}
             placeholder=""
@@ -104,7 +104,7 @@ export default function Login() {
             }}
           />
           <Text style={style.label}>Senha:</Text>
-          <AuthErrorMessage ErrorMessage={erroB} />
+          <AuthErrorMessage ErrorMessage={erroB} style={{width: '100%'}}/>
           <TextInput
             style={style.input}
             placeholder=""
@@ -124,7 +124,7 @@ export default function Login() {
         
         <View style={style.submitContainer}> 
           <View style={style.submitView}>
-            <AuthErrorMessage ErrorMessage={erroLogin} />
+            <AuthErrorMessage ErrorMessage={erroLogin}  />
             <TouchableOpacity style={style.btnSubmit} onPress={handlePress}>
               <Text style={style.submitText}>Entrar</Text>
             </TouchableOpacity>
@@ -217,7 +217,7 @@ const style = StyleSheet.create({
     marginBottom: 5,
     fontSize: 17,
     color: "#fff",
-    width: "90%",
+    width: "100%",
     // alignSelf: "flex-start",
   },
   submitContainer: {
