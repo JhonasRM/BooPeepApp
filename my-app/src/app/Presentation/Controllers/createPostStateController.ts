@@ -61,8 +61,8 @@ const createPostStateController = () => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
         }
-        const user = GetOnStorage('user') as unknown as User
-        setUserID(user.uid)
+        const uid = GetOnStorage('uid') as string
+        setUserID(uid)
         const post: Post = new Post(
             UserID,
             description,

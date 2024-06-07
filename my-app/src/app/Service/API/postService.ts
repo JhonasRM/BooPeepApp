@@ -148,11 +148,8 @@ export class postServices {
         try {
             console.log("createPost foi chamado!");
             const sendPost = {
-                //title: title
-                createdAt: post.createdAt,
                 UserID: post.UserID,
                 description: post.description,
-                postId: post.postId,
                 local: post.local,
                 status: post.status
                 
