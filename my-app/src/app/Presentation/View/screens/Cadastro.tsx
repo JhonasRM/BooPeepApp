@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { CadastroStateController } from "../../Controllers/CadastroStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import LoadingBox from "../components/LoadingIcon";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 export default function Cadastro() {
   const {
@@ -189,13 +190,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // justifyContent: 'center',
-    width: "90%",
+    width: "80%",
     // alignItems: 'center',
   },
 
   contentContainer: {
     justifyContent: "center",
     alignItems: "center",
+    width: wp(100)
   },
   input: {
     backgroundColor: "#fff",
