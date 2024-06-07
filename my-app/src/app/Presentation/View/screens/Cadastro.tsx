@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: "#000",
+    borderColor: "#40009680",
   },
   registerView: {
     marginTop: 30,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginBottom: 5,
-    borderColor: "#000",
+    borderColor: "#d5d7fe80",
     borderWidth: 2,
     fontWeight: "bold",
   },
@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
   submitText: {
     color: "#fff",
     fontSize: 18,
+    fontWeight: 'bold'
   },
 
   label: {

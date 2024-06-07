@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#d5d7fe80",
     marginTop: 120,
   },
   submitText: {
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
     marginTop: 20,
   },
 

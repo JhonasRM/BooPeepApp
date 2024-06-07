@@ -197,7 +197,7 @@ const style = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
   },
   submitView: {
     marginTop: 20,
@@ -210,7 +210,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#d5d7fe80",
   },
   submitText: {
     color: "#fff",
@@ -243,7 +243,7 @@ const style = StyleSheet.create({
     marginTop: 40,
     flexDirection: "row",
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
   },
 
   submitGoogle: {

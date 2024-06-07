@@ -70,11 +70,11 @@ export default function Redefinir() {
                   }
                 }}
          />
-          <View style={styles.btnSubmit}>
+         </View>
+         <View style={styles.btnSubmit}>
          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>
-         </View>
          </View>
          <Modal
         animationType="slide"
@@ -114,13 +114,13 @@ const styles = StyleSheet.create({
       },
       containerLogo: {
         flex: 1,
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         position: "relative"
       },
       container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "flex-end",
         width: '90%',
         alignItems: "center"
       },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         borderWidth: 2,
-        borderColor: '#000'
+        borderColor: '#40009680'
       },
       label: {
         marginBottom: 5,
@@ -149,17 +149,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         borderRadius: 10,
-        marginBottom: 70,
-        marginTop: 70,
-        borderColor: '#000',
+        // marginBottom: 70,
+        // marginTop: 70,
+        borderColor: '#d5d7fe80',
         borderWidth: 2,
         fontWeight: 'bold',
       },
       submitText: {
         color: '#fff',
         fontSize: 18,
+        fontWeight: 'bold'
       },
       btnSubmit: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: "center"
       },
