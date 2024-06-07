@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
   const SetOnStorage = async (key: string, info: any): Promise<{val: boolean, erro?: string}> => {
     try {
-      await AsyncStorage.setItem(`@asyncStorage:${key}`, info );
+      await AsyncStorage.setItem(`@asyncStorage:${key}`, info as string );
       return { val: true }
     } catch (error) {
       if(error instanceof Error){

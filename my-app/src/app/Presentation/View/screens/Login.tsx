@@ -15,14 +15,13 @@ import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
 import { User } from "../../../Service/Entities/userEntities";
-import SetOnStorage from "../../../Data Access/Storage/SetOnStorage";
 
 export default function Login() {
-  const { 
-    email, 
-    password, 
-    handleFieldChange, 
-    handleLogin 
+  const {
+    email,
+    password,
+    handleFieldChange,
+    handleLogin
   } = LoginStateController();
 
   const [erroA, setErroA] = useState("");
@@ -36,19 +35,20 @@ export default function Login() {
   const handlePress = async () => {
     try {
       const login = await handleLogin(email, password);
-      if (login.val === false) {
-        throw new Error(login.erro as string);
+      if (login.val === true) {
+        tentativa = 0
+        router.push("./Feed");
       }
-      tentativa = 0 
-      router.push("./Feed");
+      throw new Error(login.erro as string);
+
     } catch (error) {
       console.error("Erro ao realizar cadastro:", error);
       if (error instanceof Error) {
         setErroLogin(error.message)
       } else {
         setErroLogin('Ocorreu um erro desconnhecido! Tente Novamente')
-        tentativa = tentativa +  1
-        if(tentativa === 3){
+        tentativa = tentativa + 1
+        if (tentativa === 3) {
           setErroLogin('Persiste um erro desconhecido. Estamos contatando o suporte.')
         }
       }
@@ -57,14 +57,11 @@ export default function Login() {
 
   const handleReset = async () => {
     try {
-      if(email !== ''){
-        router.push('./Redefinir')
-      }
       router.push('./Redefinir')
     } catch (error) {
-     setErroA('Erro interno do servidor. Tente novamente')
-      }
+      setErroA('Erro interno da aplicação. Tente novamente')
     }
+  }
 
   return (
     <KeyboardAvoidingView style={style.background}>
@@ -94,7 +91,7 @@ export default function Login() {
               } else if (handle.val === true) {
                 setErroA("");
               }
-        
+
             }}
           />
           <Text style={style.label}>Senha:</Text>
@@ -169,7 +166,7 @@ const style = StyleSheet.create({
   },
   container: {
     flex: 1,
-     justifyContent: "center",
+    justifyContent: "center",
     width: "90%",
     // alignItems: "center",
     // paddingTop: 28,

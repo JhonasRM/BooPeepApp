@@ -10,7 +10,7 @@ export class userService {
     this.endpointuser = 'https://boopeepapir.onrender.com/user'
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser'
     this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd'
-    this.endpointest = 'https://organic-yodel-r9pjw7j5ppj3pw6r-3000.app.github.dev/user'
+    this.endpointest = 'http://localhost:3000/user'
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {
@@ -21,7 +21,7 @@ export class userService {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointest, userData, {
+      const resp = await axios.post(this.endpointuser, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -42,6 +42,32 @@ export class userService {
 
   }
 
+  async getUser(email: string, password: string): Promise<IReturnAdapter> {
+    try{
+      const resp = await axios.get(this.endpointest, {
+        params: {
+          email: email,
+          password: password
+        },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Authorization",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+      if (resp.status !== 200) {
+        throw new Error(resp.statusText)
+      }
+      return { val: true, data: resp.data }
+    }catch(error){
+       if (error instanceof Error) {
+      return { val: false, erro: error.message }
+    }
+    return { val: false, erro: `Erro interno da aplicação: ${error}` }
+  }
+  }
+
   async login(email: string, password: string): Promise<IReturnAdapter> {
     try {
       console.log('bateu...')
@@ -60,7 +86,6 @@ export class userService {
       if (resp.status !== 200) {
         throw new Error(resp.statusText)
       }
-      console.log(resp.data)
       return { val: true, data: resp.data }
     } catch (error) {
       if (error instanceof Error) {

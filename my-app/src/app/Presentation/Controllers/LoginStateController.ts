@@ -60,7 +60,16 @@ const LoginStateController = () => {
       if (req.val === false) {
         throw new Error(req.erro as string);
       }
-      SetOnStorage("user", req.data)
+      console.log('Usuário Logado com sucess')
+      console.log('Coletando informações do usuário...')
+      const getUser = await UserService.getUser(email, password)
+      if (getUser.val === false) {
+        throw new Error(req.erro as string);
+      }
+      const foundUser = getUser.data
+      SetOnStorage("name", foundUser.displayName)
+      SetOnStorage("email", foundUser.email)
+      SetOnStorage("uid", foundUser.uid)
       return { val: true, data: 'Usuário Logado com sucesso' };
     } catch (error) {
       if (error instanceof Error) {
