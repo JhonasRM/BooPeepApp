@@ -133,21 +133,6 @@ export default function Login() {
           >
             <Text style={style.registerText}>Recuperar Senha</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={style.btnGoogle}
-            onPress={() => router.push("./ChatApp")}
-          >
-            <Image
-              style={{
-                width: 40,
-                height: 40,
-              }}
-              source={require("../../../../../assets/icons/icons8-google-logo-48.png")}
-            />
-
-            <Text style={style.submitGoogle}>Conecter-se com Google</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     ) : (
