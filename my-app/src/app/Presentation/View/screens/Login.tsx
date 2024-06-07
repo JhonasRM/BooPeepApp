@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Link, router, useRouter } from "expo-router";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {
   StyleSheet,
   Text,
@@ -73,7 +74,7 @@ export default function Login() {
   return (
     <KeyboardAvoidingView style={style.background}>
     { isLoading == false ? (
-      <ScrollView contentContainerStyle={style.contentContainer}>
+      <>
         <View style={style.containerLogo}>
           <Image
             style={{
@@ -119,7 +120,9 @@ export default function Login() {
               }
             }}
           />
-
+        </View>
+        
+        <View style={style.submitContainer}> 
           <View style={style.submitView}>
             <AuthErrorMessage ErrorMessage={erroLogin} />
             <TouchableOpacity style={style.btnSubmit} onPress={handlePress}>
@@ -134,7 +137,7 @@ export default function Login() {
             <Text style={style.registerText}>Recuperar Senha</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </>
     ) : (
     <>
       <LoadingBox whatPage="Auth" />
@@ -155,8 +158,8 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: "relative",
-    marginTop: 45,
+    //position: "relative",
+    //marginTop: hp(10),
   },
   contentContainer: {
     justifyContent: "center",
@@ -164,12 +167,11 @@ const style = StyleSheet.create({
   },
   container: {
     flex: 1,
-     justifyContent: "center",
-    width: "90%",
-    // alignItems: "center",
+    justifyContent: "center",
+    width: "80%",
+    alignItems: "center",
     // paddingTop: 28,
-
-    marginTop: 50,
+    //marginTop: 50,
   },
   input: {
     backgroundColor: "#fff",
@@ -185,7 +187,7 @@ const style = StyleSheet.create({
     borderColor: "#40009680",
   },
   submitView: {
-    marginTop: 20,
+    //marginTop: 20,
   },
   btnSubmit: {
     backgroundColor: "#7b83ff",
@@ -218,22 +220,29 @@ const style = StyleSheet.create({
     width: "90%",
     // alignSelf: "flex-start",
   },
-  btnGoogle: {
-    backgroundColor: "#fff",
-    width: "100%",
-    height: 45,
-    alignItems: "center",
+  submitContainer: {
+    flex: 1,
     justifyContent: "center",
-    borderRadius: 10,
-    marginTop: 40,
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: "#40009680",
+    width: "80%",
+    //alignItems: "center",
+    //marginTop: hp(10)
   },
+  // btnGoogle: {
+  //   backgroundColor: "#fff",
+  //   width: "100%",
+  //   height: 45,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   borderRadius: 10,
+  //   marginTop: 40,
+  //   flexDirection: "row",
+  //   borderWidth: 2,
+  //   borderColor: "#40009680",
+  // },
+  // submitGoogle: {
+  //   color: "#400096",
+  //   fontWeight: "bold",
+  //   marginLeft: 18,
+  // },
 
-  submitGoogle: {
-    color: "#400096",
-    fontWeight: "bold",
-    marginLeft: 18,
-  },
 });
