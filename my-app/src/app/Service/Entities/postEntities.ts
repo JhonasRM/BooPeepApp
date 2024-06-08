@@ -8,6 +8,7 @@ export class Post {
     public status: number;
     
     constructor(
+        createdAt: Date,
         UserID: string, 
         description: string, 
         /*title: string,*/ 

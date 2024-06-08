@@ -132,7 +132,7 @@ export function FeedQuery() {
                         </View>
 
                         <View style={{marginHorizontal: wp(2)}}>
-                            <Text>Criado em: {item.createdAt}</Text>
+                            <Text>Criado em: {item.createdAt.toString()}</Text>
                         </View>
 
                         <CommentButton btnStyle={styles.chaticon} />

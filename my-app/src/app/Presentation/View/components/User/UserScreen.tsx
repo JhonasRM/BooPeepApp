@@ -1,11 +1,19 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Pressable } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
-import React from 'react';
+import React, { useState } from 'react';
 import FeedBlock from '../Feed/FeedBlock';
 import UserBlock from './UserBlock';
+import { AntDesign } from '@expo/vector-icons';
+import MyCommentsBlock from './MyCommentsBlock';
 
 
 const UserProfileScreen: React.FC = () => {
+  const [changeSection, setChangeSection] = useState(false);
+
+  const handleChange = () => {
+    setChangeSection(changeSection => !changeSection)
+  }
+
   return (
     <>
     <ScrollView style={styles.container}>
@@ -40,8 +48,28 @@ const UserProfileScreen: React.FC = () => {
       </View>
 
     <View>
-      <Text style={styles.userPostBlock}>UML é foda :(</Text>
-        <UserBlock />  
+      <View style={styles.queryContainer}>
+        { changeSection == false ? (
+          <>
+          <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
+          <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+            <AntDesign name="stepforward" size={30} color="black" />
+          </TouchableOpacity>
+          </>
+        ) : (
+          <>
+          <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Meus comentários</Text>
+          <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+            <AntDesign name="stepbackward" size={30} color="black" />
+          </TouchableOpacity>
+          </>
+        )}
+      </View>
+        { changeSection == false ? (
+          <UserBlock />  
+        ) : (
+          <MyCommentsBlock />
+        )}
     </View>
     </ScrollView>
     </>
@@ -158,6 +186,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  queryContainer: {
+    flexDirection: 'row'
+  },
+  postsCommentsBtn: {
+    position: 'absolute',
+    right: 0,
+    paddingRight: 20
   }
 });
 
