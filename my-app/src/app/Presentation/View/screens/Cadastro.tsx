@@ -15,6 +15,7 @@ import { CadastroStateController } from "../../Controllers/CadastroStateControll
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import LoadingBox from "../components/LoadingIcon";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import HeaderBar from "../components/HeaderBar";
 
 export default function Cadastro() {
   const {
@@ -68,6 +69,8 @@ export default function Cadastro() {
   return (
     <KeyboardAvoidingView style={styles.background}>
       {isLoading == false ? (
+      <>
+      <HeaderBar whatScreen="auth" whatLink="/"/>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         
         <View style={styles.containerLogo}>
@@ -165,6 +168,7 @@ export default function Cadastro() {
           </View>
         </View>
       </ScrollView>
+      </>
       ) : (
         <>
           <LoadingBox whatPage="Auth"/>
@@ -197,7 +201,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: wp(100)
+    width: wp(100),
   },
   input: {
     backgroundColor: "#fff",
@@ -213,6 +217,7 @@ const styles = StyleSheet.create({
   registerView: {
     marginTop: 30,
     marginBottom: 30,
+    paddingBottom: 20,
   },
   btnRegister: {
     backgroundColor: "#7b83ff",

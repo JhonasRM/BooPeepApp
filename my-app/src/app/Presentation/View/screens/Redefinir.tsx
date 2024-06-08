@@ -4,6 +4,7 @@ import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, Touchab
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
 import LoadingBox from '../components/LoadingIcon';
+import HeaderBar from '../components/HeaderBar';
 
 
 export default function Redefinir() {
@@ -50,6 +51,7 @@ export default function Redefinir() {
         <KeyboardAvoidingView style={styles.background}>
         {isLoading == false ? (
         <>
+        <HeaderBar whatScreen="auth" whatLink="./Login"/>
         <View style={styles.containerLogo}>
          <Image
          style={{

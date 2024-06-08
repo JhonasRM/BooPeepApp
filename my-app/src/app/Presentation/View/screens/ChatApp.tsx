@@ -42,7 +42,7 @@ export default function App(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <HeaderBar whatScreen='chat'/>
+      <HeaderBar whatScreen='chat' whatLink="../screens/Feed"/>
       <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.messagesContainer}

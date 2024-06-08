@@ -5,17 +5,27 @@ import { ids } from "./HeaderBarResponsivity";
 import SearchBar from "./SearchBar";
 import React from "react";
 import { Link } from "expo-router";
+import { LinkProps } from "expo-router/build/link/Link";
+import { Href } from "expo-router/build/link/href";
 
 type whatPage = {
-    whatScreen: "feed" | "user" | "chat" | "comment"
+    whatScreen: "feed" | "user" | "chat" | "comment" | "auth"
+    whatLink?: string
 }
 
 const HeaderBar = (props: whatPage) => {    
     return (
         <View style={props.whatScreen === "feed" ? [styles.header, {backgroundColor: "#d4d7ff"}] : styles.header}>
             
-            {props.whatScreen === "chat" ? ( //"Logo do BooPeep" - Bolt
-                <Link href={"../screens/Feed"} asChild>
+            {props.whatScreen === "chat" ? ( //"Buscar nome de usuário pra mostrar aqui:" - Bolt
+                <Link href={`${props.whatLink}`} asChild>
+                    <TouchableOpacity>
+                        <Image source={require('../../../../../assets/icons/icons8-esquerda-2-100.png')} 
+                        style={styles.imghdr} />
+                    </TouchableOpacity>
+                </Link>
+            ) : props.whatScreen === 'auth' ? (
+                <Link href={`${props.whatLink}`} asChild>
                     <TouchableOpacity>
                         <Image source={require('../../../../../assets/icons/icons8-esquerda-2-100.png')} 
                         style={styles.imghdr} />

@@ -16,6 +16,7 @@ import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
 import LoadingBox from "../components/LoadingIcon";
+import HeaderBar from "../components/HeaderBar";
 
 export default function Login() {
   const { 
@@ -75,6 +76,7 @@ export default function Login() {
     <KeyboardAvoidingView style={style.background}>
     { isLoading == false ? (
       <>
+        <HeaderBar whatScreen="auth" whatLink="/"/>
         <View style={style.containerLogo}>
           <Image
             style={{
