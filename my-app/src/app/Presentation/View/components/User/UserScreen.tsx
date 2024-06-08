@@ -49,7 +49,7 @@ const UserProfileScreen: React.FC = () => {
 
     <View>
       <View style={styles.queryContainer}>
-        { changeSection == false ? (
+        {/* { changeSection == false ? (
           <>
           <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
           <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
@@ -63,13 +63,17 @@ const UserProfileScreen: React.FC = () => {
             <AntDesign name="stepbackward" size={30} color="black" />
           </TouchableOpacity>
           </>
-        )}
+        )} */}
+        <>
+          <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
+        </>
       </View>
-        { changeSection == false ? (
+        {/* { changeSection == false ? (
           <UserBlock />  
         ) : (
           <MyCommentsBlock />
-        )}
+        )} */}
+        <UserBlock />  
     </View>
     </ScrollView>
     </>
