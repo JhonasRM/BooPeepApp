@@ -28,7 +28,7 @@ const HeaderBar = (props: whatPage) => {
             ) : props.whatScreen === 'auth' ? (
                 <Link href={`${props.whatLink}`} asChild>
                     <TouchableOpacity>
-                        <FontAwesome name="mail-reply" size={24} color="red" />
+                        <FontAwesome name="mail-reply" size={35} color="#d5d7fd"/>
                     </TouchableOpacity>
                 </Link>
             ) : props.whatScreen === "comment" ? (
@@ -82,6 +82,8 @@ const {styles} = StyleSheet.create ({
         
         flexDirection: "row",
         alignItems: "center",
+        marginLeft: '5%',
+        
     },
     icon: {
         width: 120,
