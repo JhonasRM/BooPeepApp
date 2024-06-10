@@ -1,49 +1,79 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FeedBlock from '../Feed/FeedBlock';
 import UserBlock from './UserBlock';
+import { UseScreenStateController } from '../../../Controllers/UserScreenStateController';
+import { User } from '../../../../Service/Entities/userEntities';
 
 
 const UserProfileScreen: React.FC = () => {
+  const {
+    nome,
+    email,
+    course,
+    SchoolShift,
+    handleFieldChange,
+    GetUserInfo,
+  } = UseScreenStateController()
+  const defaultUser: User = new User('Não definido', 'Não definido', 'Não definido', 'Não definido', 'Não definido', 'Não definido', ['Não definido'], 'Não definido')
+  const [user, setUser] = useState<User>(defaultUser)
+  const [erro, setErro] = useState('')
+  useEffect(() => {
+    GetUserInfo()
+      .then((wantedData) => {
+        if (wantedData.val === false) {
+          setErro(wantedData.erro as string)
+        } else {
+          const userData = wantedData.data as User
+          const user = new User(userData.name, userData.name, userData.email, '', '', userData.password, userData.postID, userData.chatID)
+          setUser(user)
+        }
+      })
+      .catch((error) => {
+        const errorMessage: string = error as string
+        setErro(errorMessage)
+      })
+
+  })
   return (
     <>
-    <ScrollView style={styles.container}>
-      <View style={styles.profileContainer}>
-        <View style={styles.profileInfo}>
-          <View style={styles.profileImageContainer}>
-            <Image
-              source={{ uri: 'https://via.placeholder.com/150' }}
-              style={styles.profileImage}
-            />
-            <View style={styles.userIconContainer}>
-              <Icon name="user" size={100} color="#FFF" />
+      <ScrollView style={styles.container}>
+        <View style={styles.profileContainer}>
+          <View style={styles.profileInfo}>
+            <View style={styles.profileImageContainer}>
+              <Image
+                source={{ uri: 'https://via.placeholder.com/150' }}
+                style={styles.profileImage}
+              />
+              <View style={styles.userIconContainer}>
+                <Icon name="user" size={100} color="#FFF" />
+              </View>
+            </View>
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.username}>{user.name}</Text>
+              <Text style={styles.bio}>
+                Desenvolvedor de software apaixonado por tecnologia.
+              </Text>
             </View>
           </View>
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.username}>Igor Rocha</Text>
-            <Text style={styles.bio}>
-              Desenvolvedor de software apaixonado por tecnologia.
-            </Text>
+        </View>
+        <View style={styles.additionalInfoContainer}>
+          <Text style={styles.additionalInfoTitle}>Informações Adicionais</Text>
+          <View style={styles.additionalInfoContent}>
+            <Text style={styles.additionalInfo}>Email: {user.email}</Text>
+            <Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>
+            <Text style={styles.additionalInfo}>Curso: </Text>
+            <Text style={styles.additionalInfo}>Turno: Noite</Text>
+            {/* Adicione mais informações conforme necessário */}
           </View>
         </View>
-      </View>
-      <View style={styles.additionalInfoContainer}>
-        <Text style={styles.additionalInfoTitle}>Informações Adicionais</Text>
-        <View style={styles.additionalInfoContent}>
-          <Text style={styles.additionalInfo}>Email: igorrocha@gamil.com</Text>
-          <Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>
-          <Text style={styles.additionalInfo}>Curso: Desenvolvimento de Sistemas</Text>
-          <Text style={styles.additionalInfo}>Turno: Noite</Text>
-          {/* Adicione mais informações conforme necessário */}
-        </View>
-      </View>
 
-    <View>
-      <Text style={styles.userPostBlock}>UML é foda :(</Text>
-        <UserBlock />  
-    </View>
-    </ScrollView>
+        <View>
+          <Text style={styles.userPostBlock}></Text>
+          <UserBlock />
+        </View>
+      </ScrollView>
     </>
   );
 };

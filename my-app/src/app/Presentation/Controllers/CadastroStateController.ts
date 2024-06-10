@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
 import { userService } from "../../Service/API/userServices";
-import { StateAndSetters } from "../../utils/Interfaces/StateAndSetters";
+import { StateAndSetters } from "../../utils/Interfaces/UserStateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
@@ -20,7 +20,13 @@ const CadastroStateController = () => {
     sobrenome: setSobrenome,
     email: setEmail,
     password: setPassword,
-    confirmarSenha: setConfirmarSenha
+    confirmarSenha: setConfirmarSenha,
+    course: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    },
+    SchoolShift: function (value: SetStateAction<string>): void {
+      throw new Error("Function not implemented.");
+    }
   };
 
   const handleFieldChange = async (field: string, value: string): Promise<IReturnAdapter> => {

@@ -61,7 +61,7 @@ const createPostStateController = () => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
         }
-        const uid = GetOnStorage('uid') as string
+        const uid = GetOnStorage('uid') as unknown as string
         setUserID(uid)
         const post: Post = new Post(
             UserID,
@@ -72,7 +72,7 @@ const createPostStateController = () => {
             console.log(post);
             const req = await postService.createPost(post);
             if (req.valido === false) {
-                throw new Error("Bad Request");
+                throw new Error(req.erro as string);
             };
             return {valido: true, value: 201, data: post};
 

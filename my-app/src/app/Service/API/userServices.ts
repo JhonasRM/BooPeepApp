@@ -44,7 +44,7 @@ export class userService {
 
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
-      const resp = await axios.get(this.endpointest, {
+      const resp = await axios.get(this.endpointuser, {
         params: {
           email: email,
           password: password
