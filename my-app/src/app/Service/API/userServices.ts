@@ -10,7 +10,7 @@ export class userService {
     this.endpointuser = 'https://boopeepapir.onrender.com/user'
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser'
     this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd'
-    this.endpointest = 'http://localhost:3000/user'
+    this.endpointest = 'https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/user'
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {
@@ -44,7 +44,7 @@ export class userService {
 
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
-      const resp = await axios.get(this.endpointuser, {
+      const resp = await axios.get(this.endpointest, {
         params: {
           email: email,
           password: password
