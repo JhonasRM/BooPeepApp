@@ -11,7 +11,7 @@ import { Link } from "expo-router";
 import { createPostStateController } from "../../Controllers/createPostStateController";
 import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
 
-const CreatePost = () => {
+const PostForm = () => {
     const {
         description,
         local,
@@ -283,4 +283,4 @@ const styles = StyleSheet.create ({
     },
 })
 
-export default CreatePost
+export default PostForm
