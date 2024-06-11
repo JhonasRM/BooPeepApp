@@ -10,7 +10,6 @@ const createPostStateController = () => {
     //const [title, setTitle] = useState("")
     // //const [checkTitle, setCheckTitle] = useState("")
     const [createdAt, setCreatedAt] = useState(0);
-    const [UserID, setUserID] = useState("");
     const [description, setDescription] = useState("");
     // const [checkDescription, setCheckDescription] = useState("")
     const [postId, setPostId] = useState("");
@@ -54,15 +53,14 @@ const createPostStateController = () => {
     }
 
     const handleCreatePost = async (
-        //title: string
+        //title: string,
+        UserID: string,
         description: string,
         local: string,
     ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
         if (/*title === '' ||*/ description === '') {
             return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
         }
-        const uid = GetOnStorage('uid') as unknown as string
-        setUserID(uid)
         const post: Post = new Post(
             UserID,
             description,
@@ -92,7 +90,6 @@ const createPostStateController = () => {
     return {
         //title,
         createdAt,
-        UserID,
         description,
         postId,
         local,

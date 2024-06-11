@@ -49,8 +49,12 @@ const CreatePost = () => {
 
     const handleSendPost = async () => {
         try {
+            
+        const getUid = await GetOnStorage('uid')
+        const uid = getUid.info as string
             const createPost = await handleCreatePost(
                 //title,
+                uid,
                 description,
                 local
             )

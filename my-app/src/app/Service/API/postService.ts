@@ -4,10 +4,12 @@ import { Post } from "../Entities/postEntities"
 export class postServices {
     private endpointposts: string
     private endpointpost: string
+    private endpointest: string
 
     constructor() {        
-        this.endpointposts = "https://boopeepapir.onrender.com/posts"
+        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/posts"
         this.endpointpost = "https://boopeepapir.onrender.com/post"
+        this.endpointest = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/post"
     };
 
     //------------------------------------------------------------------
@@ -154,7 +156,7 @@ export class postServices {
                 status: post.status
                 
             };
-            const resp = await axios.post(this.endpointpost, sendPost, {
+            const resp = await axios.post(this.endpointest, sendPost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
