@@ -55,7 +55,8 @@ export default function Redefinir() {
         <View style={styles.containerLogo}>
          <Image
          style={{
-    
+            width: 180,
+            height: 250,
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
       containerLogo: {
-        flex: 1,
+        //flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
         position: "relative"

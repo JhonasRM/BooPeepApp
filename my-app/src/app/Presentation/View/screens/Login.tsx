@@ -80,8 +80,10 @@ export default function Login() {
         <View style={style.containerLogo}>
           <Image
             style={{
-              marginTop: 40,
-              marginBottom: 40,
+              // marginTop: 40,
+              // marginBottom: 40,
+              width: 180,
+              height: 250
             }}
             source={require("../../../../../assets/icons/2-removebg-preview(2).png")}
           />
@@ -174,7 +176,7 @@ const style = StyleSheet.create({
     width: "80%",
     alignItems: "center",
     // paddingTop: 28,
-    //marginTop: 50,
+    marginTop: 50,
   },
   input: {
     backgroundColor: "#fff",

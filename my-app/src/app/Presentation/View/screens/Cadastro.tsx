@@ -76,10 +76,10 @@ export default function Cadastro() {
         <View style={styles.containerLogo}>
           <Image
             style={{
-              // width: 100,
-              // height: 100,
-              marginTop: 40,
-              marginBottom: 40,
+               width: 200,
+               height: 260,
+              //marginTop: 40,
+              //marginBottom: 40,
             }}
             source={require("../../../../../assets/icons/2-removebg-preview(2).png")}
           />
@@ -186,10 +186,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerLogo: {
-    flex: 1,
+    //flex: 1,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
+    marginBottom: 50,
   },
   container: {
     flex: 1,
