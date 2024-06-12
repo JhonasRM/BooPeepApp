@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React = require("react");
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import UserConfigProps from "../components/UserConfig/UserConfigProps";
+import { UseScreenStateController } from "../../Controllers/UserScreenStateController";
+import LoadingBox from "../components/LoadingIcon";
+import ErrorMessage from "../components/ErrorMessage";
 
 const ChangeData = () => {
     const [profileData, setProfileData] = useState({
@@ -11,7 +14,14 @@ const ChangeData = () => {
         course: "",
         shift: "",
     });
-
+    const {
+        user,
+        GetUserInfo,
+        CleanUpUserInfo
+      } = UseScreenStateController();
+     
+    const [erro, setErro] = useState('')
+    const [loading, setLoading] = useState(false)
     const handleProfileChange = (name: any, value: any) => {
         setProfileData(prevData => ({
             ...prevData,
@@ -21,9 +31,39 @@ const ChangeData = () => {
 
     const handleSubmit = () => {
         console.log("Dados do perfil atualizados:", profileData);
+        
     };
+    
+    useEffect(() => {
+        const getInfo = async() => {
+          const get = await GetUserInfo();
+          if(get.val=== false){
+            setErro(get.erro as string)
+            setLoading(false)
+          }
+          if(user.name === "Não definido"){
+            setLoading(true)
+          }
+          setLoading(false)
+        }
+        getInfo()
+        return () => {
+          CleanUpUserInfo()
+        }
+      }, [])
 
     return (
+        <>
+        <View style={styles.container}>
+            { loading ? (
+                <>
+                    <LoadingBox whatPage="Comment" />
+                </>
+            ) : erro ? (
+                <>
+                    <ErrorMessage message={erro}/>
+                </>
+            ) : (
         <View style={styles.container}>
             <UserConfigProps
                 optType="header"
@@ -32,22 +72,26 @@ const ChangeData = () => {
                 optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
             />
             <View style={styles.formContainer}>
-                <InputLabel label="Nome" value={profileData.firstName} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
+                <InputLabel label="Nome" holder={user.name} value={profileData.firstName} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
                 <InputLabel label="Sobrenome" value={profileData.lastName} onChangeText={(text: any) => handleProfileChange("lastName", text)} />
-                <InputLabel label="Email" value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
+                <InputLabel label="Email" holder={user.email} value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
                 <InputLabel label="Curso" value={profileData.course} onChangeText={(text: any) => handleProfileChange("course", text)} />
-                <InputLabel label="Turno" value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
+                <InputLabel label="Turno"value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
+                <InputLabel label="Descrição"value={profileData.shift} onChangeText={(text: any) => handleProfileChange("description", text)} />
                 <Button title="Alterar" onPress={handleSubmit} color="#400096" />
             </View>
         </View>
+         )}
+         </View>
+         </>
     );
 };
 
-const InputLabel = ({ label, value, onChangeText }: any) => (
+const InputLabel = ({ label, holder, value, onChangeText }: any) => (
     <View style={styles.inputGroup}>
         <Text style={styles.label}>{label}:</Text>
         <TextInput
-            placeholder={label}
+            placeholder={holder}
             value={value}
             onChangeText={onChangeText}
             style={styles.input}
