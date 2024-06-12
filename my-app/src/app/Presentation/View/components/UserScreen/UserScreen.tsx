@@ -5,38 +5,49 @@ import FeedBlock from '../Feed/FeedBlock';
 import UserBlock from './UserBlock';
 import { UseScreenStateController } from '../../../Controllers/UserScreenStateController';
 import { User } from '../../../../Service/Entities/userEntities';
+import LoadingBox from '../LoadingIcon';
+import ErrorMessage from '../ErrorMessage';
+import { IReturnAdapter } from '../../../../utils/Interfaces/IReturnAdapter';
 
 
 const UserProfileScreen: React.FC = () => {
   const {
-    nome,
-    email,
-    course,
-    SchoolShift,
-    handleFieldChange,
+    user,
     GetUserInfo,
-  } = UseScreenStateController()
-  const defaultUser: User = new User('Não definido', 'Não definido', 'Não definido', 'Não definido', 'Não definido', 'Não definido', ['Não definido'], 'Não definido')
-  const [user, setUser] = useState<User>(defaultUser)
-  const [erro, setErro] = useState('')
-  useEffect(() => {
-    GetUserInfo()
-      .then((wantedData) => {
-        if (wantedData.val === false) {
-          setErro(wantedData.erro as string)
-        } else {
-          const userData = wantedData.data as User
-          const user = new User(userData.name, userData.name, userData.email, '', '', userData.password, userData.postID, userData.chatID)
-          setUser(user)
-        }
-      })
-      .catch((error) => {
-        const errorMessage: string = error as string
-        setErro(errorMessage)
-      })
+    CleanUpUserInfo
+  } = UseScreenStateController();
+  const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(true)
 
-  })
+  useEffect(() => {
+    const getInfo = async() => {
+      const get = await GetUserInfo();
+      if(get.val=== false){
+        setErro(get.erro as string)
+        setLoading(false)
+      }
+      if(user.name === "Não definido"){
+        setLoading(true)
+      }
+      setLoading(false)
+    }
+    getInfo()
+    return () => {
+      CleanUpUserInfo()
+    }
+  }, [])
   return (
+      <>
+        <View style={styles.container}>
+            { loading ? (
+                <>
+                    <LoadingBox whatPage="Comment" />
+                </>
+            ) : erro ? (
+                <>
+                    <ErrorMessage message={erro}/>
+                </>
+            ) : (
     <>
       <ScrollView style={styles.container}>
         <View style={styles.profileContainer}>
@@ -74,6 +85,9 @@ const UserProfileScreen: React.FC = () => {
           <UserBlock />
         </View>
       </ScrollView>
+    </>
+    )}
+    </View>
     </>
   );
 };

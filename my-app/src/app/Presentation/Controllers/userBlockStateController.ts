@@ -32,11 +32,10 @@ const userBlockStateController = () => {
             let posts: Post[] = []
             postData.forEach(post => {
                 const newPost = new Post(
-                    post.createdAt, 
                     post.UserID, 
                     post.description, 
-                    post.postId, 
                     post.local, 
+                    post.postId, 
                     post.status
                 )
 

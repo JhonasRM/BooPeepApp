@@ -7,12 +7,10 @@ export class postServices {
     private endpointest: string
 
     constructor() {        
-        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/posts"
+        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
         this.endpointpost = "https://boopeepapir.onrender.com/post"
         this.endpointest = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/post"
     };
-
-    //------------------------------------------------------------------
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
         // const Posts = {
@@ -53,23 +51,12 @@ export class postServices {
         };
     };
 
-    //------------------------------------------------------------------
-
     async getPostFromUser(param: string): Promise<{ 
         valido: boolean, 
         value?: number, 
         erro?: string | Error, 
         data?: Post[] 
-    }> {
-        // const postParams: Post = {
-        //     createdAt: 0,
-        //     UserID: "",
-        //     description: "",
-        //     postId: "",
-        //     local: "",
-        //     status: 0
-        // };
-        
+    }> {        
         try {
             console.log("getPostFromUser for chamado!");
             const resp = await axios.get(this.endpointpost, {

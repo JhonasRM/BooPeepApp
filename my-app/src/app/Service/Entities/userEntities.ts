@@ -1,3 +1,5 @@
+import { IUserDTO } from "../DTO/IUserDTO";
+
 export class User{
     public readonly uid: string;
     public  name: string;
@@ -5,20 +7,24 @@ export class User{
     public password: string;
     public postID: string[];
     public chatID: string
-    constructor(name: string, sobrenome: string, email: string,  password: string, confirmPassword: string, uid?: string, postID?: string[], chatID?: string){
-        this.name = `${name} ${sobrenome}`,
+    constructor({displayName= "Não definido", sobrenome="Não definido", email="Não definido",  password="Não definido", confirmPassword="Não definido", uid="Não definido", postID=["Não definido"], chatID="Não definido"}: IUserDTO){
+        console.log(displayName)
+        this.name = displayName,
         this.email = email,
         this.password = password,
         this.uid = '',
         this.postID = [],
         this.chatID = ''
-        if(uid){
+        if(sobrenome !== "Não definido"){
+            this.name = `${displayName} ${sobrenome}`
+        }
+        if(uid !== "Não definido"){
             this.uid = uid
         }
-        if(postID){
+        if(postID[0] !== "Não definido"){
             this.postID = postID
         }
-        if(chatID){
+        if(chatID !== "Não definido"){
             this.chatID = chatID
         }
     }
