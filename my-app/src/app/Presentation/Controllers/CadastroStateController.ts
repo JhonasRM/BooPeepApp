@@ -68,13 +68,13 @@ const CadastroStateController = () => {
     if( email === '' || password === '' || nome === '' || sobrenome === '' || confirmarSenha === ''){
       return { val: false, erro: `Preencha todos os campos para realizar o cadastro.`}
     }
-    const user: User = new User(
-      nome,
-      sobrenome,
-      email,
-      password,
-      confirmarSenha
-    );
+    const user: User = new User({
+      displayName: nome,
+      nickname: sobrenome,
+      email: email,
+      password:  password,
+      confirmPassword: confirmarSenha
+    });
     try {
       console.log(user);
       const req = await UserService.cadastro(user);

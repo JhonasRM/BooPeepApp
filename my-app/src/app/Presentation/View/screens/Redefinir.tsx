@@ -3,6 +3,7 @@ import { Link, router }  from "expo-router";
 import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity, Alert, Pressable, Modal} from 'react-native';
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
+import ModalComponent from '../components/ModalComponent';
 
 
 export default function Redefinir() {
@@ -35,7 +36,7 @@ export default function Redefinir() {
       setErro('Erro interno do servidor. Tente novamente mais tarde')
     }
   }
-  const handleConfirm = () => {
+  const handleCloseModal = () => {
     setModalVisible(false)
     setTimeout(() => {
       router.push('./Login')
@@ -69,26 +70,8 @@ export default function Redefinir() {
          </TouchableOpacity>
          </View>
          </View>
-         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{contentModal}</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={handleConfirm}>
-              <Text style={styles.textStyle}>OK</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-    </KeyboardAvoidingView>
+         <ModalComponent isVisible={modalVisible} content={contentModal} onClose={handleCloseModal}/>
+         </KeyboardAvoidingView>
     );
 };
 

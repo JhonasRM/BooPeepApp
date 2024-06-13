@@ -2,7 +2,7 @@ import { SetStateAction, useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator";
 import { postServices } from "../../Service/API/postService";
 import { Post } from "../../Service/Entities/postEntities";
-import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters";
+import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { User } from "../../Service/Entities/userEntities";
 

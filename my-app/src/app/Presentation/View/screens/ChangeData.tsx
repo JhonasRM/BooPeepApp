@@ -2,26 +2,28 @@ import { useEffect, useState } from "react";
 import React = require("react");
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import UserConfigProps from "../components/UserConfig/UserConfigProps";
-import { UseScreenStateController } from "../../Controllers/UserScreenStateController";
+import { UserScreenStateController } from "../../Controllers/UserScreenStateController";
 import LoadingBox from "../components/LoadingIcon";
 import ErrorMessage from "../components/ErrorMessage";
+import { ChangeDataStateController } from "../../Controllers/ChangeDataStateController";
+import { User } from "../../../Service/Entities/userEntities";
+import ModalComponent from "../components/ModalComponent";
 
 const ChangeData = () => {
-    const [profileData, setProfileData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        course: "",
-        shift: "",
-    });
+    const [profileData, setProfileData] = useState<User>(new User({}));
     const {
         user,
         GetUserInfo,
         CleanUpUserInfo
-      } = UseScreenStateController();
+      } = UserScreenStateController();
      
+    const {
+        UpdateUserInfo
+    } = ChangeDataStateController()
     const [erro, setErro] = useState('')
     const [loading, setLoading] = useState(false)
+    const [modalVisible,  setModalVisible] = useState(false)
+    const [modalContent, setModalContent] = useState('')
     const handleProfileChange = (name: any, value: any) => {
         setProfileData(prevData => ({
             ...prevData,
@@ -29,24 +31,35 @@ const ChangeData = () => {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        setLoading(true)
         console.log("Dados do perfil atualizados:", profileData);
+        const updateInfo = await UpdateUserInfo(user, profileData)
+        if(updateInfo.val === false){
+            setLoading(false)
+            setErro(updateInfo.erro as string)
+        }
+        setModalContent(updateInfo.data)
+        setLoading(false)
+        setModalVisible(true)
         
     };
+    const handleCloseModal = () =>{
+        setModalVisible(false)
+    }
     
     useEffect(() => {
+        setLoading(true)
         const getInfo = async() => {
           const get = await GetUserInfo();
           if(get.val=== false){
             setErro(get.erro as string)
             setLoading(false)
           }
-          if(user.name === "Não definido"){
-            setLoading(true)
-          }
           setLoading(false)
         }
         getInfo()
+        console.log(user)
         return () => {
           CleanUpUserInfo()
         }
@@ -54,6 +67,7 @@ const ChangeData = () => {
 
     return (
         <>
+        <ModalComponent isVisible= {modalVisible} content={modalContent} onClose={handleCloseModal}/>
         <View style={styles.container}>
             { loading ? (
                 <>
@@ -72,12 +86,11 @@ const ChangeData = () => {
                 optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
             />
             <View style={styles.formContainer}>
-                <InputLabel label="Nome" holder={user.name} value={profileData.firstName} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
-                <InputLabel label="Sobrenome" value={profileData.lastName} onChangeText={(text: any) => handleProfileChange("lastName", text)} />
+                <InputLabel label="Nome" holder={user.name} value={profileData.name} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
+                <InputLabel label="Sobrenome" value={profileData.nickname} onChangeText={(text: any) => handleProfileChange("lastName", text)} />
                 <InputLabel label="Email" holder={user.email} value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
                 <InputLabel label="Curso" value={profileData.course} onChangeText={(text: any) => handleProfileChange("course", text)} />
                 <InputLabel label="Turno"value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
-                <InputLabel label="Descrição"value={profileData.shift} onChangeText={(text: any) => handleProfileChange("description", text)} />
                 <Button title="Alterar" onPress={handleSubmit} color="#400096" />
             </View>
         </View>

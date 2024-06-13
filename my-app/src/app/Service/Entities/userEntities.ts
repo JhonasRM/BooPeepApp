@@ -1,22 +1,31 @@
+import { shift } from "../../utils/types/shift";
 import { IUserDTO } from "../DTO/IUserDTO";
 
 export class User{
     public readonly uid: string;
     public  name: string;
+    public nickname: string
     public email: string;
     public password: string;
     public postID: string[];
-    public chatID: string
-    constructor({displayName= "Não definido", sobrenome="Não definido", email="Não definido",  password="Não definido", confirmPassword="Não definido", uid="Não definido", postID=["Não definido"], chatID="Não definido"}: IUserDTO){
-        console.log(displayName)
-        this.name = displayName,
+    public chatID: string;
+    public course: string;
+    public shift: string;
+    public description: string;
+    constructor({displayName= "Não definido", nickname="Não definido", email="Não definido",  password="Não definido", confirmPassword="Não definido", uid="Não definido", postID=["Não definido"], chatID="Não definido", course="Não definido", shift="Não definido", description="Adicione sua biografia aqui"}: IUserDTO){
+        const name = displayName.split(' ')
+        this.name = name[0]
+        this.nickname = name.slice(1).join(' ')
         this.email = email,
         this.password = password,
         this.uid = '',
         this.postID = [],
         this.chatID = ''
-        if(sobrenome !== "Não definido"){
-            this.name = `${displayName} ${sobrenome}`
+        this.course = course,
+        this.shift = shift
+        this.description = description
+        if(nickname !== "Não definido"){
+            this.name = `${displayName} ${nickname}`
         }
         if(uid !== "Não definido"){
             this.uid = uid
@@ -28,4 +37,5 @@ export class User{
             this.chatID = chatID
         }
     }
+
 }

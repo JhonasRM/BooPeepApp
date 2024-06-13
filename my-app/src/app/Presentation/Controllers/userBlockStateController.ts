@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { postServices } from "../../Service/API/postService"
-import { postStateAndSetters } from "../../utils/types/Interfaces/postStateAndSetters"
+import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters"
 import { Post } from "../../Service/Entities/postEntities"
 
 const userBlockStateController = () => {

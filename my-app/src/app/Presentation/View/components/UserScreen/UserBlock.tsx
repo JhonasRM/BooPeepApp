@@ -40,8 +40,6 @@ const UserBlock = () => {
     const [erroFetch, setErroFetch] = useState("")
 
     useEffect(() => {
-        console.log("useEffect is running")
-
     const incomingData = async () => {
         console.log("incomingData is running")
 

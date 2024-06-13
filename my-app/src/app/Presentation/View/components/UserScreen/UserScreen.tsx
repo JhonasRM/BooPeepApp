@@ -3,7 +3,7 @@ import Icon from '@expo/vector-icons/FontAwesome';
 import React, { useEffect, useState } from 'react';
 import FeedBlock from '../Feed/FeedBlock';
 import UserBlock from './UserBlock';
-import { UseScreenStateController } from '../../../Controllers/UserScreenStateController';
+import { UserScreenStateController } from '../../../Controllers/UserScreenStateController';
 import { User } from '../../../../Service/Entities/userEntities';
 import LoadingBox from '../LoadingIcon';
 import ErrorMessage from '../ErrorMessage';
@@ -15,7 +15,7 @@ const UserProfileScreen: React.FC = () => {
     user,
     GetUserInfo,
     CleanUpUserInfo
-  } = UseScreenStateController();
+  } = UserScreenStateController();
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(true)
 
@@ -64,7 +64,7 @@ const UserProfileScreen: React.FC = () => {
             <View style={styles.userInfoContainer}>
               <Text style={styles.username}>{user.name}</Text>
               <Text style={styles.bio}>
-                Desenvolvedor de software apaixonado por tecnologia.
+                {user.description}
               </Text>
             </View>
           </View>
@@ -73,9 +73,9 @@ const UserProfileScreen: React.FC = () => {
           <Text style={styles.additionalInfoTitle}>Informações Adicionais</Text>
           <View style={styles.additionalInfoContent}>
             <Text style={styles.additionalInfo}>Email: {user.email}</Text>
-            <Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>
-            <Text style={styles.additionalInfo}>Curso: </Text>
-            <Text style={styles.additionalInfo}>Turno: Noite</Text>
+            {/*<Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>*/}
+            <Text style={styles.additionalInfo}>Curso: {user.course}</Text>
+            <Text style={styles.additionalInfo}>Turno: {user.shift}</Text>
             {/* Adicione mais informações conforme necessário */}
           </View>
         </View>
