@@ -1,6 +1,7 @@
 import axios from "axios";
 import { User } from "../Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { useEffect } from "react";
 export class userService {
   private endpointuser: string;
   private endpointlogin: string;
@@ -21,7 +22,7 @@ export class userService {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointest, userData, {
+      const resp = await axios.post(this.endpointuser, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",

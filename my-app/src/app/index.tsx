@@ -20,14 +20,8 @@ export default function App() {
     
       <KeyboardAvoidingView style={styles.background}>
         <View style={styles.containerLogo}>
-          <Image
-            style={{
-              width: 480,
-              height: 330,
-            }}
-            source={require('../../assets/icons/3-removebg-preview.png')}
-          />
-          
+          <Image style={{width: 300, height: 350}}
+          source={require('../../assets/icons/3-removebg-preview.png')}/>          
         </View>
 
         <View style={styles.container}>
@@ -64,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerLogo: {
-    flex: 1,
+    //flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 0,
@@ -77,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#d5d7fe80",
     marginTop: 120,
   },
   submitText: {
@@ -93,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
     marginTop: 20,
   },
 
