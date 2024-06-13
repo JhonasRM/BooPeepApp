@@ -8,95 +8,124 @@ import ErrorMessage from "../components/ErrorMessage";
 import { ChangeDataStateController } from "../../Controllers/ChangeDataStateController";
 import { User } from "../../../Service/Entities/userEntities";
 import ModalComponent from "../components/ModalComponent";
+import UserPersistence from "../../../Service/Persistence/UserPersistence";
+import { router } from "expo-router";
+import { set } from "zod";
 
 const ChangeData = () => {
-    const [profileData, setProfileData] = useState<User>(new User({}));
+    const [profileData, setProfileData] = useState({
+        displayName: "",
+        nickname:  "",
+        email: "",
+        course: "",
+        shift: "",
+        description: ""
+    });
     const {
         user,
         GetUserInfo,
         CleanUpUserInfo
-      } = UserScreenStateController();
-     
+    } = UserScreenStateController();
+
     const {
         UpdateUserInfo
     } = ChangeDataStateController()
     const [erro, setErro] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [modalVisible,  setModalVisible] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [modalVisible, setModalVisible] = useState(false)
     const [modalContent, setModalContent] = useState('')
     const handleProfileChange = (name: any, value: any) => {
         setProfileData(prevData => ({
             ...prevData,
             [name]: value
         }));
+        console.log(profileData)
     };
 
     const handleSubmit = async () => {
         setLoading(true)
         console.log("Dados do perfil atualizados:", profileData);
-        const updateInfo = await UpdateUserInfo(user, profileData)
-        if(updateInfo.val === false){
+        const newUser = new User({
+            displayName: profileData.displayName,
+            nickname: profileData.nickname, 
+          email: profileData.email, 
+          course: profileData.course, 
+          shift: profileData.shift, 
+          description: profileData.description 
+        })
+        const updateInfo = await UpdateUserInfo(user, newUser)
+        if (updateInfo.val === false) {
             setLoading(false)
             setErro(updateInfo.erro as string)
-        }
+        } else if(updateInfo.val === true){
         setModalContent(updateInfo.data)
         setLoading(false)
         setModalVisible(true)
-        
-    };
-    const handleCloseModal = () =>{
-        setModalVisible(false)
     }
-    
+    };
+    const handleCloseModal = () => {
+        setModalVisible(false)
+    setLoading(false)
+
+    }
+
     useEffect(() => {
-        setLoading(true)
-        const getInfo = async() => {
-          const get = await GetUserInfo();
-          if(get.val=== false){
-            setErro(get.erro as string)
+        const getInfo = async () => {
+            const get = await GetUserInfo();
+            if (get.val === false) {
+        setLoading(false)
+
+                setErro(get.erro as string)
+            }
+            if (user.name === "Não") {
+        setLoading(false)
+
+                setErro('Erro ao encontrar o usuário')
+            } else {
             setLoading(false)
-          }
-          setLoading(false)
+}
         }
         getInfo()
         console.log(user)
+        console.log(profileData)
         return () => {
-          CleanUpUserInfo()
+            CleanUpUserInfo()
         }
-      }, [])
+    }, [])
 
     return (
         <>
-        <ModalComponent isVisible= {modalVisible} content={modalContent} onClose={handleCloseModal}/>
-        <View style={styles.container}>
-            { loading ? (
-                <>
-                    <LoadingBox whatPage="Comment" />
-                </>
-            ) : erro ? (
-                <>
-                    <ErrorMessage message={erro}/>
-                </>
-            ) : (
-        <View style={styles.container}>
-            <UserConfigProps
-                optType="header"
-                optText="Editar Perfil"
-                optLink="./ContaConfig"
-                optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
-            />
-            <View style={styles.formContainer}>
-                <InputLabel label="Nome" holder={user.name} value={profileData.name} onChangeText={(text: any) => handleProfileChange("firstName", text)} />
-                <InputLabel label="Sobrenome" value={profileData.nickname} onChangeText={(text: any) => handleProfileChange("lastName", text)} />
-                <InputLabel label="Email" holder={user.email} value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
-                <InputLabel label="Curso" value={profileData.course} onChangeText={(text: any) => handleProfileChange("course", text)} />
-                <InputLabel label="Turno"value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
-                <Button title="Alterar" onPress={handleSubmit} color="#400096" />
+            <ModalComponent isVisible={modalVisible} content={modalContent} onClose={handleCloseModal} />
+            <View style={styles.container}>
+                {loading ? (
+                    <>
+                        <LoadingBox whatPage="Comment" />
+                    </>
+                ) : erro ? (
+                    <>
+                        <ErrorMessage message={erro} />
+                    </>
+                ) : (
+                    <View style={styles.container}>
+                        <UserConfigProps
+                            optType="header"
+                            optText="Editar Perfil"
+                            optLink="./ContaConfig"
+                            optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
+                        />
+                        <View style={styles.formContainer}>
+                            <InputLabel label="Nome" holder={user.name} value={profileData.displayName} onChangeText={(text: any) => handleProfileChange("displayName", text)} />
+                            <InputLabel label="Sobrenome" holder={user.nickname} value={profileData.nickname} onChangeText={(text: any) => handleProfileChange("nickname", text)} />
+                            <InputLabel label="Email" holder={user.email} value={profileData.email} onChangeText={(text: any) => handleProfileChange("email", text)} />
+                            <InputLabel label="Curso" holder={user.course} value={profileData.course} onChangeText={(text: any) => handleProfileChange("course", text)} />
+                            <InputLabel label="Turno" holder={user.shift} value={profileData.shift} onChangeText={(text: any) => handleProfileChange("shift", text)} />
+                            <InputLabel label="Descrição" holder={user.description} value={profileData.description} onChangeText={(text: any) => handleProfileChange("description", text)} />
+                            <Button title="Alterar" onPress={handleSubmit} color="#400096" />
+                        </View>
+                    </View>
+                )}
             </View>
-        </View>
-         )}
-         </View>
-         </>
+        </>
     );
 };
 

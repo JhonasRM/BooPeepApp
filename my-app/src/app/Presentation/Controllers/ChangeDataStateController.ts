@@ -1,10 +1,8 @@
-import { SetStateAction, useState } from "react";
-import { userValidator } from "../../Service/Validators/userValidator";
-import { userService } from "../../Service/API/userServices";
-import { StateAndSetters } from "../../utils/Interfaces/UserStateAndSetters";
+
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 
 interface FieldUpdate {
   fieldToUpdate: string;
@@ -12,9 +10,7 @@ interface FieldUpdate {
 }
 
 const ChangeDataStateController = () => {
-  const defaultUser: User = new User({})
-  const [user, setUser] = useState<User>(defaultUser)
-  const UserService: userService = new userService();
+  const uRepository: userRepository = new userRepository();
   const UpdateUserInfo = async (user: User, profileData: User): Promise<IReturnAdapter> => {
     try{
     const updatedFields: FieldUpdate[] = [];
@@ -30,14 +26,16 @@ const ChangeDataStateController = () => {
   updatedFields.forEach(async (updatedInfo) => {
     let fieldToUpdate = updatedInfo.fieldToUpdate
     let newValue = updatedInfo.NewValue
+    if(newValue === ''){
+      return
+    }
     try {
       const email = await GetOnStorage('email')
-        const req = await UserService.update(email.info, fieldToUpdate, newValue)
+        const req = await uRepository.update(email.info, fieldToUpdate, newValue)
         if (req.val === false) {
           throw new Error(req.erro as string);
         }
         return
-        console.log(req.data)
       } catch (error) {
         if (error instanceof Error) {
             throw new Error(error.message );
@@ -54,25 +52,9 @@ const ChangeDataStateController = () => {
 return { val: false, erro: "Internal Server Error" };
 }
   };
-  const CleanUpUserInfo = async(): Promise<IReturnAdapter> => {
-    try {
-      const userInfo = new User({})
-      setUser(userInfo)
-      console.log('Limpando dados...')
-      return {val: true, data: 'Dados descartados'}
-    } catch (error) {
-      if (error instanceof Error) {
-        return { val: false, erro: error.message };
-      }
-    
-    return { val: false, erro: "Internal Server Error" };
-    }
-  }
 
   return {
-    user,
     UpdateUserInfo,
-    CleanUpUserInfo
   };
 };
 

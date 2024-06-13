@@ -1,18 +1,18 @@
 import { SetStateAction, useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
-import { userService } from "../../Service/API/userServices";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 import { StateAndSetters } from "../../utils/Interfaces/UserStateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import SetOnStorage from "../../Data Access/Storage/SetOnStorage";
-import MyUserService from "../../Service/business/MyUserService";
+import UserPersistence from "../../Service/Persistence/UserPersistence";
 
 const LoginStateController = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const validator: userValidator = new userValidator();
-  const UserService: userService = new userService();
+  const uRepository: userRepository = new userRepository();
 
   const setState: StateAndSetters = {
     email: setEmail,
@@ -63,13 +63,13 @@ const LoginStateController = () => {
       if( email === '' || password === ''){
         return { val: false, erro: `Preencha todos os campos para realizar o login.`}
       }
-      const req = await UserService.login(email, password);
+      const req = await uRepository.login(email, password);
       if (req.val === false) {
         throw new Error(req.erro as string);
       }
       console.log('Usuário Logado com sucess')
       console.log('Coletando informações do usuário...')
-      const getUser = await UserService.getUser(email, password)
+      const getUser = await uRepository.getUser(email, password)
       if (getUser.val === false) {
         throw new Error(req.erro as string);
       }
@@ -84,7 +84,7 @@ const LoginStateController = () => {
         postID: foundUser.uid,
         chatID: foundUser.chatID
       })
-      const MyUser = MyUserService.getInstance()
+      const MyUser = UserPersistence.getInstance()
       MyUser.setUser(newUser)
       return { val: true, data: 'Usuário Logado com sucesso' };
     } catch (error) {

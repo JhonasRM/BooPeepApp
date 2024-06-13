@@ -1,74 +1,78 @@
-import { SetStateAction, useState } from "react";
-import { userValidator } from "../../Service/Validators/userValidator";
-import { userService } from "../../Service/API/userServices";
-import { StateAndSetters } from "../../utils/Interfaces/UserStateAndSetters";
+import { useState, useEffect } from "react";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
-import MyUserService from "../../Service/business/MyUserService";
+import UserPersistence from "../../Service/Persistence/UserPersistence";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 
 const UserScreenStateController = () => {
-  const defaultUser: User = new User({})
-  const [user, setUser] = useState<User>(defaultUser)
-  const UserService: userService = new userService();
+  const defaultUser = new User({
+    displayName: "", 
+          email: "", 
+          course: "", 
+          shift: "", 
+          description: ""
+  })
+  const [user, setUser] = useState<User>(defaultUser);
+  const uRepository: userRepository = new userRepository();
 
   const GetUserInfo = async (): Promise<IReturnAdapter> => {
     try {
-      const MyUser = MyUserService.getInstance()
-      const userInfo  = await MyUser.getUser()
-      console.log(`User INFO from Instace: ${userInfo}`)
-      if(userInfo === null){
-      const email = await GetOnStorage('email')
-      const req = await UserService.getUser(email.info, '')
-      if (req.val === false) {
-        throw new Error(req.erro as string);
+      const MyUser = await UserPersistence.getInstance();
+      const userInfo = await MyUser.getUser();
+      if (userInfo === defaultUser) {
+        const email = await GetOnStorage('email');
+        const req = await uRepository.getUser(email.info, '');
+        if (req.val === false) {
+          throw new Error(req.erro as string);
+        }
+        const userData = req.data as User;
+        const displayName = req.data.displayName as string;
+        const GottenInfo = new User({ 
+          displayName: displayName, 
+          email: userData.email, 
+          uid: userData.uid, 
+          postID: userData.postID, 
+          chatID: userData.chatID, 
+          course: userData.course, 
+          shift: userData.shift, 
+          description: userData.description 
+        });
+        MyUser.setUser(GottenInfo);
+        setUser(GottenInfo);
+        return { val: true, data: 'Usuário encontrado' };
       }
-      const userData = req.data as User
-      const displayName = req.data.displayName as string
-      const GottenInfo = new User({ displayName: displayName, email: userData.email, uid: userData.uid, postID: userData.postID, chatID: userData.chatID })
-      MyUser.setUser(GottenInfo)
-      console.log(GottenInfo)
-      setUser({
-        uid: GottenInfo.uid,
-        name: GottenInfo.name,
-        nickname: GottenInfo.nickname,
-        email: GottenInfo.email,
-        password: GottenInfo.password,
-        postID: GottenInfo.postID,
-        chatID: GottenInfo.chatID,
-        course: GottenInfo.course,
-        shift: GottenInfo.shift,
-        description: GottenInfo.description
-      })
-      console.log(user)
-    return { val: true, data: 'Usuário encontrado' };
-    }
-    setUser(userInfo)
-    return { val: true, data: 'Usuário encontrado' };
+      setUser(userInfo as User);
+      return { val: true, data: 'Usuário encontrado' };
     } catch (error) {
       if (error instanceof Error) {
         return { val: false, erro: error.message };
       }
-
       return { val: false, erro: "Internal Server Error" };
     }
   };
+
   const CleanUpUserInfo = async (): Promise<IReturnAdapter> => {
     try {
-      const userInfo = new User({})
-      setUser(userInfo)
-      console.log('Limpando dados...')
+      const userInfo = new User({});
+      setUser(userInfo);
+      console.log('Limpando dados...');
       return { val: true, data: 'Dados descartados' }
     } catch (error) {
       if (error instanceof Error) {
         return { val: false, erro: error.message };
       }
-
       return { val: false, erro: "Internal Server Error" };
     }
   }
 
+{/*  // Use useEffect to log when user changes
+  useEffect(() => {
+    console.log(`User state updated: ${JSON.stringify(user)}`);
+  }, [user]);*/}
+
   return {
+    defaultUser,
     user,
     GetUserInfo,
     CleanUpUserInfo

@@ -1,13 +1,12 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
 import React, { useEffect, useState } from 'react';
-import FeedBlock from '../Feed/FeedBlock';
 import UserBlock from './UserBlock';
 import { UserScreenStateController } from '../../../Controllers/UserScreenStateController';
 import { User } from '../../../../Service/Entities/userEntities';
 import LoadingBox from '../LoadingIcon';
 import ErrorMessage from '../ErrorMessage';
-import { IReturnAdapter } from '../../../../utils/Interfaces/IReturnAdapter';
+import UserPersistence from '../../../../Service/Persistence/UserPersistence';
 
 
 const UserProfileScreen: React.FC = () => {
@@ -26,7 +25,7 @@ const UserProfileScreen: React.FC = () => {
         setErro(get.erro as string)
         setLoading(false)
       }
-      if(user.name === "Não definido"){
+      if(user.name === "Não"){
         setLoading(true)
       }
       setLoading(false)
@@ -62,7 +61,7 @@ const UserProfileScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.userInfoContainer}>
-              <Text style={styles.username}>{user.name}</Text>
+              <Text style={styles.username}>{user.name} {user.nickname}</Text>
               <Text style={styles.bio}>
                 {user.description}
               </Text>

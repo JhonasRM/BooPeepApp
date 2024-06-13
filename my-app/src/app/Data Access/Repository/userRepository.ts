@@ -1,7 +1,7 @@
 import axios from "axios";
-import { User } from "../Entities/userEntities";
+import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
-export class userService {
+export class userRepository {
   private endpointuser: string;
   private endpointlogin: string;
   private endpointreset: string;
@@ -121,8 +121,10 @@ export class userService {
     }
   }
 
-  async update(email: string, fieldToUpdate: string, newValue: string, token?: string): Promise<IReturnAdapter> {
-    
+  async update(email: string, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
+    if(fieldToUpdate === "name" || fieldToUpdate === "nickname"){
+      fieldToUpdate = "displayName"
+    }
     const  updateData = {
         email: email,
         fieldToUpdate: fieldToUpdate,

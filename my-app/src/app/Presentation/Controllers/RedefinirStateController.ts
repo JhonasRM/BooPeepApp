@@ -1,16 +1,15 @@
 import { SetStateAction, useState } from "react";
 import { userValidator } from "../../Service/Validators/userValidator";
-import { userService } from "../../Service/API/userServices";
 import { StateAndSetters } from "../../utils/Interfaces/UserStateAndSetters";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 
 const RedefinirStateController = () => {
   const [email, setEmail] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
 
   const validator: userValidator = new userValidator();
-  const UserService: userService = new userService();
+  const uRepository: userRepository = new userRepository();
 
   const setState: StateAndSetters = {
     email: setEmail,
@@ -60,7 +59,7 @@ const RedefinirStateController = () => {
     email: string
   ): Promise<IReturnAdapter> => {
     try {
-      const req = await UserService.resetPwd(email);
+      const req = await uRepository.resetPwd(email);
       if (req.val === false) {
         throw new Error("Bad Request");
       }
