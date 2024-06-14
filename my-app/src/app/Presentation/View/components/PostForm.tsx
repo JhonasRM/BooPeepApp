@@ -10,8 +10,15 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { createPostStateController } from "../../Controllers/createPostStateController";
 import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
+import ContainerOptions from "./ContainerOptions";
 
-const PostForm = () => {
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+}
+
+const PostForm = (props: Props) => {
     const {
         description,
         local,
@@ -23,16 +30,22 @@ const PostForm = () => {
     const [erroA, setErroA] = useState("");
     const [erroB, setErroB] = useState("");
     const [erroCreatePost, setErroCreatePost] = useState('')
+    const [useEffectRunner, setUseEffectRunner] = useState<any>(undefined)
 
     const [isTouched, setIsTouched] = useState(false)
     const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
+
+    const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
 
     const handleTouch = () => {
         setIsTouched(true)
     }
 
+    //---Isso está sendo executado antes de mandar desativa o botão, por isso executa duas vezes.---
+    //---Veja como verificar isso antes de executar o handleExit()---
     const handleExit = () => {
         setIsTouched(false)
+        props.stopEdit(true)
     }
 
     const imageHandler = async() => {
@@ -77,8 +90,18 @@ const PostForm = () => {
         console.log(erroB);
     }
 
+    useEffect(() => {
+        console.log(props.pressedEdit)
+
+        if (props.pressedEdit == true) {
+            setIsTouched(true)
+        }
+    })
+
     return (
     <>
+    {/* <GrandfatherPostFormIsTouchedHandler isTouched={updateTouched} /> */}
+    {/* <ContainerOptions isTouched={updateTouched}/> */}
     { isTouched == false ? (
         <>
         <TouchableOpacity style={styles.buttonOn} onPress={handleTouch}>

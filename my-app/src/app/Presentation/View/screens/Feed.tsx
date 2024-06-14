@@ -4,19 +4,39 @@ import FeedArea from "../components/Feed/FeedArea";
 import FooterBar from "../components/FooterBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import React from "react";
+import React, { useState } from "react";
 import PostForm from "../components/PostForm";
 
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+}
 
-
-const Feed = () => {
+const Feed = (props: Props) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [pressedEdit, isPressingEdit] = useState(false)
+    const [stopEdit, isStoppingEdit] = useState(false)
     const queryClient = new QueryClient();
+
+    const handleFeedAreaEditResponse = (response: any) => {
+        setIsEditing(response)
+    }
+
+    const handleContainerOptionsEditBtnPress = (response: any) => {
+        isPressingEdit(response);
+    }
+
+    const handlePostFormEditDenial = (response: any) => {
+        isStoppingEdit(response)
+    }
+
     return (
      <QueryClientProvider client={queryClient}>
     <View>
         <HeaderBar whatScreen="feed"/>
-        <FeedArea />
-        <PostForm />
+        <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit}/>
+        <PostForm isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial}/>
         <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>

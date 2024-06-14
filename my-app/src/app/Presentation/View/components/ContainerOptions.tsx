@@ -1,14 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { Image, StyleProp, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle, Modal, Pressable } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 interface Props {
     style?: StyleProp<ViewStyle> //"Isso será usado para receber o estilo do Parent!" - Bolt
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
 }
 
 const ContainerOptions = (props: Props) => {
     const [isPress, setIsPress] = useState(false)
+    const [pressEdit, setPressEdit] = useState(false)
 
     const handlePress = () => {
         setIsPress(true)
@@ -17,6 +21,29 @@ const ContainerOptions = (props: Props) => {
    const handleExit = () => {
 	setIsPress(false)
    }
+
+   const handlePostFormEditDenial = (response: any) => {
+    props.stopEdit(response)
+   }
+
+   //veja isso
+   const EditHandle = () => {    
+    //props.pressedEdit = pressEdit
+
+    //props.isTouched(true)
+    props.pressedEdit(true)
+    handlePostFormEditDenial
+
+    // useEffect(() => {
+    //     props.isTouched(true);
+    // }, [])
+   }
+
+   useEffect(() => {
+    if (props.stopEdit == true) {
+        props.pressedEdit(false)
+    }
+   })
 
     //if/else based on click boolean
     //Will open a menu and hide the icon image
@@ -43,7 +70,7 @@ const ContainerOptions = (props: Props) => {
                     <Text style={styles.headerText}>Opções da Postagem</Text>
                 </View>
 
-                <TouchableOpacity style={styles.optioncontainer}>
+                <TouchableOpacity style={styles.optioncontainer} onPress={EditHandle}> 
                     <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
                     <Text style={[styles.btnText]}>Editar Postagem</Text>
                 </TouchableOpacity>

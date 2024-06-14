@@ -5,7 +5,6 @@ import { ids } from "./FeedBlockResponsivity";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
-import ContainerOptions from "../ContainerOptions";
 
 //import React from "react";
 
@@ -16,13 +15,20 @@ import { Entypo } from '@expo/vector-icons';
 import React, { SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
+import ContainerOptions from "../ContainerOptions";
 
 const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/501/300',
 'https://picsum.photos/502/300',
 'https://picsum.photos/503/300']
 
-export function FeedQuery() {
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+}
+
+export function FeedQuery(props: Props) {
     const {
         createdAt, 
         UserID, 
@@ -79,6 +85,10 @@ export function FeedQuery() {
     console.log(`erro Response: ${erro}`)
     }, []);
 
+    const handleContainerOptionsEditResponse = (response: any) => {
+        props.isTouched(response)
+    }
+
     return (
         <>
         <View style={styles.container}>
@@ -103,7 +113,7 @@ export function FeedQuery() {
                             <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                         </View>
 
-                        <ContainerOptions style={styles.options}/>
+                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
                     </View>
                     
                     <Text style={[styles.titletext]}>
@@ -148,10 +158,10 @@ export function FeedQuery() {
     )
 }
 
-const FeedBlock = () => {
+const FeedBlock = (props: Props) => {
     return (
         <View style={styles.container}>
-            <FeedQuery />
+            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
         </View>
     )
 }

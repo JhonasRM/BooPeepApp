@@ -5,11 +5,21 @@ import FeedBlock from "./FeedBlock";
 import { ids } from "./FeedAreaResponsivity";
 import React from "react";
 
-const FeedArea = () => {
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+}
+
+const FeedArea = (props: Props) => {
+    const handleFeedBlockEditResponse = (response: any) => {
+        props.isTouched(response)
+    }
+    
     return (
         <View style={styles.feed} dataSet={{ media: ids.feed }}>
             <ScrollView >
-                <FeedBlock />
+                <FeedBlock isTouched={handleFeedBlockEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
             </ScrollView>
         </View>
     )
