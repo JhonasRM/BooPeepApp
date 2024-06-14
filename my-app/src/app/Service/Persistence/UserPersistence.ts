@@ -54,6 +54,14 @@ class UserPersistence {
   public clearUser(): void {
     this.user = null;
   }
+  public isLogged(): boolean{
+    if(this.user = null){
+      return false
+    } else if(typeof this.user === "object"){
+      return true
+    }
+    return false
+  }
 }
 
 export default UserPersistence;

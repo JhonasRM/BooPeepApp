@@ -10,6 +10,7 @@ type optProps = {
     optTextColor?: string,
     optImgUrl?: ImageSourcePropType,
     optLink?: string,
+    optFunction?: () => void
 }
 
 const UserConfigProps = (props: optProps) => {
@@ -41,7 +42,7 @@ const UserConfigProps = (props: optProps) => {
             </>
         ) : (
             <>
-                <TouchableOpacity style={styles.buttonChild}>
+                <TouchableOpacity style={styles.buttonChild} onPress={props.optFunction}>
                         <Text style={[styles.optText, props.optTextColor != undefined ? {color: props.optTextColor} : null]}> 
                             {props.optText} 
                         </Text>  

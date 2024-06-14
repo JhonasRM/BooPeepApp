@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Alert, Modal, Pressable, ScrollView, View, StyleSheet, Text } from "react-native";
 import UserConfigProps from "../components/UserConfig/UserConfigProps";
+import ModalComponent from "../components/ModalComponent";
+import { router } from "expo-router";
+import UserPersistence from "../../../Service/Persistence/UserPersistence";
+import { removeItemFromStorage } from "../../../Data Access/Storage/removeItemFromStorage"
 
 const ContaConfig = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalLogOutVisible, setModalLogOutVisible] = useState(false)
     const [contentModal, setContentModal] = useState('');
 
     const handleAlterarSenha = async () => {
@@ -15,6 +20,27 @@ const ContaConfig = () => {
         setModalVisible(false);
     };
 
+    const handleLogOut = async () => {
+        setContentModal('Você deseja sair da sua conta ?')
+        setModalLogOutVisible(true)
+    }
+    const handleConfirmLogOut = async() => {
+        try {
+            const InstanceUser = UserPersistence.getInstance()
+        InstanceUser.clearUser()
+        removeItemFromStorage('uid')
+        removeItemFromStorage('email')
+        removeItemFromStorage('displayName')
+        setModalLogOutVisible(false)
+        router.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+        }
+    const handleCancelLogOut = async() => {
+        setModalLogOutVisible(false)
+    }
+
     return (
         <ScrollView>
             <UserConfigProps 
@@ -24,29 +50,10 @@ const ContaConfig = () => {
                 optImgUrl={require('../../../../../assets/icons/icons8-esquerda-2-100.png')}
             />
             <UserConfigProps optType="option" optText="Alterar dados" optLink="./ChangeData" />
-            <UserConfigProps optType="button" optText="Alterar senha"/>
-            <UserConfigProps optType="button" optText="Sair" optTextColor="red" />
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>{contentModal}</Text>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={handleConfirm}
-                        >
-                            <Text style={styles.textStyle}>OK</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+            <UserConfigProps optType="button" optText="Alterar senha" optFunction={handleAlterarSenha}/>
+            <UserConfigProps optType="button" optText="Sair" optTextColor="red" optFunction={handleLogOut}/>
+            <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirm} Category={"Single Action"} />
+            <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirmLogOut} optionalonPress={handleCancelLogOut} Category={"Dual Action"} />
         </ScrollView>
     );
 };
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
     buttonOpen: {
         backgroundColor: '#F194FF',
     },
-    buttonClose: {
+    buttonPress: {
         backgroundColor: '#7b83ff',
     },
     textStyle: {

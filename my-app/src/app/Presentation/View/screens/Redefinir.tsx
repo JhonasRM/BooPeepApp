@@ -70,7 +70,7 @@ export default function Redefinir() {
          </TouchableOpacity>
          </View>
          </View>
-         <ModalComponent isVisible={modalVisible} content={contentModal} onClose={handleCloseModal}/>
+         <ModalComponent Category={"Single Action"} isVisible={modalVisible} content={contentModal} onPress={handleCloseModal}/>
          </KeyboardAvoidingView>
     );
 };

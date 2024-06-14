@@ -6,11 +6,14 @@ export class userRepository {
   private endpointlogin: string;
   private endpointreset: string;
   private endpointest: string;
+  private endpointestlogin: string;
   constructor() {
     this.endpointuser = 'https://boopeepapir.onrender.com/user'
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser'
     this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd'
-    this.endpointest = 'https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/user'
+    this.endpointest = 'http://localhost:3000/user'
+    this.endpointestlogin = 'http://localhost:3000/loginuser'
+
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {
@@ -21,7 +24,7 @@ export class userRepository {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointuser, userData, {
+      const resp = await axios.post(this.endpointest, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -44,7 +47,7 @@ export class userRepository {
 
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
-      const resp = await axios.get(this.endpointuser, {
+      const resp = await axios.get(this.endpointest, {
         params: {
           email: email,
           password: password
@@ -75,7 +78,7 @@ export class userRepository {
         email: email,
         password: password
       }
-      const resp = await axios.post(this.endpointlogin, loginData,{
+      const resp = await axios.post(this.endpointestlogin, loginData,{
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -132,7 +135,7 @@ export class userRepository {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.put(this.endpointuser, updateData, {
+      const resp = await axios.put(this.endpointest, updateData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
