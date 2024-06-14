@@ -44,7 +44,7 @@ export class userRepository {
 
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
-      const resp = await axios.get(this.endpointest, {
+      const resp = await axios.get(this.endpointuser, {
         params: {
           email: email,
           password: password
@@ -132,7 +132,7 @@ export class userRepository {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.put(this.endpointest, updateData, {
+      const resp = await axios.put(this.endpointuser, updateData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
