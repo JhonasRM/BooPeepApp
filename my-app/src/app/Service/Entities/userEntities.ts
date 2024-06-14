@@ -24,16 +24,16 @@ export class User{
         this.course = course,
         this.shift = shift
         this.description = description
-        if(nickname !== "Não definido"){
+        if(nickname !== "Não definido"  && nickname !== "" || " "){
             this.name = `${displayName} ${nickname}`
         }
-        if(uid !== "Não definido"){
+        if(uid !== "Não definido" && uid !==  ""){
             this.uid = uid
         }
-        if(postID[0] !== "Não definido"){
+        if(postID[0] !== "Não definido" && postID[0] !== "" || " "){
             this.postID = postID
         }
-        if(chatID !== "Não definido"){
+        if(chatID !== "Não definido" && chatID !== "" || " "){
             this.chatID = chatID
         }
     }

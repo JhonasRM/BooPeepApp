@@ -30,7 +30,7 @@ const ContaConfig = () => {
         InstanceUser.clearUser()
         removeItemFromStorage('uid')
         removeItemFromStorage('email')
-        removeItemFromStorage('displayName')
+        removeItemFromStorage('name')
         setModalLogOutVisible(false)
         router.push('/')
         } catch (error) {
@@ -53,7 +53,7 @@ const ContaConfig = () => {
             <UserConfigProps optType="button" optText="Alterar senha" optFunction={handleAlterarSenha}/>
             <UserConfigProps optType="button" optText="Sair" optTextColor="red" optFunction={handleLogOut}/>
             <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirm} Category={"Single Action"} />
-            <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirmLogOut} optionalonPress={handleCancelLogOut} Category={"Dual Action"} />
+            <ModalComponent isVisible={modalLogOutVisible} content={contentModal} onPress={handleConfirmLogOut} optionalonPress={handleCancelLogOut} Category={"Dual Action"} />
         </ScrollView>
     );
 };

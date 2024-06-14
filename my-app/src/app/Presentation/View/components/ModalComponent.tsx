@@ -38,18 +38,20 @@ const ModalComponent: React.FC<ModalProps> = ({
         {Category === "Dual Action" && (
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{content}</Text>
-            <Pressable
-              style={[styles.button, styles.buttonPress]}
-              onPress={onPress}
-            >
-              <Text style={styles.textStyle}>Confirmar</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonPress]}
-              onPress={optionalonPress}
-            >
-              <Text style={styles.textStyle}>Cancelar</Text>
-            </Pressable>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                style={[styles.button, styles.buttonPress]}
+                onPress={onPress}
+              >
+                <Text style={styles.textStyle}>Confirmar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonPress, styles.buttonCancel]}
+                onPress={optionalonPress}
+              >
+                <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+            </View>
           </View>
         )}
       </View>
@@ -79,17 +81,24 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 15,
+  },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 9,
     elevation: 2,
+    flex: 1,
+    marginHorizontal: 5,
   },
   buttonPress: {
     backgroundColor: "#7b83ff",
   },
-  buttonOptional: {
-    backgroundColor: "#2196F3", // cor diferente para o botão opcional
-    marginTop: 10, // margem superior para separar os botões
+  buttonCancel: {
+    backgroundColor: "#ff7b7b",
   },
   textStyle: {
     color: "white",

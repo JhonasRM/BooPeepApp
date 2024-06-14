@@ -3,10 +3,8 @@ import Icon from '@expo/vector-icons/FontAwesome';
 import React, { useEffect, useState } from 'react';
 import UserBlock from './UserBlock';
 import { UserScreenStateController } from '../../../Controllers/UserScreenStateController';
-import { User } from '../../../../Service/Entities/userEntities';
 import LoadingBox from '../LoadingIcon';
 import ErrorMessage from '../ErrorMessage';
-import UserPersistence from '../../../../Service/Persistence/UserPersistence';
 
 
 const UserProfileScreen: React.FC = () => {

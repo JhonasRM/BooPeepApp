@@ -89,7 +89,7 @@ const ChangeData = () => {
   return (
     <>
       <ModalComponent
-        Category={"Dual Action"}
+        Category={"Single Action"}
         isVisible={modalVisible}
         content={modalContent}
         onPress={handleCloseModal}
