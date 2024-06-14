@@ -3,6 +3,8 @@ import { Link, router }  from "expo-router";
 import { StyleSheet, Text, KeyboardAvoidingView, View, Image, TextInput, TouchableOpacity, Alert, Pressable, Modal} from 'react-native';
 import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
+import LoadingBox from '../components/LoadingIcon';
+import HeaderBar from '../components/HeaderBar';
 
 
 export default function Redefinir() {
@@ -12,12 +14,14 @@ export default function Redefinir() {
     handleResetRequest
   } = RedefinirStateController()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [erro, setErro ] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [contentModal, setContentModal] = useState('')
 
   const handlePress = async() => {
     try {
+      setIsLoading(true);
       if(email === '' || email === undefined){
         throw new Error('Preencha os campos necessários.')
       }
@@ -27,8 +31,10 @@ export default function Redefinir() {
       }
       setContentModal('Enviamos um email para você')
       setModalVisible(true)
+      setIsLoading(false);
 
     } catch (error) {
+      setIsLoading(false);
       if(error instanceof Error){
         setErro(error.message)
       }
@@ -43,10 +49,14 @@ export default function Redefinir() {
   }
     return(
         <KeyboardAvoidingView style={styles.background}>
+        {isLoading == false ? (
+        <>
+        <HeaderBar whatScreen="auth" whatLink="./Login"/>
         <View style={styles.containerLogo}>
          <Image
          style={{
-    
+            width: 180,
+            height: 250,
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
@@ -63,11 +73,11 @@ export default function Redefinir() {
                   }
                 }}
          />
-          <View style={styles.btnSubmit}>
+         </View>
+         <View style={styles.btnSubmit}>
          <TouchableOpacity style={styles.btnRegister} onPress={handlePress}>
             <Text style={styles.submitText}>Trocar Senha</Text>
          </TouchableOpacity>
-         </View>
          </View>
          <Modal
         animationType="slide"
@@ -88,6 +98,12 @@ export default function Redefinir() {
           </View>
         </View>
       </Modal>
+      </>
+   ) : (
+    <>
+      <LoadingBox whatPage='Auth'/>
+    </>
+   )}
     </KeyboardAvoidingView>
     );
 };
@@ -100,14 +116,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
       containerLogo: {
-        flex: 1,
-        justifyContent: 'space-evenly',
+        //flex: 1,
+        justifyContent: 'flex-end',
         alignItems: 'center',
         position: "relative"
       },
       container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "flex-end",
         width: '90%',
         alignItems: "center"
       },
@@ -120,7 +136,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         borderWidth: 2,
-        borderColor: '#000'
+        borderColor: '#40009680'
       },
       label: {
         marginBottom: 5,
@@ -136,17 +152,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         borderRadius: 10,
-        marginBottom: 70,
-        marginTop: 70,
-        borderColor: '#000',
+        // marginBottom: 70,
+        // marginTop: 70,
+        borderColor: '#d5d7fe80',
         borderWidth: 2,
         fontWeight: 'bold',
       },
       submitText: {
         color: '#fff',
         fontSize: 18,
+        fontWeight: 'bold'
       },
       btnSubmit: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: "center"
       },
