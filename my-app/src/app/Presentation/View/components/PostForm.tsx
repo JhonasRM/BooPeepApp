@@ -34,8 +34,8 @@ const PostForm = (props: Props) => {
 
     const [isTouched, setIsTouched] = useState(false)
     const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
-
     const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
+    const [startEdit, isEditStarting] = useState<boolean | null>(false)
 
     const handleTouch = () => {
         setIsTouched(true)
@@ -44,8 +44,10 @@ const PostForm = (props: Props) => {
     //---Isso está sendo executado antes de mandar desativa o botão, por isso executa duas vezes.---
     //---Veja como verificar isso antes de executar o handleExit()---
     const handleExit = () => {
-        setIsTouched(false)
         props.stopEdit(true)
+        setIsTouched(false)
+
+        isEditStarting(false)
     }
 
     const imageHandler = async() => {
@@ -94,9 +96,14 @@ const PostForm = (props: Props) => {
         console.log(props.pressedEdit)
 
         if (props.pressedEdit == true) {
+            isEditStarting(true)
             setIsTouched(true)
         }
     })
+
+    useEffect(() => { //"Previne que abra o Modal duas vezes" - Bolt
+        props.stopEdit(true)
+    }, [])
 
     return (
     <>
@@ -127,7 +134,7 @@ const PostForm = (props: Props) => {
                         </TouchableOpacity>
                     </View>
 
-                { isTouched == true ? (
+                { isTouched == true && editPressed == false ? (
                     <View style={styles.inputView}>
                         <TextInput 
                         placeholder={"Título da postagem"} 
@@ -161,10 +168,56 @@ const PostForm = (props: Props) => {
                         style={styles.textInput}
                         />
                     </View>
+                ) : isTouched == true && startEdit == true ? (
+                    <View style={styles.inputView}>
+                    <TextInput 
+                    placeholder={"Título da postagem"} 
+                    placeholderTextColor={"#303030"}
+                    autoCorrect={false}
+                    // onChangeText={async (title) => {
+                    //     const handle = await handleFieldChange("nome", nome);
+                    //      if (handle.valido === false) {
+                    //          setErroA(handle.erro as string);
+                    //      } else if (handle.valido === true) {
+                    //          setErroA("")
+                    //      }
+                    //}}
+                    style={styles.textInput}
+                    /> 
+
+                    <TextInput 
+                    placeholder={"Me diga o que ocorreu..."} 
+                    placeholderTextColor={"#303030"}
+                    multiline
+                    numberOfLines={10}
+                    autoCorrect={false}
+                    onChangeText={async (description) => {
+                        const handle = await handleFieldChange("description", description)
+                        if (handle.valido === false) {
+                            setErroB(handle.erro as string);
+                        } else if (handle.valido === true) {
+                            setErroB("")
+                        }
+                    }}
+                    style={styles.textInput}
+                    />
+                    </View>
                 ) : (null)
                 }
 
                     <View style={styles.buttonView}>
+                        { startEdit == true ? (
+                        <>
+                        <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
+                            <Text style={styles.btntext}>Alterar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
+                            <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
+                        </TouchableOpacity>
+                        </>
+                        ) : editPressed == false ? (
+                        <>
                         <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
                             <Text style={styles.btntext}>Publicar</Text>
                         </TouchableOpacity>
@@ -172,6 +225,8 @@ const PostForm = (props: Props) => {
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
                             <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
                         </TouchableOpacity>
+                        </>
+                        ) : (null)}
                     </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
