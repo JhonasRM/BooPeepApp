@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { RedefinirStateController } from '../../Controllers/RedefinirStateController';
 import LoadingBox from '../components/LoadingIcon';
 import HeaderBar from '../components/HeaderBar';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
 export default function Redefinir() {
@@ -55,8 +56,8 @@ export default function Redefinir() {
         <View style={styles.containerLogo}>
          <Image
          style={{
-            width: 180,
-            height: 250,
+          width: 160,
+          height: 220
          }}
             source={require('../../../../../assets/icons/2-removebg-preview(2).png')}
          />
@@ -119,7 +120,8 @@ const styles = StyleSheet.create({
         //flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
-        position: "relative"
+        position: "relative",
+        marginTop: hp(4)
       },
       container: {
         flex: 1,

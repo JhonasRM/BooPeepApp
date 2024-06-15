@@ -76,8 +76,8 @@ export default function Cadastro() {
         <View style={styles.containerLogo}>
           <Image
             style={{
-               width: 200,
-               height: 260,
+              width: 160,
+              height: 220
               //marginTop: 40,
               //marginBottom: 40,
             }}
@@ -190,7 +190,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    marginBottom: 50,
+    //marginBottom: 50,
+    marginBottom: hp(7),
+    marginTop: hp(2)
   },
   container: {
     flex: 1,

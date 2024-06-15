@@ -5,7 +5,8 @@ import FooterBar from "../components/FooterBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import React, { useState } from "react";
-import PostForm from "../components/PostForm";
+import PostForm from "../components/CreatePost";
+import CreatePost from "../components/CreatePost";
 
 type Props = {
     isTouched?: any
@@ -36,7 +37,7 @@ const Feed = (props: Props) => {
     <View>
         <HeaderBar whatScreen="feed"/>
         <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit}/>
-        <PostForm isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial}/>
+        <CreatePost isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial}/>
         <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>

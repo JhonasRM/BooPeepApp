@@ -80,8 +80,8 @@ export default function Login() {
             style={{
               // marginTop: 40,
               // marginBottom: 40,
-              width: 180,
-              height: 250
+              width: 160,
+              height: 220
             }}
             source={require("../../../../../assets/icons/2-removebg-preview(2).png")}
           />
@@ -163,6 +163,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     //position: "relative",
     //marginTop: hp(10),
+
   },
   contentContainer: {
     justifyContent: "center",
@@ -171,13 +172,8 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-<<<<<<< HEAD
-    width: "90%",
-    // alignItems: "center",
-=======
     width: "80%",
     alignItems: "center",
->>>>>>> 81afdd953b616523adc7ecadd2d5f1f4317bbb6b
     // paddingTop: 28,
     marginTop: 50,
   },
@@ -214,7 +210,7 @@ const style = StyleSheet.create({
   },
   btnRegister: {
     marginTop: 10,
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "center",
   },
   registerText: {

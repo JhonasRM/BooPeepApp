@@ -9,6 +9,7 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { createPostStateController } from "../../Controllers/createPostStateController";
+import { AntDesign } from '@expo/vector-icons';
 import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
 import ContainerOptions from "./ContainerOptions";
 
@@ -18,7 +19,7 @@ type Props = {
     stopEdit?: any
 }
 
-const PostForm = (props: Props) => {
+const CreatePost = (props: Props) => {
     const {
         description,
         local,
@@ -112,7 +113,7 @@ const PostForm = (props: Props) => {
     { isTouched == false ? (
         <>
         <TouchableOpacity style={styles.buttonOn} onPress={handleTouch}>
-            <Text style={styles.plustext}>+</Text>
+            <AntDesign name="plus" size={35} color="white" />
         </TouchableOpacity>
         </>
     ) : (
@@ -136,7 +137,7 @@ const PostForm = (props: Props) => {
 
                 { isTouched == true && editPressed == false ? (
                     <View style={styles.inputView}>
-                        <TextInput 
+                        {/* <TextInput 
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"#303030"}
                         autoCorrect={false}
@@ -149,7 +150,7 @@ const PostForm = (props: Props) => {
                         //      }
                         //}}
                         style={styles.textInput}
-                        /> 
+                        />  */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
@@ -170,7 +171,7 @@ const PostForm = (props: Props) => {
                     </View>
                 ) : isTouched == true && startEdit == true ? (
                     <View style={styles.inputView}>
-                    <TextInput 
+                    {/* <TextInput 
                     placeholder={"Título da postagem"} 
                     placeholderTextColor={"#303030"}
                     autoCorrect={false}
@@ -183,7 +184,7 @@ const PostForm = (props: Props) => {
                     //      }
                     //}}
                     style={styles.textInput}
-                    /> 
+                    />  */}
 
                     <TextInput 
                     placeholder={"Me diga o que ocorreu..."} 
@@ -268,8 +269,10 @@ const styles = StyleSheet.create ({
         height: hp(9),
         marginRight: 15,
         borderRadius: 5,
-        alignItems: "center",
         position: "absolute",
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "center",
         right: 0,
         bottom: hp(10),
         
@@ -279,8 +282,10 @@ const styles = StyleSheet.create ({
         display: "none"
     },
     plustext: {     //<Text>
-        fontSize: 50,         
-        color: "#ffffff"
+         fontSize: 50,         
+         color: "#ffffff",
+        // position: "absolute",
+        // top: 0, bottom: 0
     },
     formOn: {
         display: "flex",
@@ -361,4 +366,4 @@ const styles = StyleSheet.create ({
     },
 })
 
-export default PostForm
+export default CreatePost

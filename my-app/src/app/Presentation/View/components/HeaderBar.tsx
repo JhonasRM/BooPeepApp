@@ -6,7 +6,6 @@ import SearchBar from "./SearchBar";
 import React from "react";
 import { Link } from "expo-router";
 import { LinkProps } from "expo-router/build/link/Link";
-import { Href } from "expo-router/build/link/href";
 import { FontAwesome } from '@expo/vector-icons';
 
 type whatPage = {
@@ -16,7 +15,7 @@ type whatPage = {
 
 const HeaderBar = (props: whatPage) => {    
     return (
-        <View style={props.whatScreen === "auth" ? [styles.authHeader] : props.whatScreen === "feed" ? [styles.header, {backgroundColor: "#d4d7ff"}] : styles.header}>
+        <View style={props.whatScreen === "auth" ? [styles.authHeader] : props.whatScreen === "feed" ? [styles.header, {backgroundColor: "#d4d7ff", justifyContent: "center"}] : styles.header}>
             
             {props.whatScreen === "chat" ? ( //"Buscar nome de usuário pra mostrar aqui:" - Bolt
                 <Link href={`${props.whatLink}`} asChild>
@@ -87,7 +86,8 @@ const {styles} = StyleSheet.create ({
     },
     icon: {
         width: 120,
-        height: 44,
+        height: 28,
+        //height: hp(4),
         marginLeft: wp(2),
         marginTop: hp(2),
         marginBottom: hp(2)

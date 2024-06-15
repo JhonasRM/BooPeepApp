@@ -17,10 +17,12 @@ import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 import ContainerOptions from "../ContainerOptions";
 
-const photos: string[] = ['https://picsum.photos/500/300',
-'https://picsum.photos/501/300',
-'https://picsum.photos/502/300',
-'https://picsum.photos/503/300']
+const photos: string[] = [
+ 'https://picsum.photos/500/300',
+ 'https://picsum.photos/501/300',
+ 'https://picsum.photos/502/300',
+ 'https://picsum.photos/503/300'
+]
 
 type Props = {
     isTouched?: any
@@ -116,10 +118,7 @@ export function FeedQuery(props: Props) {
                         <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
                     </View>
                     
-                    <Text style={[styles.titletext]}>
-                        Perdi o meu Relogio :( {/*{item.}*/}
-                    </Text>
-                    <Text style={[styles.infotext]}> 
+                    <Text style={[styles.titletext]}> 
                         {item.description}
                     </Text>
 
@@ -127,7 +126,7 @@ export function FeedQuery(props: Props) {
                         <ImageCarousel ImgSource={photos}/>
                     </View>
 
-                <View style={styles.endline}>
+                <View style={[styles.endline, {marginBottom: 0}]}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
                         { item.status == "0" ? (
                         <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
@@ -141,11 +140,10 @@ export function FeedQuery(props: Props) {
                         <Text>Status: {item.status}</Text>
                         </View>
 
-                        <View style={{marginHorizontal: wp(2)}}>
-                            <Text>Criado em: {item.createdAt.toString()}</Text>
-                        </View>
-
                         <CommentButton btnStyle={styles.chaticon} />
+                    </View>
+                    <View style={[styles.endline, {marginHorizontal: wp(2)}]}>
+                            <Text>Criado em: {item.createdAt.toString()}</Text>
                     </View>
                 </View>
                 )
@@ -168,18 +166,20 @@ const FeedBlock = (props: Props) => {
 
 const {styles} = StyleSheet.create ({
     container: {
-        marginVertical: hp(1),
+        marginTop: hp(1),
         paddingBottom: hp(2),
 
-        borderBottomColor: "black",
-        borderBottomWidth: 2,
+        // borderBottomColor: "black",
+        // borderBottomWidth: 2,
     },
     feedblock: {
         backgroundColor: "#eeeeee",
         padding: 6,
         borderRadius: 10,
         marginBottom: hp(3),
-        marginHorizontal: wp(3)
+        marginHorizontal: wp(3),
+        // borderBottomColor: "black",
+        // borderBottomWidth: 2,
     },
     firstline: {
         flex: 1,
@@ -214,8 +214,8 @@ const {styles} = StyleSheet.create ({
     titletext: {
         paddingHorizontal: wp(5),
         paddingTop: wp(2),
-        fontSize: 18,
-        fontWeight: "bold"
+        fontSize: 16,
+        //fontWeight: "bold"
     },
     infotext: {
         paddingHorizontal: wp(5),
