@@ -4,13 +4,13 @@ import { Image, View } from "react-native"
 import React from "react";
 
 type loadingBoxProps = {
-    whatPage: "Feed" | "Comment"
+    whatPage: "Feed" | "Comment" | "Auth"
 }
 
 const LoadingBox = (props: loadingBoxProps) => {
     return (
     <>
-    { props.whatPage == "Feed" ? (
+    { props.whatPage == "Feed" || props.whatPage == "Auth" ? (
     <View style={[styles.loadingbox, styles.forFeed]}>
         <Image source={require('../../../../../assets/gifs/icons8-círculo-de-carga.gif')} style={styles.loadinggif} />
     </View>

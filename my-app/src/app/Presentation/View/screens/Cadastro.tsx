@@ -10,9 +10,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CadastroStateController } from "../../Controllers/CadastroStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
+import LoadingBox from "../components/LoadingIcon";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import HeaderBar from "../components/HeaderBar";
 
 export default function Cadastro() {
   const {
@@ -26,6 +29,7 @@ export default function Cadastro() {
     handleCadastro,
   } = CadastroStateController();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [erroC, setErroC] = useState("");
   const [erroD, setErroD] = useState("");
   const [erroE, setErroE] = useState("");
@@ -33,6 +37,7 @@ export default function Cadastro() {
 
   const handlePress = async () => {
     try {
+      setIsLoading(true);
       const cadastro = await handleCadastro(
         nome,
         sobrenome,
@@ -40,6 +45,7 @@ export default function Cadastro() {
         password,
         confirmarSenha
       );
+      
       if (cadastro.val === false) {
         throw new Error(cadastro.erro as string);
       }
@@ -47,7 +53,9 @@ export default function Cadastro() {
       console.log(` Cadastro realizado com sucesso!`);
       router.push("./Login")
       }
+      
     } catch (error) {
+      setIsLoading(false);
       console.error("Erro ao realizar cadastro:", error);
       if (error instanceof Error) {
         setErroCadastro(error.message)
@@ -60,15 +68,18 @@ export default function Cadastro() {
 
   return (
     <KeyboardAvoidingView style={styles.background}>
+      {isLoading == false ? (
+      <>
+      <HeaderBar whatScreen="auth" whatLink="/"/>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         
         <View style={styles.containerLogo}>
           <Image
             style={{
-              // width: 100,
-              // height: 100,
-              marginTop: 40,
-              marginBottom: 40,
+              width: 160,
+              height: 220
+              //marginTop: 40,
+              //marginBottom: 40,
             }}
             source={require("../../../../../assets/icons/2-removebg-preview(2).png")}
           />
@@ -157,6 +168,12 @@ export default function Cadastro() {
           </View>
         </View>
       </ScrollView>
+      </>
+      ) : (
+        <>
+          <LoadingBox whatPage="Auth"/>
+        </>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -169,21 +186,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerLogo: {
-    flex: 1,
+    //flex: 1,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
+    //marginBottom: 50,
+    marginBottom: hp(7),
+    marginTop: hp(2)
   },
   container: {
     flex: 1,
     // justifyContent: 'center',
-    width: "90%",
+    width: "80%",
     // alignItems: 'center',
   },
 
   contentContainer: {
     justifyContent: "center",
     alignItems: "center",
+    width: wp(100),
   },
   input: {
     backgroundColor: "#fff",
@@ -194,11 +215,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: "#000",
+    borderColor: "#40009680",
   },
   registerView: {
     marginTop: 30,
     marginBottom: 30,
+    paddingBottom: 20,
   },
   btnRegister: {
     backgroundColor: "#7b83ff",
@@ -208,7 +230,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginBottom: 5,
-    borderColor: "#000",
+    borderColor: "#d5d7fe80",
     borderWidth: 2,
     fontWeight: "bold",
   },
@@ -216,6 +238,7 @@ const styles = StyleSheet.create({
   submitText: {
     color: "#fff",
     fontSize: 18,
+    fontWeight: 'bold'
   },
 
   label: {

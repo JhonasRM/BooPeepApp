@@ -2,7 +2,11 @@
 
 # dependencies
 node_modules/
+<<<<<<< HEAD
 ./package-lock.json
+=======
+./y-app/package-lock.json
+>>>>>>> 81afdd953b616523adc7ecadd2d5f1f4317bbb6b
 
 # Expo
 .expo/

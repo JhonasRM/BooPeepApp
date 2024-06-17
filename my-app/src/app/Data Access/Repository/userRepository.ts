@@ -2,6 +2,7 @@ import axios from "axios";
 import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 export class userRepository {
+
   private endpointuser: string;
   private endpointlogin: string;
   private endpointestreset: string;

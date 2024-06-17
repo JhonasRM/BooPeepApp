@@ -9,9 +9,17 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { createPostStateController } from "../../Controllers/createPostStateController";
+import { AntDesign } from '@expo/vector-icons';
 import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
+import ContainerOptions from "./ContainerOptions";
 
-const CreatePost = () => {
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+}
+
+const CreatePost = (props: Props) => {
     const {
         description,
         local,
@@ -23,16 +31,22 @@ const CreatePost = () => {
     const [erroA, setErroA] = useState("");
     const [erroB, setErroB] = useState("");
     const [erroCreatePost, setErroCreatePost] = useState('')
+    const [useEffectRunner, setUseEffectRunner] = useState<any>(undefined)
 
     const [isTouched, setIsTouched] = useState(false)
-    const [image, setImage] = useState<string | null>(null) //"Quando der erro de Tipo com 'useState', use um Generics com os tipos que faltam" - Bolt
+    const [image, setImage] = useState<string | null>(null)
+    const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
+    const [startEdit, isEditStarting] = useState<boolean | null>(false)
 
     const handleTouch = () => {
         setIsTouched(true)
     }
 
     const handleExit = () => {
+        props.stopEdit(true)
         setIsTouched(false)
+
+        isEditStarting(false)
     }
 
     const imageHandler = async() => {
@@ -81,12 +95,27 @@ const CreatePost = () => {
         console.log(erroB);
     }
 
+    useEffect(() => {
+        console.log(props.pressedEdit)
+
+        if (props.pressedEdit == true) {
+            isEditStarting(true)
+            setIsTouched(true)
+        }
+    })
+
+    useEffect(() => { //"Previne que abra o Modal duas vezes" - Bolt
+        props.stopEdit(true)
+    }, [])
+
     return (
     <>
+    {/* <GrandfatherPostFormIsTouchedHandler isTouched={updateTouched} /> */}
+    {/* <ContainerOptions isTouched={updateTouched}/> */}
     { isTouched == false ? (
         <>
         <TouchableOpacity style={styles.buttonOn} onPress={handleTouch}>
-            <Text style={styles.plustext}>+</Text>
+            <AntDesign name="plus" size={35} color="white" />
         </TouchableOpacity>
         </>
     ) : (
@@ -108,9 +137,9 @@ const CreatePost = () => {
                         </TouchableOpacity>
                     </View>
 
-                { isTouched == true ? (
+                { isTouched == true && editPressed == false ? (
                     <View style={styles.inputView}>
-                        <TextInput 
+                        {/* <TextInput 
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"#303030"}
                         autoCorrect={false}
@@ -123,7 +152,7 @@ const CreatePost = () => {
                         //      }
                         //}}
                         style={styles.textInput}
-                        /> 
+                        />  */}
 
                         <TextInput 
                         placeholder={"Me diga o que ocorreu..."} 
@@ -142,10 +171,56 @@ const CreatePost = () => {
                         style={styles.textInput}
                         />
                     </View>
+                ) : isTouched == true && startEdit == true ? (
+                    <View style={styles.inputView}>
+                    {/* <TextInput 
+                    placeholder={"Título da postagem"} 
+                    placeholderTextColor={"#303030"}
+                    autoCorrect={false}
+                    // onChangeText={async (title) => {
+                    //     const handle = await handleFieldChange("nome", nome);
+                    //      if (handle.valido === false) {
+                    //          setErroA(handle.erro as string);
+                    //      } else if (handle.valido === true) {
+                    //          setErroA("")
+                    //      }
+                    //}}
+                    style={styles.textInput}
+                    />  */}
+
+                    <TextInput 
+                    placeholder={"Me diga o que ocorreu..."} 
+                    placeholderTextColor={"#303030"}
+                    multiline
+                    numberOfLines={10}
+                    autoCorrect={false}
+                    onChangeText={async (description) => {
+                        const handle = await handleFieldChange("description", description)
+                        if (handle.valido === false) {
+                            setErroB(handle.erro as string);
+                        } else if (handle.valido === true) {
+                            setErroB("")
+                        }
+                    }}
+                    style={styles.textInput}
+                    />
+                    </View>
                 ) : (null)
                 }
 
                     <View style={styles.buttonView}>
+                        { startEdit == true ? (
+                        <>
+                        <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
+                            <Text style={styles.btntext}>Alterar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
+                            <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
+                        </TouchableOpacity>
+                        </>
+                        ) : editPressed == false ? (
+                        <>
                         <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
                             <Text style={styles.btntext}>Publicar</Text>
                         </TouchableOpacity>
@@ -153,6 +228,8 @@ const CreatePost = () => {
                         <TouchableOpacity style={styles.imagebutton} onPress={imageHandler}>
                             <MaterialCommunityIcons name="image-filter-hdr" size={40} color="#400096" />
                         </TouchableOpacity>
+                        </>
+                        ) : (null)}
                     </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
@@ -194,8 +271,10 @@ const styles = StyleSheet.create ({
         height: hp(9),
         marginRight: 15,
         borderRadius: 5,
-        alignItems: "center",
         position: "absolute",
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "center",
         right: 0,
         bottom: hp(10),
         
@@ -205,8 +284,10 @@ const styles = StyleSheet.create ({
         display: "none"
     },
     plustext: {     //<Text>
-        fontSize: 50,         
-        color: "#ffffff"
+         fontSize: 50,         
+         color: "#ffffff",
+        // position: "absolute",
+        // top: 0, bottom: 0
     },
     formOn: {
         display: "flex",

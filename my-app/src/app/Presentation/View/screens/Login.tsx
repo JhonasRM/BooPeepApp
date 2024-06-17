@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Link, router, useRouter } from "expo-router";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {
   StyleSheet,
   Text,
@@ -14,7 +15,8 @@ import {
 import { LoginStateController } from "../../Controllers/LoginStateController";
 import AuthErrorMessage from "../components/AuthErrorMessage";
 import { RedefinirStateController } from "../../Controllers/RedefinirStateController";
-import { User } from "../../../Service/Entities/userEntities";
+import LoadingBox from "../components/LoadingIcon";
+import HeaderBar from "../components/HeaderBar";
 
 export default function Login() {
   const {
@@ -24,6 +26,7 @@ export default function Login() {
     handleLogin
   } = LoginStateController();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [erroA, setErroA] = useState("");
   const [erroB, setErroB] = useState("");
   const [erroLogin, setErroLogin] = useState("")
@@ -34,6 +37,8 @@ export default function Login() {
 
   const handlePress = async () => {
     try {
+      setIsLoading(true);
+
       const login = await handleLogin(email, password);
       if (login.val === true) {
         tentativa = 0
@@ -42,6 +47,8 @@ export default function Login() {
       throw new Error(login.erro as string);
 
     } catch (error) {
+      setIsLoading(false);
+
       console.error("Erro ao realizar cadastro:", error);
       if (error instanceof Error) {
         setErroLogin(error.message)
@@ -65,12 +72,16 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView style={style.background}>
-      <ScrollView contentContainerStyle={style.contentContainer}>
+    { isLoading == false ? (
+      <>
+        <HeaderBar whatScreen="auth" whatLink="/"/>
         <View style={style.containerLogo}>
           <Image
             style={{
-              marginTop: 40,
-              marginBottom: 40,
+              // marginTop: 40,
+              // marginBottom: 40,
+              width: 160,
+              height: 220
             }}
             source={require("../../../../../assets/icons/2-removebg-preview(2).png")}
           />
@@ -78,7 +89,7 @@ export default function Login() {
 
         <View style={style.container}>
           <Text style={style.label}>Email:</Text>
-          <AuthErrorMessage ErrorMessage={erroA} />
+          <AuthErrorMessage ErrorMessage={erroA} style={{width: '100%'}}/>
           <TextInput
             style={style.input}
             placeholder=""
@@ -95,7 +106,7 @@ export default function Login() {
             }}
           />
           <Text style={style.label}>Senha:</Text>
-          <AuthErrorMessage ErrorMessage={erroB} />
+          <AuthErrorMessage ErrorMessage={erroB} style={{width: '100%'}}/>
           <TextInput
             style={style.input}
             placeholder=""
@@ -111,9 +122,11 @@ export default function Login() {
               }
             }}
           />
-
+        </View>
+        
+        <View style={style.submitContainer}> 
           <View style={style.submitView}>
-            <AuthErrorMessage ErrorMessage={erroLogin} />
+            <AuthErrorMessage ErrorMessage={erroLogin}  />
             <TouchableOpacity style={style.btnSubmit} onPress={handlePress}>
               <Text style={style.submitText}>Entrar</Text>
             </TouchableOpacity>
@@ -125,23 +138,13 @@ export default function Login() {
           >
             <Text style={style.registerText}>Recuperar Senha</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={style.btnGoogle}
-            onPress={() => router.push("./ChatApp")}
-          >
-            <Image
-              style={{
-                width: 40,
-                height: 40,
-              }}
-              source={require("../../../../../assets/icons/icons8-google-logo-48.png")}
-            />
-
-            <Text style={style.submitGoogle}>Conecter-se com Google</Text>
-          </TouchableOpacity>
         </View>
-      </ScrollView>
+      </>
+    ) : (
+    <>
+      <LoadingBox whatPage="Auth" />
+    </>
+  )}
     </KeyboardAvoidingView>
   );
 }
@@ -152,13 +155,15 @@ const style = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#400096",
+
   },
   containerLogo: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: "relative",
-    marginTop: 45,
+    //position: "relative",
+    //marginTop: hp(10),
+
   },
   contentContainer: {
     justifyContent: "center",
@@ -167,10 +172,9 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    width: "90%",
-    // alignItems: "center",
+    width: "80%",
+    alignItems: "center",
     // paddingTop: 28,
-
     marginTop: 50,
   },
   input: {
@@ -184,10 +188,10 @@ const style = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
   },
   submitView: {
-    marginTop: 20,
+    //marginTop: 20,
   },
   btnSubmit: {
     backgroundColor: "#7b83ff",
@@ -197,7 +201,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#d5d7fe80",
   },
   submitText: {
     color: "#fff",
@@ -206,7 +210,7 @@ const style = StyleSheet.create({
   },
   btnRegister: {
     marginTop: 10,
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "center",
   },
   registerText: {
@@ -217,25 +221,32 @@ const style = StyleSheet.create({
     marginBottom: 5,
     fontSize: 17,
     color: "#fff",
-    width: "90%",
+    width: "100%",
     // alignSelf: "flex-start",
   },
-  btnGoogle: {
-    backgroundColor: "#fff",
-    width: "100%",
-    height: 45,
-    alignItems: "center",
+  submitContainer: {
+    flex: 1,
     justifyContent: "center",
-    borderRadius: 10,
-    marginTop: 40,
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: "#000000",
+    width: "80%",
+    //alignItems: "center",
+    //marginTop: hp(10)
   },
+  // btnGoogle: {
+  //   backgroundColor: "#fff",
+  //   width: "100%",
+  //   height: 45,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   borderRadius: 10,
+  //   marginTop: 40,
+  //   flexDirection: "row",
+  //   borderWidth: 2,
+  //   borderColor: "#40009680",
+  // },
+  // submitGoogle: {
+  //   color: "#400096",
+  //   fontWeight: "bold",
+  //   marginLeft: 18,
+  // },
 
-  submitGoogle: {
-    color: "#400096",
-    fontWeight: "bold",
-    marginLeft: 18,
-  },
 });

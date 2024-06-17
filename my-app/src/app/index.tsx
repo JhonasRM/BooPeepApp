@@ -11,6 +11,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Link, router, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import React from "react";
 
 export default function App() {
@@ -20,14 +21,8 @@ export default function App() {
     
       <KeyboardAvoidingView style={styles.background}>
         <View style={styles.containerLogo}>
-          <Image
-            style={{
-              width: 480,
-              height: 330,
-            }}
-            source={require('../../assets/icons/3-removebg-preview.png')}
-          />
-          
+          <Image style={{width: 250, height: 300}}
+          source={require('../../assets/icons/3-removebg-preview.png')}/>          
         </View>
 
         <View style={styles.container}>
@@ -64,10 +59,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerLogo: {
-    flex: 1,
+    //flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 0,
+    marginTop: hp(7),
   },
   btnSubmit: {
     backgroundColor: "#7b83ff",
@@ -77,7 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#d5d7fe80",
     marginTop: 120,
   },
   submitText: {
@@ -93,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#40009680",
     marginTop: 20,
   },
 

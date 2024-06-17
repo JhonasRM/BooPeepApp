@@ -4,14 +4,12 @@ export class Post {
     public UserID: string;
     public description: string;
     public postId: string;
-    //public title: string;
     public local: string;
     public status: number;
     
     constructor(
         UserID: string, 
         description: string, 
-        /*title: string,*/ 
         local: string,
         postID?: string,
         status?: number,
