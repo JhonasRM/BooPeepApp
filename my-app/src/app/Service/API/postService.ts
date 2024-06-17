@@ -5,11 +5,14 @@ export class postServices {
     private endpointposts: string
     private endpointpost: string
     private endpointest: string
+    private endpointests: string
 
     constructor() {        
         this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
         this.endpointpost = "https://boopeepapir.onrender.com/post"
-        this.endpointest = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev/post"
+        this.endpointest = "http://localhost:3000/post"
+        this.endpointests = "http://localhost:3000/posts"
+
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
@@ -24,7 +27,7 @@ export class postServices {
 
         try {
             console.log("getPosts foi chamado!");
-            const resp = await axios.get(this.endpointposts, {
+            const resp = await axios.get(this.endpointests, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -59,7 +62,7 @@ export class postServices {
     }> {        
         try {
             console.log("getPostFromUser for chamado!");
-            const resp = await axios.get(this.endpointpost, {
+            const resp = await axios.get(this.endpointest, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -98,7 +101,7 @@ export class postServices {
     }> {                
         try {
             console.log("getSpecificPost foi chamado!");
-            const resp = await axios.get(this.endpointpost, {
+            const resp = await axios.get(this.endpointest, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -106,7 +109,7 @@ export class postServices {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    postId: String(param)
+                    postID: String(param)
                 }
             });
 

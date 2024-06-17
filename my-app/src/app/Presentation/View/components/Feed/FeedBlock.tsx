@@ -23,17 +23,11 @@ const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/503/300']
 
 export function FeedQuery() {
-    const {
-        createdAt, 
-        UserID, 
-        description, 
-        postId, 
-        local, 
-        status, 
+    const { 
+        posts,
         handleFeedFetch
     } = feedStateController()
 
-    const [data, setData] = useState<Post[] | undefined>([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -49,17 +43,13 @@ export function FeedQuery() {
             setLoading(true)
             const response = await handleFeedFetch()
 
-            if (response.valido === false) {
-                setErro(true)
+            if (response.val === false) {
                 throw new Error(response.erro as string);
             }
 
-            if (response.valido === true) {
-                console.log(`${response.value}. GET realizado com sucesso!`);
-
-
-                setData(response.data)                
-                console.log(`Data from setData: ${data}`)
+            if (response.val === true) {
+                console.log(`${response.data}. GET realizado com sucesso!`);
+                console.log(`Data from setData: ${posts}`)
             }
 
         } catch (error) {
@@ -69,13 +59,15 @@ export function FeedQuery() {
             } else {
                 setErroFetch('An unknown error occurred')
             }
+            setErro(true)
+
         }
         finally {
             setLoading(false)
         }
     }
     incomingData()
-    console.log(`FeedBlock Response: ${data}`)
+    console.log(`FeedBlock Response: ${posts}`)
     console.log(`erro Response: ${erro}`)
     }, []);
 
@@ -92,7 +84,7 @@ export function FeedQuery() {
                 </>
             ) : (
             <>
-            {data && data.map((item: any) => (
+            {posts && posts.map((item: any) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 

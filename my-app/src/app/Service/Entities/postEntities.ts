@@ -1,5 +1,6 @@
+import { format } from 'date-fns';
 export class Post {
-    public createdAt: Date;
+    public createdAt: string;
     public UserID: string;
     public description: string;
     public postId: string;
@@ -14,8 +15,9 @@ export class Post {
         local: string,
         postID?: string,
         status?: number,
+        createdAt?: string
     ) {
-        this.createdAt = new Date(),
+        this.createdAt = 'Agora',
         this.UserID = UserID,
         this.description = description,
         this.postId = "",
@@ -27,6 +29,10 @@ export class Post {
         }
         if(postID){
             this.postId = postID
+        }
+        if(createdAt){
+            const agora = Date.now()
+            this.createdAt = format(createdAt, 'dd/MM/yyyy HH:mm:ss')
         }
     }
 }
