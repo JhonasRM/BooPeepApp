@@ -17,11 +17,30 @@ const ChangeDataStateController = () => {
     Object.keys(user).forEach(key => {
       const typedKey = key as keyof User;
       if (typedKey !== 'uid' && typedKey !== 'postID' && typedKey !== 'chatID' && typeof user[typedKey] === 'string' && user[typedKey] !== profileData[typedKey]) {
+      if(typedKey === 'name' || typedKey === 'nickname'){
+        const treatedKey = 'displayName'
+        let newValue: string =  ''
+        if(profileData.nickname === '' || profileData.nickname === ' '){
+          let newValue = `${profileData[typedKey]} ${user.nickname}`
+        }
+        if(profileData.name === ''|| profileData.name === ' ' ){
+          let newValue = `${user.name} ${profileData[typedKey]}`
+        } else{
+        let newValue = `${profileData.name} ${profileData.nickname}`
+      }
+        updatedFields.push({
+          fieldToUpdate: treatedKey,
+          NewValue: newValue
+      })
+      } else if(typedKey==='course' || typedKey === 'description' || typedKey === 'email' || typedKey === 'password' || typedKey === 'shift'){
         updatedFields.push({
           fieldToUpdate: key,
           NewValue: profileData[typedKey]
       })
-      }
+    } else{
+      return
+    }
+    }
   });
   updatedFields.forEach(async (updatedInfo) => {
     let fieldToUpdate = updatedInfo.fieldToUpdate

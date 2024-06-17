@@ -4,16 +4,17 @@ import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 export class userRepository {
   private endpointuser: string;
   private endpointlogin: string;
+  private endpointestreset: string;
   private endpointreset: string;
   private endpointest: string;
   private endpointestlogin: string;
   constructor() {
-    this.endpointuser = 'https://boopeepapir.onrender.com/user'
-    this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser'
-    this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd'
-    this.endpointest = 'http://localhost:3000/user'
-    this.endpointestlogin = 'http://localhost:3000/loginuser'
-
+    this.endpointuser = 'https://boopeepapir.onrender.com/user',
+    this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser',
+    this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd',
+    this.endpointest = 'http://localhost:3000/user',
+    this.endpointestlogin = 'http://localhost:3000/loginuser',
+    this.endpointestreset = 'http://localhost:3000/resetpwd'
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {
@@ -103,7 +104,7 @@ export class userRepository {
       const resetData = {
         email: email
       }
-      const resp = await axios.post(this.endpointreset, resetData, {
+      const resp = await axios.post(this.endpointestreset, resetData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -124,9 +125,6 @@ export class userRepository {
   }
 
   async update(email: string, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
-    if(fieldToUpdate === "name" || fieldToUpdate === "nickname"){
-      fieldToUpdate = "displayName"
-    }
     const  updateData = {
         email: email,
         fieldToUpdate: fieldToUpdate,
@@ -157,6 +155,7 @@ export class userRepository {
     }
   }
   async delete(email: string){
+
     try{
       const resp = await axios.delete(this.endpointest, {
         params: {

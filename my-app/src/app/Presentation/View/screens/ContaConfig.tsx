@@ -75,8 +75,9 @@ const ContaConfig = () => {
             <UserConfigProps optType="option" optText="Alterar dados" optLink="./ChangeData" />
             <UserConfigProps optType="button" optText="Alterar senha" optFunction={handleAlterarSenha}/>
             <UserConfigProps optType="button" optText="Sair" optTextColor="red" optFunction={handleLogOut}/>
-            <UserConfigProps optType="button" optText="Deletar meu usuário" optTextColor="red" optFunction={handleDelete}/>            
+            <UserConfigProps optType="button" optText="Deletar meu usuário" optTextColor="red" optFunction={handleDeleteVisible}/>            
             <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirm} Category={"Single Action"} />
+            <ModalComponent isVisible={modalLogOutVisible} content={contentModal} onPress={handleConfirmLogOut} optionalonPress={handleCancelLogOut} Category={"Dual Action"} />
             <ModalComponent isVisible={modalDeleteVisible} content={contentModal} onPress={handleDelete} optionalonPress={handleCancelDelete} Category={"Dual Action"} />
         </ScrollView>
     );

@@ -8,9 +8,6 @@ import ErrorMessage from "../components/ErrorMessage";
 import { ChangeDataStateController } from "../../Controllers/ChangeDataStateController";
 import { User } from "../../../Service/Entities/userEntities";
 import ModalComponent from "../components/ModalComponent";
-import UserPersistence from "../../../Service/Persistence/UserPersistence";
-import { router } from "expo-router";
-import { set } from "zod";
 
 const ChangeData = () => {
   const [profileData, setProfileData] = useState({
