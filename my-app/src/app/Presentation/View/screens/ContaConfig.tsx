@@ -5,10 +5,14 @@ import ModalComponent from "../components/ModalComponent";
 import { router } from "expo-router";
 import UserPersistence from "../../../Service/Persistence/UserPersistence";
 import { removeItemFromStorage } from "../../../Data Access/Storage/removeItemFromStorage"
+import { ContaConfigStateController } from "../../Controllers/ContaConfigStateController";
 
 const ContaConfig = () => {
+    const { DeleteUser } = ContaConfigStateController()
+    
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLogOutVisible, setModalLogOutVisible] = useState(false)
+    const [modalDeleteVisible, setModalDeleteVisible] = useState(false)
     const [contentModal, setContentModal] = useState('');
 
     const handleAlterarSenha = async () => {
@@ -41,6 +45,25 @@ const ContaConfig = () => {
         setModalLogOutVisible(false)
     }
 
+    const handleDeleteVisible = async() => {
+        setContentModal('Você deseja deletar sua conta? ')
+        setModalDeleteVisible(true)
+    }
+    const handleCancelDelete = async() => {
+        setModalDeleteVisible(false)
+    }
+    const handleDelete = async() => {
+        try {
+            const deleteUser = await DeleteUser()
+            if(deleteUser.val === false){
+                throw new Error(deleteUser.erro as string)
+            }
+            router.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <ScrollView>
             <UserConfigProps 
@@ -52,8 +75,9 @@ const ContaConfig = () => {
             <UserConfigProps optType="option" optText="Alterar dados" optLink="./ChangeData" />
             <UserConfigProps optType="button" optText="Alterar senha" optFunction={handleAlterarSenha}/>
             <UserConfigProps optType="button" optText="Sair" optTextColor="red" optFunction={handleLogOut}/>
+            <UserConfigProps optType="button" optText="Deletar meu usuário" optTextColor="red" optFunction={handleDelete}/>            
             <ModalComponent isVisible={modalVisible} content={contentModal} onPress={handleConfirm} Category={"Single Action"} />
-            <ModalComponent isVisible={modalLogOutVisible} content={contentModal} onPress={handleConfirmLogOut} optionalonPress={handleCancelLogOut} Category={"Dual Action"} />
+            <ModalComponent isVisible={modalDeleteVisible} content={contentModal} onPress={handleDelete} optionalonPress={handleCancelDelete} Category={"Dual Action"} />
         </ScrollView>
     );
 };

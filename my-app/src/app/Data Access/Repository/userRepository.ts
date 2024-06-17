@@ -73,7 +73,6 @@ export class userRepository {
 
   async login(email: string, password: string): Promise<IReturnAdapter> {
     try {
-      console.log('bateu...')
       const loginData = {
         email: email,
         password: password
@@ -156,5 +155,29 @@ export class userRepository {
       }
       return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
+  }
+  async delete(email: string){
+    try{
+      const resp = await axios.delete(this.endpointest, {
+        params: {
+          email: email
+        },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Authorization",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+      if (resp.status !== 200) {
+        throw new Error(resp.statusText)
+      }
+      return { val: true, data: resp.data }
+    }catch(error){
+       if (error instanceof Error) {
+      return { val: false, erro: error.message }
+    }
+    return { val: false, erro: `Erro interno da aplicação: ${error}` }
+  }
   }
 }

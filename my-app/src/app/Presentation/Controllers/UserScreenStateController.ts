@@ -19,8 +19,6 @@ const UserScreenStateController = () => {
   const GetUserInfo = async (): Promise<IReturnAdapter> => {
     try {
       const MyUser = await UserPersistence.getInstance();
-      const userInfo = await MyUser.getUser();
-      if (userInfo === defaultUser) {
         const email = await GetOnStorage('email');
         const req = await uRepository.getUser(email.info, '');
         if (req.val === false) {
@@ -41,9 +39,6 @@ const UserScreenStateController = () => {
         MyUser.setUser(GottenInfo);
         setUser(GottenInfo);
         return { val: true, data: 'Usuário encontrado' };
-      }
-      setUser(userInfo as User);
-      return { val: true, data: 'Usuário encontrado' };
     } catch (error) {
       if (error instanceof Error) {
         return { val: false, erro: error.message };

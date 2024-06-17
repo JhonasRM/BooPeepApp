@@ -12,7 +12,7 @@ export class User{
     public course: string;
     public shift: string;
     public description: string;
-    constructor({displayName= "Não definido", nickname="Não definido", email="Não definido",  password="Não definido", confirmPassword="Não definido", uid="Não definido", postID=["Não definido"], chatID="Não definido", course="Não definido", shift="Não definido", description="Adicione sua biografia aqui"}: IUserDTO){
+    constructor({displayName= "Não definido", nickname= "Não definido", email="Não definido",  password="Não definido", confirmPassword="Não definido", uid="Não definido", postID=["Não definido"], chatID="Não definido", course="Não definido", shift="Não definido", description="Adicione sua biografia aqui"}: IUserDTO){
         const name = displayName.split(' ')
         this.name = name[0]
         this.nickname = name.slice(1).join(' ')
@@ -24,7 +24,7 @@ export class User{
         this.course = course,
         this.shift = shift
         this.description = description
-        if(nickname !== "Não definido"  && nickname !== "" || " "){
+        if(nickname !== "Não definido"  && nickname !== "" ){
             this.name = `${displayName} ${nickname}`
         }
         if(uid !== "Não definido" && uid !==  ""){

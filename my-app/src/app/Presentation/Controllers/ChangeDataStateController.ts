@@ -26,7 +26,8 @@ const ChangeDataStateController = () => {
   updatedFields.forEach(async (updatedInfo) => {
     let fieldToUpdate = updatedInfo.fieldToUpdate
     let newValue = updatedInfo.NewValue
-    if(newValue === ''){
+    
+    if(newValue === '' || newValue === ' '){
       return
     }
     try {
@@ -38,9 +39,9 @@ const ChangeDataStateController = () => {
         return
       } catch (error) {
         if (error instanceof Error) {
-            throw new Error(error.message );
+            throw new Error('Erro ao atualizar dados do usuário: ' + error.message);
           }
-        throw new Error('Erro interno da aplicação');
+        throw new Error(`Erro interno da aplicação: ${error}`);
       }
   })
   return { val: true, data: 'Usuário alterado com sucesso!' };
