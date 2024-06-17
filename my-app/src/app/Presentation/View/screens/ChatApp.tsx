@@ -1,29 +1,59 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import HeaderBar from '../components/HeaderBar';
 import FooterBar from '../components/FooterBar';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Message } from '../../../Service/Entities/messageEntities';
 
-interface Message {
-  id: string;
-  text: string;
+import { MaterialIcons } from '@expo/vector-icons';
+import { chatService } from '../../../Service/API/chatService';
+import { createMessageStateController } from '../../Controllers/MessageStateController';
+
+interface Messages {
+  chatid: string;
+  lastmessage: string;
 }
 
 export default function App(): JSX.Element {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
+  const {
+    handleFieldChange,
+    handleCreateChat,
+    UserID,
+    displayname,
+    lastmessage,
+    dataTime,
+    chatid
+  } = createMessageStateController();
 
-  const handleMessageSend = (): void => {
-    if (message.trim() === '') return;
-    const newMessage: Message = {
-      id: String(messages.length + 1),
-      text: message.trim(),
+  const chatServiceInstance = new chatService()
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const result = await chatServiceInstance.getMessages();
+      if (result.val) {
+        setMessages(result.data);
+      } else {
+        console.error("Failed to fetch messages:", result.erro);
+      }
     };
-    setMessages([...messages, newMessage]);
-    setMessage('');
-   
-    scrollViewRef.current?.scrollToEnd({ animated: true });
+    fetchMessages();
+  }, []);
+
+  const handleMessageSend = async (): Promise<void>=> {
+    if (message.trim() === '') return;
+ 
+
+   const response = await  handleCreateChat(message.trim());
+
+   if (response.val) {
+      setMessages([...messages, response.data]);
+      setMessage('');
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+   } else {
+      console.error("Failed to send message:", response.erro);
+   }
   };
 
   const renderMessages = (): JSX.Element[] => {
@@ -33,9 +63,9 @@ export default function App(): JSX.Element {
           styles.messageContainer,
           { alignSelf: 'flex-end' }, 
         ]}
-        key={message.id}
+        key={message.chatid}
       >
-        <Text style={styles.messageText}>{message.text}</Text>
+        <Text style={styles.messageText}>{message.lastmsg}</Text>
       </View>
     ));
   };
@@ -55,7 +85,10 @@ export default function App(): JSX.Element {
         <TextInput
           style={styles.input}
           value={message}
-          onChangeText={setMessage}
+          onChangeText={async (text) => {
+            setMessage(text);
+            await handleFieldChange('lastmessage', text);
+         } }
           placeholder="Digite sua mensagem..."
           placeholderTextColor="#888"
         />
@@ -121,3 +154,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff', 
   },
 });
+
+

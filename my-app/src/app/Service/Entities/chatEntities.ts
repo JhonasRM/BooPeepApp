@@ -1,3 +1,4 @@
+
 export class Chat{
     public  uid: string;
     public chatid: string;

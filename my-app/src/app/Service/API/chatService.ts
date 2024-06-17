@@ -5,16 +5,14 @@ import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import { MessagesSquare } from "@tamagui/lucide-icons";
 
 export class chatService {
+   
   private endpointchat: string;
 
   constructor() {
     this.endpointchat = "https://boopeepapir.onrender.com/chat"
   };
 
-  async setchat(chat: Chat): Promise< {valido: boolean, 
-  value?: number, 
-  erro?: string | Error, 
-  data?: Chat[]}> {
+  async setchat(chat: Chat): Promise< IReturnAdapter> {
     
     try {
       console.log("createChat foi chamado!")
@@ -30,31 +28,27 @@ export class chatService {
           "Content-Type": "application/json;charset=UTF-8"
         }
       })
-      if (resp.status !== 200) {
+      if (resp.status !== 201) {
         console.log("createChat respondeu com ERRO!");
         throw new Error(resp.statusText)
       };
       console.log("createChat respondeu com SUCESSO!");
       console.log(resp.data);
-      return { valido: true,value:200, data: resp.data }
+      return { val: true, data: resp.data}
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false, value:400, erro: error.message }
+        return { val: false, erro: error.message}
       }
-      return { valido: false, value:500, erro: `Erro interno da aplicação: ${error}` }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
 
   }
 
-  async createmessage(chat: Chat, message:Message): Promise<{
-    valido: boolean, 
-    value?: number, 
-    erro?: string | Error, 
-    data?: Message[]}> {
+  async createmessage( message:Message): Promise< IReturnAdapter> {
       try {
       console.log("createMessage foi chamado")
       const chatData = {
-        uid: chat.uid,
+        uid: message.UserID,
         chat: message.chatid,
         displayName: message.displayName,
         lastmsg: message.lastmsg,
@@ -75,17 +69,18 @@ export class chatService {
       }
       console.log("createMessage respondeu com SUCESSO!");
       console.log(resp.data);
-      return { valido: true, value:200, data: resp.data };
+      return { val: true, data: resp.data };
      
     } catch (error) {
       if (error instanceof Error) {
-        return { valido: false,value: 400, erro: error.message }
+        return { val: false, erro: error.message }
       }
-      return { valido: false, value: 500, erro: `Erro interno da aplicação: ${error}` }
+      return { val: false, erro: `Erro interno da aplicação: ${error}` }
     }
 
   }
-  async getMessages(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Message[] }> {
+ 
+  async getMessages(): Promise<IReturnAdapter> {
   
     try {
         console.log("getMessages foi chamado!");
@@ -106,13 +101,13 @@ export class chatService {
             throw new Error(resp.statusText)
         };
         console.log('getMessages respondeu com SUCESSO!');
-        return { valido: true, value: 200, data: resp.data as Message[] };
+        return { val: true, data: resp.data as Message[] };
 
     } catch (error) {
         if (error instanceof Error) {
-            return { valido: false, value: 400, erro: error.message }
+            return { val: false, erro: error.message }
         };
-        return { valido: false, value: 500, erro: 'Internal Server Error' };
+        return { val: false, erro: 'Internal Server Error' };
     };
 };
 

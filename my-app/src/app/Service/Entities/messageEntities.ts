@@ -1,7 +1,7 @@
 export class Message{
     public  chatid: string;
     public UserID: string;
-    // photoURL: string;
+   
     public displayName: string;
     public lastmsg: string;
     public dateTime: Date;

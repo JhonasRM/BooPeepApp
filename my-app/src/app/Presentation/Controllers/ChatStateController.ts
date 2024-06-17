@@ -1,79 +1,68 @@
-import { useState } from "react"
-import { Message } from "../../Service/Entities/messageEntities";
-import {User} from "../../Service/Entities/userEntities"
+import { useState } from "react";
+import { chatValidator } from "../../Service/Validators/chatValidator";
+import { chatService } from "../../Service/API/chatService";
+import { Chat } from "../../Service/Entities/chatEntities";
+import  {Message} from "../../Service/Entities/messageEntities"
 import { searchOnStorage } from "../../Data Access/Storage/GetOnStorage";
-import { chatValidator } from "../../Service/Validators/chatValidor";
-import { chatService} from "../../Service/API/chatService";
-import { ChatStateAndSetters } from "../../utils/Interfaces/ChatStateAndSetters";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
-const createChatStateController = () =>{
-    const [uid, setuid] = useState("");
-    const [displayname, setdisplamayname] = useState("");
-    const [lastmessage, setlastmessage] = useState("");
-    const [dataTime, setdataTime] = useState(0);
+const ChatStateController = () =>{
+    const [UserID, setUserID] = useState("");
+    const [displayname, setdisplayname] = useState("");
+    const [message, setmessage] = useState("");
     const [chatid, setchatid] = useState("");
 
-    const validator : chatValidator = new chatValidator();
-    const chatServices : chatService = new chatService() ;
+    const getchat = async(): Promise <IReturnAdapter> => {    
+   
 
-    const setState: ChatStateAndSetters ={
-        lastmessage: setlastmessage
-    };
-
-    const handleFieldChange = async (field: string, value: string ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
-        if (field in setState) {
-            setState[field as keyof ChatStateAndSetters](value);
-            const valfield = await validator.valByField(field, value);
-            
-            if (valfield.valido === false) {
-                console.log(valfield.erro);
-                return {valido: false, value: 401, erro: valfield.erro}
+        try {
+            const chatServiceInstance = new chatService();
+            const req = await chatServiceInstance.getMessages()
+            console.log(`Request: ${req}`);
+            if (req.val === false) {
+                throw new Error("Bad Request");
             }
 
-            console.log("")
-            console.log("-----createChatStateController-----");
-            console.log(`field: ${field}, value: ${value}`)
-            console.log("validação concluída");
-            return { valido: true, value: 200 };
-        }
+            const chatData = req.data as Message[]
 
-        console.error(
-            `Campo "${field}" não é uma chave válida em chatStateAndSetters.`
-        );
+            let chat: Message[] = []
+            chatData.forEach(message => {
+                const newMessage = new Message(
+                    message.UserID, 
+                    message.chatid,
+                    message.displayName,          
+                    message.lastmsg
+                )
 
-        return {valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em chatStateAndSetters.`}
-    }
- 
-    const handleCreateChat = async ( lastmessage: string ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Message}> => {
-        if (lastmessage === '') {
-            return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
-        }
-        const uid = searchOnStorage('uid') as unknown as string
-        setuid(uid)
-        const message: Message = new Message(
-            uid, 
-            displayname,
-            lastmessage, 
+                chat.push(newMessage)
+            });
 
-        );
-        try {
-            console.log(message);
-            const req = await chatService.createmessage(message);
-            if (req.valido === false) {
-                throw new Error("Bad Request");
-            };
-            return {valido: true, value: 201, data: message};
+            if (chat[0] instanceof Message) {
+                return { val: true, data: chat };
+            }
 
+            throw new Error('Nenhum Chat encontrado.')
         } catch (error) {
+            console.log("setchat respondeu com ERRO!")
+
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
-                    return {valido: false, value: 401, erro: error}
+                  return { val: false, erro: error };
                 } else if (error.message === "Bad Request") {
-                    return {valido: false, value: 400, erro: error}
+                  return { val: false, erro: error };
                 }
-                return {valido: false, value: 400, erro: error}
             }
-            return {valido: false, value: 500, erro: "Internal Server Error"};
+              return { val: false, erro: "Internal Server Error" };
         }
+    
     }
+    return{
+        UserID,
+        chatid,
+        message,
+        getchat  
+    }
+
 }
+
+export {ChatStateController}
