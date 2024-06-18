@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { postServices } from "../../Service/API/postService"
+import { postRepository } from "../../Data Access/Repository/postRepository"
 import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters"
 import { Post } from "../../Service/Entities/postEntities"
 
@@ -12,7 +12,7 @@ const userBlockStateController = () => {
     const [local, setLocal] = useState("")
     const [status, setStatus] = useState(0)
 
-    const postService: postServices = new postServices()
+    const postrepository: postRepository = new postRepository()
 
     const handleFetchUserPosts = async (): Promise<{
         valido: boolean, 
@@ -21,7 +21,7 @@ const userBlockStateController = () => {
         data?: Post[]
     }> => {
          try {
-            const req = await postService.getPostFromUser("0")
+            const req = await postrepository.getPostFromUser("0")
             console.log(`Request: ${req}`);
             if (req.valido === false) {
                 throw new Error("Bad Request");

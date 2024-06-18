@@ -1,14 +1,15 @@
 import axios from "axios"
-import { Post } from "../Entities/postEntities"
+import { Post } from "../../Service/Entities/postEntities"
 
-export class postServices {
+export class postRepository {
     private endpointposts: string
     private endpointpost: string
     private endpointest: string
     private endpointests: string
 
     constructor() {        
-        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
+        // this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
+        this.endpointposts = "https://boopeepapir.onrender.com/posts"
         this.endpointpost = "https://boopeepapir.onrender.com/post"
         this.endpointest = "http://localhost:3000/post"
         this.endpointests = "http://localhost:3000/posts"
@@ -27,7 +28,7 @@ export class postServices {
 
         try {
             console.log("getPosts foi chamado!");
-            const resp = await axios.get(this.endpointests, {
+            const resp = await axios.get(this.endpointposts, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -62,7 +63,7 @@ export class postServices {
     }> {        
         try {
             console.log("getPostFromUser for chamado!");
-            const resp = await axios.get(this.endpointest, {
+            const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -101,7 +102,7 @@ export class postServices {
     }> {                
         try {
             console.log("getSpecificPost foi chamado!");
-            const resp = await axios.get(this.endpointest, {
+            const resp = await axios.get(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
@@ -146,7 +147,7 @@ export class postServices {
                 status: post.status
                 
             };
-            const resp = await axios.post(this.endpointest, sendPost, {
+            const resp = await axios.post(this.endpointpost, sendPost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",

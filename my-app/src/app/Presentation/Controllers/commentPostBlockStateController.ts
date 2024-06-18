@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { postServices } from "../../Service/API/postService"
 import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters"
 import { Post } from "../../Service/Entities/postEntities"
+import { postRepository } from "../../Data Access/Repository/postRepository"
 
 const commentPostBlockStateController = () => {
         //const [title, setTitle] = useState("")
@@ -12,7 +12,7 @@ const commentPostBlockStateController = () => {
         const [local, setLocal] = useState("")
         const [status, setStatus] = useState(0)
     
-        const postService: postServices = new postServices()
+        const postrepository: postRepository = new postRepository()
     
         const handleFetchSpecificPost = async (): Promise<{
             valido: boolean, 
@@ -21,7 +21,7 @@ const commentPostBlockStateController = () => {
             data?: Post[]
         }> => {
              try {
-                const req = await postService.getSpecificPost("0")
+                const req = await postrepository.getSpecificPost("0")
 
                 if (req.valido === false) {
                     throw new Error("Bad Request");
@@ -32,12 +32,12 @@ const commentPostBlockStateController = () => {
                 let posts: Post[] = []
                 postData.forEach(post => {
                     const newPost = new Post(
-                        post.createdAt, 
-                        post.UserID, 
-                        post.description, 
-                        post.postId, 
-                        post.local, 
-                        post.status
+                        post.UserID,
+                        post.description,
+                        post.local,
+                        post.postId,
+                        post.status,
+                        post.createdAt,
                     )
 
                     posts.push(newPost)

@@ -1,16 +1,16 @@
 import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator"
-import { postServices } from "../../Service/API/postService"
+import { postRepository } from "../../Data Access/Repository/postRepository"
 import { Post } from "../../Service/Entities/postEntities"
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
 const feedStateController = () => {
     const [posts, setPosts] = useState<Post[]>([])
-    const postService: postServices = new postServices()
+    const postrepository: postRepository = new postRepository()
 
     const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
         try {
-            const req = await postService.getPosts()
+            const req = await postrepository.getPosts()
             console.log(`Request: ${req}`);
             if (req.valido === false) {
                 throw new Error("Bad Request");

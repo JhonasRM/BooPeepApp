@@ -26,7 +26,7 @@ export class userRepository {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.post(this.endpointest, userData, {
+      const resp = await axios.post(this.endpointuser, userData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -49,7 +49,7 @@ export class userRepository {
 
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
-      const resp = await axios.get(this.endpointest, {
+      const resp = await axios.get(this.endpointuser, {
         params: {
           email: email,
           password: password
@@ -79,7 +79,7 @@ export class userRepository {
         email: email,
         password: password
       }
-      const resp = await axios.post(this.endpointestlogin, loginData,{
+      const resp = await axios.post(this.endpointlogin, loginData,{
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -105,7 +105,7 @@ export class userRepository {
       const resetData = {
         email: email
       }
-      const resp = await axios.post(this.endpointestreset, resetData, {
+      const resp = await axios.post(this.endpointreset, resetData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
@@ -158,7 +158,7 @@ export class userRepository {
   async delete(email: string){
 
     try{
-      const resp = await axios.delete(this.endpointest, {
+      const resp = await axios.delete(this.endpointuser, {
         params: {
           email: email
         },

@@ -1,6 +1,6 @@
 import { SetStateAction, useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator";
-import { postServices } from "../../Service/API/postService";
+import { postRepository } from "../../Data Access/Repository/postRepository";
 import { Post } from "../../Service/Entities/postEntities";
 import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
@@ -17,7 +17,7 @@ const createPostStateController = () => {
     const [status, setStatus] = useState(0);
 
     const validator: postValidator = new postValidator();
-    const postService: postServices = new postServices();
+    const postrepository: postRepository = new postRepository();
 
     const setState: postStateAndSetters = {
         //title: setTitle
@@ -68,7 +68,7 @@ const createPostStateController = () => {
         );
         try {
             console.log(post);
-            const req = await postService.createPost(post);
+            const req = await postrepository.createPost(post);
             if (req.valido === false) {
                 throw new Error(req.erro as string);
             };
