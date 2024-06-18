@@ -4,9 +4,9 @@ import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter"
 const containerOptionsStateController = () => {
     const postRep = new postRepository()
 
-    const DeletePost = async(): Promise<IReturnAdapter> => {
+    const DeletePost = async(deleteThis: string): Promise<IReturnAdapter> => {
         try {
-            const deletePost = await postRep.deletePost("0")
+            const deletePost = await postRep.deletePost(deleteThis)
 
             if (deletePost.val === false) {
                 throw new Error(deletePost.erro)

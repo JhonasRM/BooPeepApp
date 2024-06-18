@@ -9,6 +9,7 @@ interface Props {
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postID: any
 }
 
 const ContainerOptions = (props: Props) => {
@@ -38,15 +39,18 @@ const ContainerOptions = (props: Props) => {
         handlePostFormEditDenial
    }
 
+   
+
    const DeleteHandle = async() => {
         try {
-            const deletePost = await DeletePost()
+            const deletePost = await DeletePost(props.postID)
             if (deletePost.val === false) {
                 throw new Error(deletePost.erro as string)
             }
         } catch (error) {
             console.log(`DeleteHandle respondeu com ERRO! ${error}`)
         }
+        console.log(`Post tentando ser deletado: ${props.postID}`)
    }
 
    useEffect(() => {

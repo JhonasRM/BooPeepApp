@@ -97,7 +97,7 @@ export function FeedQuery(props: Props) {
             ) : (
             <>
             {posts && posts.map((item: any) => (
-                <View style={styles.feedblock}>
+                <View style={styles.feedblock} key={item.postID}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
@@ -107,7 +107,7 @@ export function FeedQuery(props: Props) {
                             <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                         </View>
 
-                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
+                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={item.postId}/>
                     </View>
                     
                     <Text style={[styles.titletext]}> 

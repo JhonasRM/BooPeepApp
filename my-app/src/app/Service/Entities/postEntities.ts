@@ -1,26 +1,26 @@
 import { format } from 'date-fns';
 export class Post {
-    public createdAt: string;
     public UserID: string;
+    public createdAt: string;
     public description: string;
-    public postId: string;
     public local: string;
+    public postId: string;
     public status: number;
     
     constructor(
         UserID: string, 
+        createdAt: string,
         description: string, 
         local: string,
         postID?: string,
-        status?: number,
-        createdAt?: string
+        status?: number
     ) {
-        this.createdAt = 'Agora',
         this.UserID = UserID,
+        this.createdAt = 'Agora',
         this.description = description,
-        this.postId = "",
         //this.title = title,
         this.local = local,
+        this.postId = "",
         this.status = 0
         if(status){
             this.status = status
