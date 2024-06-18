@@ -207,11 +207,11 @@ export class postRepository {
 
     //------------------------------------------------------------------
     //Melhor ver isso com o Jonathan:
-    async deletePost(postId: string) {
+    async deletePost(postID: string) {
         try {
             const resp = await axios.delete(this.endpointpost, {
                 params: {
-                    postId: postId
+                    postID: postID
                 },
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -222,6 +222,7 @@ export class postRepository {
             })
 
             if (resp.status !== 200) {
+                console.log(`postRepository respondeu com ERRO!`)
                 throw new Error(resp.statusText)
             }
             return {val: true, data: resp.data}
