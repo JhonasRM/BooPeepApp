@@ -1,11 +1,13 @@
 import axios from "axios"
 import { Post } from "../../Service/Entities/postEntities"
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter"
 
 export class postRepository {
     private endpointposts: string
     private endpointpost: string
     private endpointest: string
     private endpointests: string
+    private endpointusers: string
 
     constructor() {        
         // this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
@@ -13,7 +15,7 @@ export class postRepository {
         this.endpointpost = "https://boopeepapir.onrender.com/post"
         this.endpointest = "http://localhost:3000/post"
         this.endpointests = "http://localhost:3000/posts"
-
+        this.endpointusers = "https://boopeepapir.onrender.com/users"
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
@@ -54,6 +56,36 @@ export class postRepository {
             return { valido: false, value: 500, erro: 'Internal Server Error' };
         };
     };
+
+    // ------------------------------------------------------------------------------------ //
+
+    async getUsers(): Promise<IReturnAdapter> {
+        try {
+            console.log("getUsers foi chamado!")
+            const resp = await axios.get(this.endpointusers, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET",
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+            })
+
+            if (resp.status !== 200) {
+                console.log('getUsers respondeu com ERRO!')
+                throw new Error(resp.statusText)
+            };
+            console.log('getUsers respondeu com SUCESSO!');
+            return { val: true, data: resp.data as Post[] };
+        } catch (error) {
+            if (error instanceof Error) {
+                return { val: false, erro: error.message }
+            };
+            return { val: false, erro: 'Internal Server Error' };
+        }
+    }
+
+    // ------------------------------------------------------------------------------------ //
 
     async getPostFromUser(param: string): Promise<{ 
         valido: boolean, 
@@ -175,36 +207,31 @@ export class postRepository {
 
     //------------------------------------------------------------------
     //Melhor ver isso com o Jonathan:
-    async deletePost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+    async deletePost(postId: string) {
         try {
-            console.log("deletePost for chamado!");
             const resp = await axios.delete(this.endpointpost, {
+                params: {
+                    postId: postId
+                },
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
                     "Content-Type": "application/json;charset=UTF-8"
-                },
-                //Lembre-se, DELETE/UPDATE tem que ter WHERE se não a vaca vai pro brejo
-                params: {
-                    postId: post.postId
                 }
-            });
+            })
 
-            if (resp.status !== 201) {
-                console.log('deletePost respondeu com ERRO!');
-                throw new Error(resp.statusText);
+            if (resp.status !== 200) {
+                throw new Error(resp.statusText)
             }
-            console.log('deletePost respondeu com SUCESSO!');
-            return { valido: true, value: 200, data: resp.data };
-
+            return {val: true, data: resp.data}
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message };
-            };
-            return { valido: false, value: 500, erro: 'Internal Server Error' };
-        };
-    };
+                return {val: false, erro: error.message}
+            }
+            return { val: false, erro: `Erro interno da aplicação: ${error}` }
+        }
+    }
 };
 
 
