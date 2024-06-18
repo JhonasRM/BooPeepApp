@@ -133,7 +133,7 @@ export class userRepository {
     }
     try {
       console.log('bateu...')
-      const resp = await axios.put(this.endpointest, updateData, {
+      const resp = await axios.put(this.endpointuser, updateData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",

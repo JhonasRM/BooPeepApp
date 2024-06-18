@@ -19,7 +19,7 @@ const UserProfileScreen: React.FC = () => {
   useEffect(() => {
     const getInfo = async() => {
       const get = await GetUserInfo();
-      if(get.val=== false){
+      if(get.val === false){
         setErro(get.erro as string)
         setLoading(false)
       }
@@ -38,7 +38,7 @@ const UserProfileScreen: React.FC = () => {
         <View style={styles.container}>
             { loading ? (
                 <>
-                    <LoadingBox whatPage="Comment" />
+                    <LoadingBox whatPage="Feed" />
                 </>
             ) : erro ? (
                 <>
@@ -122,14 +122,16 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'flex-start',
     marginBottom: 20,
-    paddingHorizontal: 20,
-  },
-  profileInfo: {
-    backgroundColor: 'white',
-    padding: 20,
+    marginTop: 10,
+    marginHorizontal: 20,
+    //paddingRight: 40,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',
+    backgroundColor: 'white',
+  },
+  profileInfo: {
+    padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
   },
