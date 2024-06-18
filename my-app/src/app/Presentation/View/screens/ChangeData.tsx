@@ -94,10 +94,16 @@ const ChangeData = () => {
       <View style={styles.container}>
         {loading ? (
           <>
-            <LoadingBox whatPage="Comment" />
+            <LoadingBox whatPage="Feed" />
           </>
         ) : erro ? (
           <>
+            <UserConfigProps
+              optType="header"
+              optText="Editar Perfil"
+              optLink="./ContaConfig"
+              optImgUrl={require("../../../../../assets/icons/icons8-esquerda-2-100.png")}
+            />
             <ErrorMessage message={erro} />
           </>
         ) : (
