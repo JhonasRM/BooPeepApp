@@ -233,6 +233,42 @@ export class postRepository {
             return { val: false, erro: `Erro interno da aplicação: ${error}` }
         }
     }
+
+    //----------------------------------------------------------------------------------------//
+
+    async updatePost(
+        description: string,
+    ): Promise<IReturnAdapter> {
+        const updateData = {
+            description: description
+        }
+
+        try {
+            console.log('updatePost está rodando!')
+            const resp = await axios.put(this.endpointpost, updateData, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+            })
+
+            if (resp.status !== 200) {
+                console.log("updatePost respondeu com ERRO!")
+                throw new Error(resp.statusText)
+            }
+
+        console.log(resp.data)
+        return { val: true, data: resp.data}
+
+        } catch (error) {
+            if (error instanceof Error) {
+                return { val: false, erro: error.message }
+              }
+            return { val: false, erro: `Erro interno da aplicação: ${error}` }
+        }
+    }
 };
 
 
