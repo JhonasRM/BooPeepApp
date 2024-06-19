@@ -5,6 +5,8 @@ import UserBlock from './UserBlock';
 import { UserScreenStateController } from '../../../Controllers/UserScreenStateController';
 import LoadingBox from '../LoadingIcon';
 import ErrorMessage from '../ErrorMessage';
+import MyCommentsBlock from './MyCommentsBlock';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const UserProfileScreen: React.FC = () => {
@@ -15,6 +17,11 @@ const UserProfileScreen: React.FC = () => {
   } = UserScreenStateController();
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(true)
+  const [changeSection, setChangeSection] = useState(false);
+
+  const handleChange = () => {
+    setChangeSection(changeSection => !changeSection)
+  }
 
   useEffect(() => {
     const getInfo = async() => {
@@ -78,9 +85,33 @@ const UserProfileScreen: React.FC = () => {
         </View>
 
         <View>
-          <Text style={styles.userPostBlock}></Text>
-          <UserBlock />
+        <View style={styles.queryContainer}>
+          { changeSection == false ? (
+            <>
+            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
+            <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+              <AntDesign name="stepforward" size={30} color="black" />
+            </TouchableOpacity>
+            </>
+          ) : (
+            <>
+            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Meus comentários</Text>
+            <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+              <AntDesign name="stepbackward" size={30} color="black" />
+            </TouchableOpacity>
+            </>
+          )} 
+          {/* <>
+            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
+          </> */}
         </View>
+          { changeSection == false ? (
+            <UserBlock />  
+          ) : (
+            <MyCommentsBlock />
+          )} 
+          {/* <UserBlock />   */}
+      </View>
       </ScrollView>
     </>
     )}
@@ -201,6 +232,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  queryContainer: {
+    flexDirection: 'row'
+  },
+  postsCommentsBtn: {
+    position: 'absolute',
+    right: 0,
+    paddingRight: 20
   }
 });
 
