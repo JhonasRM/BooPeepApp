@@ -97,7 +97,7 @@ export function FeedQuery(props: Props) {
             ) : (
             <>
             {posts && posts.map((item: any) => (
-                <View style={styles.feedblock} key={item.postID}>
+                <View style={styles.feedblock} key={item.createdAt}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
@@ -121,15 +121,26 @@ export function FeedQuery(props: Props) {
                 <View style={[styles.endline, {marginBottom: 0}]}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
                         { item.status == "0" ? (
-                        <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Perdido</Text>
+                        </>
                         ) : item.status == "1" ? (
-                        <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Em processo...</Text>
+                        </>
                         ) : item.status == "2" ? (
-                        <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Encontrado</Text>
+                        </>
                         ) : (
-                        <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                            <Text>Status: {item.status}</Text>
+                        </>
                         )} 
-                        <Text>Status: {item.status}</Text>
                         </View>
 
                         <CommentButton btnStyle={styles.chaticon} />
@@ -235,6 +246,9 @@ const {styles} = StyleSheet.create ({
         // marginRight: wp(1),
         flexDirection: "row",
         alignItems: "center",
+    },
+    statusText: {
+        marginTop: 0.2
     },
     time: {
         marginLeft: 4,
