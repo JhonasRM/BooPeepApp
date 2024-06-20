@@ -25,7 +25,8 @@ const CreatePost = (props: Props) => {
         local,
         handleFieldChange,
         //handleCheckDescriptionChange,
-        handleCreatePost
+        handleCreatePost,
+        UpdatePost
     } = createPostStateController()
     
     const [erroA, setErroA] = useState("");
@@ -204,6 +205,7 @@ const CreatePost = (props: Props) => {
                     }}
                     style={styles.textInput}
                     />
+
                     </View>
                 ) : (null)
                 }
