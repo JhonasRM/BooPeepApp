@@ -9,6 +9,7 @@ import ErrorMessage from '../ErrorMessage';
 
 const UserProfileScreen: React.FC = () => {
   const {
+    postsID,
     user,
     GetUserInfo,
     CleanUpUserInfo
@@ -73,13 +74,12 @@ const UserProfileScreen: React.FC = () => {
             {/*<Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>*/}
             <Text style={styles.additionalInfo}>Curso: {user.course}</Text>
             <Text style={styles.additionalInfo}>Turno: {user.shift}</Text>
-            {/* Adicione mais informações conforme necessário */}
           </View>
         </View>
 
         <View>
           <Text style={styles.userPostBlock}></Text>
-          <UserBlock />
+          <UserBlock postsID={postsID}/>
         </View>
       </ScrollView>
     </>

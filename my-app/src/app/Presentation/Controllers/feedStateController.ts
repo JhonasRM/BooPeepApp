@@ -28,7 +28,7 @@ const feedStateController = () => {
                 )
                 posts.push(newPost)
             });
-
+ 
             if (posts[0] instanceof Post) {
                 setPosts(posts)
                 return { val: true, data: 'Posts encontrados' };

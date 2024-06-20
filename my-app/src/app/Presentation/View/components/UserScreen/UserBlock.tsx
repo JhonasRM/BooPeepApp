@@ -23,14 +23,12 @@ const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/502/300',
 'https://picsum.photos/503/300']
 
-const UserBlock = () => {
+type UserBlockProps = {
+    postsID: string[]
+}
+
+const UserBlock = (props: UserBlockProps) => {
     const {
-        createdAt, 
-        UserID, 
-        description, 
-        postId, 
-        local, 
-        status, 
         handleFetchUserPosts
     } = userBlockStateController()
     const [data, setData] = useState<Post[] | undefined>([])
@@ -45,15 +43,15 @@ const UserBlock = () => {
 
         try {
             setLoading(true)
-            const response = await handleFetchUserPosts()
+            const response = await handleFetchUserPosts(props.postsID)
 
-            if (response.valido === false) {
+            if (response.val === false) {
                 setErro(true)
                 throw new Error(response.erro as string);
             }
 
-            if (response.valido === true) {
-                console.log(`${response.value}. GET realizado com sucesso!`);
+            if (response.val === true) {
+                console.log(`${response.data}. GET realizado com sucesso!`);
                 
                 setData(response.data)
                 console.log(`Data from setData: ${data}`)
