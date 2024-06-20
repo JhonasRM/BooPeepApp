@@ -128,12 +128,12 @@ export function FeedQuery(props: Props) {
                         ) : item.status == "1" ? (
                         <>
                             <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Em processo...</Text>
+                            <Text style={styles.statusText}>Status: Achado</Text>
                         </>
                         ) : item.status == "2" ? (
                         <>
                             <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Encontrado</Text>
+                            <Text style={styles.statusText}>Status: Devolvido</Text>
                         </>
                         ) : (
                         <>
