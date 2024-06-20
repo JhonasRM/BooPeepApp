@@ -73,6 +73,27 @@ export class userRepository {
   }
   }
 
+  async getUserByUID(uid: string): Promise<IReturnAdapter> {
+    try{
+      const resp = await axios.get(`${this.endpointest}/${uid}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Authorization",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+      if (resp.status !== 200) {
+        throw new Error(resp.statusText)
+      }
+      return { val: true, data: resp.data }
+    }catch(error){
+       if (error instanceof Error) {
+      return { val: false, erro: error.message }
+    }
+    return { val: false, erro: `Erro interno da aplicação: ${error}` }
+  }
+  }
   async login(email: string, password: string): Promise<IReturnAdapter> {
     try {
       const loginData = {

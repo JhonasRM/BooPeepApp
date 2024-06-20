@@ -13,7 +13,7 @@ import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
 import React, { SetStateAction, useEffect, useState } from "react";
-import { feedStateController } from "../../../Controllers/feedStateController";
+import { PostsFeed, feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 import ContainerOptions from "../ContainerOptions";
 
@@ -96,22 +96,22 @@ export function FeedQuery(props: Props) {
                 </>
             ) : (
             <>
-            {posts && posts.map((item: any) => (
+            {posts && posts.map((item: PostsFeed) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
 
                         <View>
-                            <Text style={styles.usertext}>{item.UserID}</Text>
-                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
+                            <Text style={styles.usertext}>{item.name} {item.nickname}</Text>
+                            <Text style={styles.userinfo}>{item.course} - {item.shift}</Text>
                         </View>
 
                         <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
                     </View>
                     
                     <Text style={[styles.titletext]}> 
-                        {item.description}
+                        {item.post.description}
                     </Text>
 
                     <View style={styles.middleline}>
@@ -120,22 +120,22 @@ export function FeedQuery(props: Props) {
 
                 <View style={[styles.endline, {marginBottom: 0}]}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                        { item.status == "0" ? (
+                        { item.post.status == 0 ? (
                         <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                        ) : item.status == "1" ? (
+                        ) : item.post.status == 1 ? (
                         <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                        ) : item.status == "2" ? (
+                        ) : item.post.status == 2 ? (
                         <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                         ) : (
                         <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
                         )} 
-                        <Text>Status: {item.status}</Text>
+                        <Text>Status: {item.post.status}</Text>
                         </View>
 
                         <CommentButton btnStyle={styles.chaticon} />
                     </View>
                     <View style={[styles.endline, {marginHorizontal: wp(2)}]}>
-                            <Text>Criado em: {item.createdAt.toString()}</Text>
+                            <Text>Criado em: {item.post.createdAt.toString()}</Text>
                     </View>
                 </View>
                 )

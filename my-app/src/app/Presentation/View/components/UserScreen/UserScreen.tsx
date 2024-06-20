@@ -9,7 +9,6 @@ import ErrorMessage from '../ErrorMessage';
 
 const UserProfileScreen: React.FC = () => {
   const {
-    postsID,
     user,
     GetUserInfo,
     CleanUpUserInfo
@@ -79,7 +78,7 @@ const UserProfileScreen: React.FC = () => {
 
         <View>
           <Text style={styles.userPostBlock}></Text>
-          <UserBlock postsID={postsID}/>
+          <UserBlock/>
         </View>
       </ScrollView>
     </>

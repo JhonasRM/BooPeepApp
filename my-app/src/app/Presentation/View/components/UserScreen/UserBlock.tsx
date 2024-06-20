@@ -6,10 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingBox from "../LoadingIcon";
 import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
-
-//import React from "react";
-
-
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
@@ -17,6 +13,7 @@ import React, { SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 import { userBlockStateController } from "../../../Controllers/userBlockStateController";
+import { UserScreenStateController } from "../../../Controllers/UserScreenStateController";
 
 const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/501/300',
@@ -27,8 +24,10 @@ type UserBlockProps = {
     postsID: string[]
 }
 
-const UserBlock = (props: UserBlockProps) => {
+const UserBlock = () => {
     const {
+        postsID,
+        GetPostID,
         handleFetchUserPosts
     } = userBlockStateController()
     const [data, setData] = useState<Post[] | undefined>([])
@@ -43,19 +42,20 @@ const UserBlock = (props: UserBlockProps) => {
 
         try {
             setLoading(true)
-            const response = await handleFetchUserPosts(props.postsID)
-
-            if (response.val === false) {
+            const getPostID = await GetPostID()
+            if (getPostID.val === false) {
                 setErro(true)
-                throw new Error(response.erro as string);
+                throw new Error(getPostID.erro as string);
             }
-
-            if (response.val === true) {
-                console.log(`${response.data}. GET realizado com sucesso!`);
-                
-                setData(response.data)
+            if (getPostID.val === true) {
+                const getPosts = await handleFetchUserPosts(postsID)
+                if(getPosts.val === false){
+                setErro(true)
+                throw new Error(getPostID.erro as string);
+                }
+                setData(getPosts.data)
                 console.log(`Data from setData: ${data}`)
-                console.log(`Response from response: ${response}`)
+                console.log(`getPostID from getPostID: ${getPostID}`)
             }
 
         } catch (error) {

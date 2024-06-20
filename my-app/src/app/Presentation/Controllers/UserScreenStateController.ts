@@ -13,7 +13,6 @@ const UserScreenStateController = () => {
           shift: "", 
           description: ""
   })
-  const [postsID, setPostsID] = useState<string[]>([])
   const [user, setUser] = useState<User>(defaultUser);
   const uRepository: userRepository = new userRepository();
 
@@ -37,10 +36,6 @@ const UserScreenStateController = () => {
           shift: userData.shift, 
           description: userData.description 
         });
-        if(GottenInfo.postID.length !== 0){
-          setPostsID(GottenInfo.postID)
-        }
-        console.log(`postsID: ${postsID}`)
         MyUser.setUser(GottenInfo);
         setUser(GottenInfo);
         return { val: true, data: 'Usuário encontrado' };
@@ -68,7 +63,6 @@ const UserScreenStateController = () => {
 
 
   return {
-    postsID,
     defaultUser,
     user,
     GetUserInfo,
