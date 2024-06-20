@@ -56,11 +56,11 @@ const feedStateController = () => {
             postData.forEach(post => {
                 const newPost = new Post(
                     post.UserID, 
-                    post.createdAt,
                     post.description, 
                     post.local, 
                     post.postId, 
                     post.status,
+                    post.createdAt,
                 )
                 posts.push(newPost)
             });
