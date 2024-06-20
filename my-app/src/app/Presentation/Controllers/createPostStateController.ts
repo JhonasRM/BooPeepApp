@@ -5,6 +5,12 @@ import { Post } from "../../Service/Entities/postEntities";
 import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { User } from "../../Service/Entities/userEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+
+interface FieldUpdate {
+    fieldToUpdate: string;
+    NewValue: any;
+}
 
 const createPostStateController = () => {
     //const [title, setTitle] = useState("")
@@ -87,6 +93,64 @@ const createPostStateController = () => {
         }
     };
 
+    const UpdatePost = async (post: Post, postData: Post, updateThis: string): Promise<IReturnAdapter> => {
+        try {
+            const updatedFields: FieldUpdate[] = [];
+            Object.keys(post).forEach(key => {
+                const typedKey = key as keyof Post;
+                if (
+                    typedKey !== "UserID" && 
+                    typedKey !== "createdAt" &&
+                    typedKey !== "postId" &&
+                    typedKey !== "local" &&
+                    typeof post[typedKey] === 'string' &&
+                    post[typedKey] !== postData[typedKey]
+                ) {
+                    if (typedKey === "description" || typedKey === "status") {
+                        updatedFields.push({
+                            fieldToUpdate: key,
+                            NewValue: postData[typedKey]
+                        })
+                    } else {
+                        return
+                    }
+                }
+            });
+
+            updatedFields.forEach(async (updatedInfo) => {
+                let fieldToUpdate = updatedInfo.fieldToUpdate
+                let newValue = updatedInfo.NewValue
+
+                if (newValue === '' || newValue === ' ') {
+                    return
+                }
+
+                try {
+                    const req = await postrepository.updatePost(updateThis, fieldToUpdate, newValue)
+                    
+                    if (req.val === false) {
+                        throw new Error(req.erro as string);
+                    }
+
+                    return
+                } catch (error) {
+                    if (error instanceof Error) {
+                        throw new Error('Erro ao atualizar está postagem: ' + error.message);
+                    }
+                    throw new Error(`Erro interno da aplicação: ${error}`)
+                }
+            })
+
+            return { val: true, data: 'Postagem alterada com sucesso!'};
+        } catch (error) {
+            if (error instanceof Error) {
+                return { val: false, erro: error.message }
+            }
+
+            return {val: false, erro: "Internal Server Error"};
+        }
+    }
+
     return {
         //title,
         createdAt,
@@ -96,7 +160,8 @@ const createPostStateController = () => {
         status,
         handleFieldChange,
         //handleCheckDescriptionChange,
-        handleCreatePost
+        handleCreatePost,
+        UpdatePost
     };
 };
 

@@ -236,15 +236,14 @@ export class postRepository {
 
     //----------------------------------------------------------------------------------------//
 
-    async updatePost(
-        description: string,
-    ): Promise<IReturnAdapter> {
+    async updatePost(postID: string, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
         const updateData = {
-            description: description
+            postID: postID,
+            fieldToUpdate: fieldToUpdate,
+            newValue: newValue
         }
-
         try {
-            console.log('updatePost está rodando!')
+            console.log("updatePost foi chamado!")
             const resp = await axios.put(this.endpointpost, updateData, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -255,17 +254,18 @@ export class postRepository {
             })
 
             if (resp.status !== 200) {
-                console.log("updatePost respondeu com ERRO!")
+                console.log('updatePost respondeu com ERRO!')
                 throw new Error(resp.statusText)
             }
 
-        console.log(resp.data)
-        return { val: true, data: resp.data}
-
+            console.log('updatePost respondeu com SUCESSO!')
+            console.log(resp.data)
+            return { val: true, data: resp.data }
         } catch (error) {
             if (error instanceof Error) {
                 return { val: false, erro: error.message }
-              }
+            }
+            
             return { val: false, erro: `Erro interno da aplicação: ${error}` }
         }
     }
