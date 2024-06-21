@@ -12,12 +12,14 @@ type Props = {
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postId: any
 }
 
 const Feed = (props: Props) => {
     const [isEditing, setIsEditing] = useState(false);
     const [pressedEdit, isPressingEdit] = useState(false)
     const [stopEdit, isStoppingEdit] = useState(false)
+    const [postId, setPostId] = useState("");
     const queryClient = new QueryClient();
 
     const handleFeedAreaEditResponse = (response: any) => {
@@ -32,12 +34,16 @@ const Feed = (props: Props) => {
         isStoppingEdit(response)
     }
 
+    const handlePostId = (response: any) => {
+        setPostId(response)
+    }
+
     return (
      <QueryClientProvider client={queryClient}>
     <View>
         <HeaderBar whatScreen="feed"/>
-        <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit}/>
-        <CreatePost isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial}/>
+        <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit} postId={handlePostId}/>
+        <CreatePost isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial} postId={postId}/>
         <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>

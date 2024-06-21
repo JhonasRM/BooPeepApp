@@ -28,6 +28,7 @@ type Props = {
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postId: any
 }
 
 export function FeedQuery(props: Props) {
@@ -98,6 +99,7 @@ export function FeedQuery(props: Props) {
             <>
             {posts && posts.map((item: any) => (
                 <View style={styles.feedblock} key={item.createdAt}>
+                    {props.postId(item.postID)}
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
@@ -162,7 +164,7 @@ export function FeedQuery(props: Props) {
 const FeedBlock = (props: Props) => {
     return (
         <View style={styles.container}>
-            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
+            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId}/>
         </View>
     )
 }

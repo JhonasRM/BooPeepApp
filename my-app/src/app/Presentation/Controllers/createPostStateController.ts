@@ -93,18 +93,18 @@ const createPostStateController = () => {
         }
     };
 
-    const UpdatePost = async (post: Post, postData: Post, updateThis: string): Promise<IReturnAdapter> => {
+    const UpdatePost = async (postData: Post, updateThis: string): Promise<IReturnAdapter> => {
+        console.log(`UpdatePost's updateThis: ${updateThis}`)
         try {
             const updatedFields: FieldUpdate[] = [];
-            Object.keys(post).forEach(key => {
+            Object.keys(postData).forEach(key => {
                 const typedKey = key as keyof Post;
                 if (
                     typedKey !== "UserID" && 
                     typedKey !== "createdAt" &&
                     typedKey !== "postId" &&
                     typedKey !== "local" &&
-                    typeof post[typedKey] === 'string' &&
-                    post[typedKey] !== postData[typedKey]
+                    postData[typedKey] !== "" && postData[typedKey] !== ""
                 ) {
                     if (typedKey === "description" || typedKey === "status") {
                         updatedFields.push({

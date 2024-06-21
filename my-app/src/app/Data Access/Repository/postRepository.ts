@@ -236,7 +236,7 @@ export class postRepository {
 
     //----------------------------------------------------------------------------------------//
 
-    async updatePost(postID: string, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
+    async updatePost(postID: string | undefined, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
         const updateData = {
             postID: postID,
             fieldToUpdate: fieldToUpdate,
