@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { User } from './userEntities';
+import { userRepository } from '../../Data Access/Repository/userRepository';
 export class Post {
     public createdAt: string;
     public UserID: string;
@@ -7,8 +8,8 @@ export class Post {
     public postId: string;
     public local: string;
     public status: number;
-    public user: User | null
-    
+    public user: User | null = null
+    private uRepository: userRepository
     constructor(
         UserID: string, 
         description: string, 
@@ -16,17 +17,16 @@ export class Post {
         postID?: string,
         status?: number,
         createdAt?: string,
-        user?: User,
     ) {
+        this.uRepository = new userRepository
         const agora = Date.now()
-        this.createdAt =  format(agora, 'dd/MM/yyyy HH:mm:ss'),
         this.UserID = UserID,
+        this.createdAt =  format(agora, 'dd/MM/yyyy HH:mm:ss'),
         this.description = description,
         this.postId = "",
         //this.title = title,
         this.local = local,
         this.status = 0
-        this.user = null
         if(status){
             this.status = status
         }
@@ -36,8 +36,23 @@ export class Post {
         if(createdAt){
             this.createdAt = format(createdAt, 'dd/MM/yyyy HH:mm:ss')
         }
-        if(user){
-            this.user = user
-        }
+        this.setUser()
+    }
+
+    async setUser(){
+        if(this.user === null){
+        const reqUser = await this.uRepository.getUserByUID(this.UserID)
+                if(reqUser.val === false){
+                    throw new Error(reqUser.erro as string)
+                }
+                const userData = reqUser.data as User
+                const newUser = new User({
+                    displayName: reqUser.data.displayName,
+                    course: userData.course,
+                    shift: userData.shift
+                })
+                this.user = newUser
+            }
+            return this.user
     }
 }

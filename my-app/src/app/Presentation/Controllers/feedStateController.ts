@@ -49,17 +49,7 @@ const feedStateController = () => {
                 posts.push(newPost)
             });
             posts.forEach(async(post: Post) => {
-                const reqUser = await uRepository.getUserByUID(post.UserID)
-                if(reqUser.val === false){
-                    throw new Error(reqUser.erro as string)
-                }
-                const userData = reqUser.data as User
-                const newUser = new User({
-                    displayName: reqUser.data.displayName,
-                    course: userData.course,
-                    shift: userData.shift
-                })
-                post.user = newUser
+                post.setUser()
             })
 
             if (posts[0] instanceof Post) {

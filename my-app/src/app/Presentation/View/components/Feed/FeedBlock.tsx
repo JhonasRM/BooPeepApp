@@ -79,6 +79,10 @@ export function FeedQuery() {
     console.log(`erro Response: ${erro}`)
     }, []);
 
+    useEffect(() => {
+        console.log(data)
+    }, [data])
+
     return (
         <>
         <View style={styles.container}>
@@ -92,23 +96,23 @@ export function FeedQuery() {
                 </>
             ) : (
             <>
-            {data && data.map((item: any) => (
+            {data && data.map((item: Post) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
 
                         <View>
-                            <Text style={styles.usertext}>{item.UserID}</Text>
-                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
+                            <Text style={styles.usertext}>{item.user?.name} {item.user?.nickname}</Text>
+                            <Text style={styles.userinfo}>{item.user?.course} - {item.user?.course}</Text>
                         </View>
 
                         <ContainerOptions style={styles.options}/>
                     </View>
-                    
+{/*                     
                     <Text style={[styles.titletext]}>
-                        Perdi o meu Relogio :( {/*{item.}*/}
-                    </Text>
+                        Perdi o meu Relogio 
+                    </Text> */}
                     <Text style={[styles.infotext]}> 
                         {item.description}
                     </Text>
@@ -119,11 +123,11 @@ export function FeedQuery() {
 
                 <View style={styles.endline}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                        { item.status == "0" ? (
+                        { item.status == 0 ? (
                         <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                        ) : item.status == "1" ? (
+                        ) : item.status == 1 ? (
                         <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                        ) : item.status == "2" ? (
+                        ) : item.status == 2 ? (
                         <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                         ) : (
                         <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
