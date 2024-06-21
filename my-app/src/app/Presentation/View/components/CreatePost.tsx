@@ -21,6 +21,8 @@ type Props = {
     pressedEdit?: any
     stopEdit?: any
     postId: any
+    reloadGET: any
+    reloadResponse: any
 }
 
 const CreatePost = (props: Props) => {
@@ -117,12 +119,12 @@ const CreatePost = (props: Props) => {
 
     const handleUpdate = async () => {
         console.log("Dados do post atualizados:", postData);
-        const newPost = new Post(
+        const newPost = new Post (
             postData.UserID, postData.description, postData.local
         )
 
         //post, newPost, props.postID
-        const updatePost = await UpdatePost(newPost, "ble3jZht5ruroAflmDRA");
+        const updatePost = await UpdatePost("ble3jZht5ruroAflmDRA", newPost);
         console.log(`postId: ${props.postId}`)
         if (updatePost.val === false) {
             setErroCreatePost(updatePost.erro as string);
@@ -130,6 +132,7 @@ const CreatePost = (props: Props) => {
         } else if (updatePost.val === true) {
             console.log("handleUpdate respondeu com SUCESSO!")
             handleExit()
+            props.reloadGET(true)
         }
     }
 
@@ -139,6 +142,10 @@ const CreatePost = (props: Props) => {
         if (props.pressedEdit == true) {
             isEditStarting(true)
             setIsTouched(true)
+        }
+
+        if (props.reloadResponse == true) {
+            props.reloadGET(false)
         }
     })
 

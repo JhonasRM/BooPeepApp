@@ -13,6 +13,8 @@ type Props = {
     pressedEdit?: any
     stopEdit?: any
     postId: any
+    reloadGET: any
+    reloadResponse: any
 }
 
 const Feed = (props: Props) => {
@@ -20,6 +22,8 @@ const Feed = (props: Props) => {
     const [pressedEdit, isPressingEdit] = useState(false)
     const [stopEdit, isStoppingEdit] = useState(false)
     const [postId, setPostId] = useState("");
+    const [reloadFeed, setReloadFeed] = useState(false)
+    const [reloadResponse, setReloadResponse] = useState(false)
     const queryClient = new QueryClient();
 
     const handleFeedAreaEditResponse = (response: any) => {
@@ -42,8 +46,8 @@ const Feed = (props: Props) => {
      <QueryClientProvider client={queryClient}>
     <View>
         <HeaderBar whatScreen="feed"/>
-        <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit} postId={handlePostId}/>
-        <CreatePost isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial} postId={postId}/>
+        <FeedArea isTouched={handleFeedAreaEditResponse} pressedEdit={handleContainerOptionsEditBtnPress} stopEdit={stopEdit} postId={handlePostId} reloadGET={reloadFeed} reloadResponse={setReloadResponse}/>
+        <CreatePost isTouched={isEditing} pressedEdit={pressedEdit} stopEdit={handlePostFormEditDenial} postId={postId} reloadGET={setReloadFeed} reloadResponse={reloadResponse}/>
         <FooterBar whatScreen="feed"/>
     </View>
     </QueryClientProvider>

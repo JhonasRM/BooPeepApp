@@ -93,7 +93,7 @@ const createPostStateController = () => {
         }
     };
 
-    const UpdatePost = async (postData: Post, updateThis: string): Promise<IReturnAdapter> => {
+    const UpdatePost = async (updateThis: string, postData: Post): Promise<IReturnAdapter> => {
         console.log(`UpdatePost's updateThis: ${updateThis}`)
         try {
             const updatedFields: FieldUpdate[] = [];
@@ -106,7 +106,7 @@ const createPostStateController = () => {
                     typedKey !== "local" &&
                     postData[typedKey] !== "" && postData[typedKey] !== ""
                 ) {
-                    if (typedKey === "description" || typedKey === "status") {
+                    if (typedKey === "description") {
                         updatedFields.push({
                             fieldToUpdate: key,
                             NewValue: postData[typedKey]

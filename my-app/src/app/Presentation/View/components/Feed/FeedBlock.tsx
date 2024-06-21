@@ -12,7 +12,7 @@ import ErrorMessage from "../ErrorMessage";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { DependencyList, SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 import ContainerOptions from "../ContainerOptions";
@@ -29,6 +29,8 @@ type Props = {
     pressedEdit?: any
     stopEdit?: any
     postId: any
+    reloadGET: any
+    reloadResponse: any
 }
 
 export function FeedQuery(props: Props) {
@@ -41,6 +43,7 @@ export function FeedQuery(props: Props) {
     const [loading, setLoading] = useState(true)
     
     const [erroFetch, setErroFetch] = useState("")
+    const [effectController, setEffectController] = useState<DependencyList | undefined>([])
 
     useEffect(() => {
         console.log("useEffect is running")
@@ -79,6 +82,14 @@ export function FeedQuery(props: Props) {
     console.log(`FeedBlock Response: ${posts}`)
     console.log(`erro Response: ${erro}`)
     }, []);
+
+    // useEffect(() => {
+    //     if (props.reloadGET == true) {
+    //         setEffectController(undefined)
+    //         setEffectController([])
+    //         props.reloadResponse(true)
+    //     }
+    // })
 
     const handleContainerOptionsEditResponse = (response: any) => {
         props.isTouched(response)
@@ -164,7 +175,7 @@ export function FeedQuery(props: Props) {
 const FeedBlock = (props: Props) => {
     return (
         <View style={styles.container}>
-            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId}/>
+            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId} reloadGET={props.reloadGET} reloadResponse={props.reloadResponse}/>
         </View>
     )
 }
