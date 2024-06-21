@@ -1,30 +1,20 @@
-import axios from "axios"
-import { Post } from "../Entities/postEntities"
+import axios from "axios";
+import { Post } from "../Entities/postEntities";
 
 export class postServices {
-    private endpointposts: string
-    private endpointpost: string
-    private endpointest: string
-    private endpointests: string
+    private endpointposts: string;
+    private endpointpost: string;
+    private endpointest: string;
+    private endpointests: string;
 
     constructor() {        
-        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
-        this.endpointpost = "https://boopeepapir.onrender.com/post"
-        this.endpointest = "http://localhost:3000/post"
-        this.endpointests = "http://localhost:3000/posts"
-
+        this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts";
+        this.endpointpost = "https://boopeepapir.onrender.com/post";
+        this.endpointest = "http://localhost:3000/post";
+        this.endpointests = "http://localhost:3000/posts";
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
-        // const Posts = {
-        //     createdAt: post.createdAt,
-        //     UserID: post.UserID,
-        //     description: post.description,
-        //     postId: post.postId,
-        //     local: post.local,
-        //     status: post.status,
-        // };
-
         try {
             console.log("getPosts foi chamado!");
             const resp = await axios.get(this.endpointests, {
@@ -41,14 +31,14 @@ export class postServices {
 
             if (resp.status !== 200) {
                 console.log('getPosts respondeu com ERRO!')
-                throw new Error(resp.statusText)
+                throw new Error(resp.statusText);
             };
             console.log('getPosts respondeu com SUCESSO!');
             return { valido: true, value: 200, data: resp.data as Post[] };
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message }
+                return { valido: false, value: 400, erro: error.message };
             };
             return { valido: false, value: 500, erro: 'Internal Server Error' };
         };
@@ -61,7 +51,7 @@ export class postServices {
         data?: Post[] 
     }> {        
         try {
-            console.log("getPostFromUser for chamado!");
+            console.log("getPostFromUser foi chamado!");
             const resp = await axios.get(this.endpointest, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -74,7 +64,7 @@ export class postServices {
                 }
             });
 
-            console.log(`resp: ${resp}`)
+            console.log(`resp: ${resp}`);
 
             if (resp.status !== 200) {
                 console.log('getPostFromUser respondeu com ERRO!');
@@ -91,9 +81,7 @@ export class postServices {
         }
     }
 
-    //------------------------------------------------------------------
-
-    async getSpecificPost(param: string): Promise<{
+    async getSpecificPost(param: string): Promise<{ 
         valido: boolean, 
         value?: number, 
         erro?: string | Error, 
@@ -128,55 +116,54 @@ export class postServices {
         };
     };
 
-    //------------------------------------------------------------------
-
     async createPost(
-        post: Post
-    ): Promise<{
-        valido: boolean, 
-        value?: number, 
-        erro?: string | Error, 
-        data?: Post[]}> {
+        post: Post,
+        imageUri?: string
+    ): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
         try {
             console.log("createPost foi chamado!");
-            const sendPost = {
-                UserID: post.UserID,
-                description: post.description,
-                local: post.local,
-                status: post.status
-                
-            };
-            const resp = await axios.post(this.endpointest, sendPost, {
+
+            const formData = new FormData();
+            formData.append('UserID', post.UserID);
+            formData.append('description', post.description);
+            formData.append('local', post.local);
+            formData.append('status', post.status);
+
+            if (imageUri) {
+                const file = {
+                    uri: imageUri,
+                    name: imageUri.split('/').pop(),
+                    type: 'image/jpeg'
+                };
+                formData.append('file', file);
+            }
+
+            const resp = await axios.post(this.endpointpost, formData, {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "Authorization",
-                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-                    "Content-Type": "application/json;charset=UTF-8"
-                }
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
             if (resp.status !== 200) {
                 console.log("createPost respondeu com ERRO!");
                 throw new Error(resp.statusText);
-            };
+            }
 
             console.log("createPost respondeu com SUCESSO!");
             console.log(resp.data);
-            return {valido: true, value: 200, data: resp.data};
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
-                return {valido: false, value: 400, erro: error.message};
-            };
-            return {valido: false, value: 500, erro: 'Internal Server Error'};
-        };
+                return { valido: false, value: 400, erro: error.message };
+            }
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
+        }
     }
 
-    //------------------------------------------------------------------
-    //Melhor ver isso com o Jonathan:
-    async deletePost(post: Post): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+    async deletePost(post: Post): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> {
         try {
-            console.log("deletePost for chamado!");
+            console.log("deletePost foi chamado!");
             const resp = await axios.delete(this.endpointpost, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -184,7 +171,6 @@ export class postServices {
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
                     "Content-Type": "application/json;charset=UTF-8"
                 },
-                //Lembre-se, DELETE/UPDATE tem que ter WHERE se não a vaca vai pro brejo
                 params: {
                     postId: post.postId
                 }
@@ -205,7 +191,6 @@ export class postServices {
         };
     };
 };
-
 
 // fetchPosts = async () => {
 //     const response = await fetch('https://boopeepapir.onrender.com/posts');
