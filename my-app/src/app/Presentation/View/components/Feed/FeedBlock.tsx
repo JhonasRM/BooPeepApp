@@ -16,7 +16,6 @@ import { Entypo } from '@expo/vector-icons';
 import React, { SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
-import { User } from "../../../../Service/Entities/userEntities";
 
 const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/501/300',
@@ -25,12 +24,16 @@ const photos: string[] = ['https://picsum.photos/500/300',
 
 export function FeedQuery() {
     const {
-        handleFeedInfo,
+        createdAt, 
+        UserID, 
+        description, 
+        postId, 
+        local, 
+        status, 
         handleFeedFetch
     } = feedStateController()
 
-    const [data, setData] = useState<{posts: Post[], users: User[]}>()
-    const [dataFeed, setDataFeed] = useState([])
+    const [data, setData] = useState<Post[] | undefined>([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
@@ -46,13 +49,17 @@ export function FeedQuery() {
             setLoading(true)
             const response = await handleFeedFetch()
 
-            if (response.val === false) {
+            if (response.valido === false) {
+                setErro(true)
                 throw new Error(response.erro as string);
             }
 
-            if (response.val === true) {
-                setData(response.data.posts)
-                console.log(data)
+            if (response.valido === true) {
+                console.log(`${response.value}. GET realizado com sucesso!`);
+
+
+                setData(response.data)                
+                console.log(`Data from setData: ${data}`)
             }
 
         } catch (error) {
@@ -62,7 +69,6 @@ export function FeedQuery() {
             } else {
                 setErroFetch('An unknown error occurred')
             }
-            setErro(true)
         }
         finally {
             setLoading(false)
@@ -86,23 +92,23 @@ export function FeedQuery() {
                 </>
             ) : (
             <>
-            {data?.posts && data.posts.map((item: any) => (
+            {data && data.map((item: any) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
 
                         <View>
-                            <Text style={styles.usertext}>{item.name} {item.nickname}</Text>
-                            <Text style={styles.userinfo}>2°Lógistica - Noite </Text>
+                            <Text style={styles.usertext}>{item.UserID}</Text>
+                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                         </View>
 
                         <ContainerOptions style={styles.options}/>
                     </View>
-{/*                     
+                    
                     <Text style={[styles.titletext]}>
-                        Perdi o meu Relogio 
-                    </Text> */}
+                        Perdi o meu Relogio :( {/*{item.}*/}
+                    </Text>
                     <Text style={[styles.infotext]}> 
                         {item.description}
                     </Text>
@@ -117,7 +123,7 @@ export function FeedQuery() {
                         <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
                         ) : item.status == "1" ? (
                         <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                        ) :item.status == "2" ? (
+                        ) : item.status == "2" ? (
                         <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                         ) : (
                         <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
@@ -126,7 +132,7 @@ export function FeedQuery() {
                         </View>
 
                         <View style={{marginHorizontal: wp(2)}}>
-                            <Text>Criado em: {item.createdAt.toString}</Text>
+                            <Text>Criado em: {item.createdAt}</Text>
                         </View>
 
                         <CommentButton btnStyle={styles.chaticon} />

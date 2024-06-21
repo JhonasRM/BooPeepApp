@@ -2,19 +2,29 @@ import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator"
 import { postServices } from "../../Service/API/postService"
 import { Post } from "../../Service/Entities/postEntities"
-import { userRepository } from "../../Data Access/Repository/userRepository"
-import { User } from "../../Service/Entities/userEntities"
-import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter"
-import FeedPersistence from "../../Service/Persistence/FeedPersistence"
 
 const feedStateController = () => {
+    //const [title, setTitle] = useState("")
+    const [createdAt, setCreatedAt] = useState(0)
+    const [UserID, setUserID] = useState("")
+    const [description, setDescription] = useState("")
+    const [postId, setPostId] = useState("")
+    const [local, setLocal] = useState("")
+    const [status, setStatus] = useState(0)
 
-    const [userData, setUserData] = useState<User[]>([])
-    const [postData, setPostData] = useState<Post[]>([])
+    // const validator: postValidator = new postValidator()
     const postService: postServices = new postServices()
-    const uRepository: userRepository = new userRepository()
 
-    const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
+    // const handleFeedFetch = async (/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
+        
+    // }
+
+    const handleFeedFetch = async (): Promise<{
+        valido: boolean, 
+        value?: number, 
+        erro?: string | Error, 
+        data?: Post[]
+    }> => {    
         try {
             const req = await postService.getPosts()
             console.log(`Request: ${req}`);
@@ -31,29 +41,14 @@ const feedStateController = () => {
                     post.description, 
                     post.postId, 
                     post.local, 
-                    post.status,
-                    post.createdAt
+                    post.status
                 )
+
                 posts.push(newPost)
             });
-            let users: User[] = []
+
             if (posts[0] instanceof Post) {
-                posts.forEach(async(post: Post) => {
-                    const reqUser = await uRepository.getUserByUID(post.UserID)
-                    if(reqUser.val === false){
-                        throw new Error(reqUser.erro as string)
-                    }
-                    const userData = reqUser.data as User
-                    const newUser = new User({
-                        displayName: reqUser.data.displayName,
-                        course: userData.course,
-                        shift: userData.shift
-                    })
-                    users.push(newUser)
-                })
-                setUserData(users)
-                setPostData(posts)
-                return { val: true, data: {post: posts, users: users} };
+                return { valido: true, value: 200, data: posts };
             }
 
             throw new Error('Nenhum post encontrado.')
@@ -62,32 +57,22 @@ const feedStateController = () => {
 
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
-                  return { val: false, erro: error };
+                  return { valido: false, value: 401, erro: error };
                 } else if (error.message === "Bad Request") {
-                  return { val: false, erro: error };
+                  return { valido: false, value: 400, erro: error };
                 }
             }
-              return { val: false, erro: "Internal Server Error" };
+              return { valido: false, value: 500, erro: "Internal Server Error" };
         }
-    }
-
-    const handleFeedInfo = async(): Promise<IReturnAdapter> => {
-    try{
-        const Feed = FeedPersistence.getInstance()
-        const reqFeed = await Feed.getPosts(postData)
-        if(reqFeed ===  null){
-            throw new Error('Requisição do feed deu errado')
-        }    
-        return {val: true, data: reqFeed}
-    } catch (error) {
-            console.log(error)
-            return{val: false, erro: `Erro ${error}`}
-        }
-        
     }
 
     return {
-        handleFeedInfo,
+        createdAt,
+        UserID, 
+        description, 
+        postId, 
+        local, 
+        status, 
         handleFeedFetch};
 };
 
