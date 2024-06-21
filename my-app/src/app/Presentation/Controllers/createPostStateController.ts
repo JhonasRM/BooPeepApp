@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react"
+import { SetStateAction, useState } from "react";
 import { postValidator } from "../../Service/Validators/postValidator";
 import { postServices } from "../../Service/API/postService";
 import { Post } from "../../Service/Entities/postEntities";
@@ -7,40 +7,37 @@ import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { User } from "../../Service/Entities/userEntities";
 
 const createPostStateController = () => {
-    //const [title, setTitle] = useState("")
-    // //const [checkTitle, setCheckTitle] = useState("")
     const [createdAt, setCreatedAt] = useState(0);
     const [description, setDescription] = useState("");
-    // const [checkDescription, setCheckDescription] = useState("")
     const [postId, setPostId] = useState("");
     const [local, setLocal] = useState("ETEC ZONA LESTE");
     const [status, setStatus] = useState(0);
+    const [imageUri, setImageUri] = useState<string | null>(null); // Adicionando estado para a imagem
 
     const validator: postValidator = new postValidator();
     const postService: postServices = new postServices();
 
     const setState: postStateAndSetters = {
-        //title: setTitle
         description: setDescription,
         local: setLocal,
-    }
+    };
 
     const handleFieldChange = async (
         field: string,
         value: string,
-    ): Promise<{valido: boolean, value: number, erro?: string | Error}> => {
+    ): Promise<{ valido: boolean, value: number, erro?: string | Error }> => {
         if (field in setState) {
             setState[field as keyof postStateAndSetters](value);
             const valfield = await validator.valByField(field, value);
-            
+
             if (valfield.valido === false) {
                 console.log(valfield.erro);
-                return {valido: false, value: 401, erro: valfield.erro}
+                return { valido: false, value: 401, erro: valfield.erro };
             }
 
-            console.log("")
+            console.log("");
             console.log("-----createPostStateController-----");
-            console.log(`field: ${field}, value: ${value}`)
+            console.log(`field: ${field}, value: ${value}`);
             console.log("validação concluída");
             return { valido: true, value: 200 };
         }
@@ -49,17 +46,17 @@ const createPostStateController = () => {
             `Campo "${field}" não é uma chave válida em postStateAndSetters.`
         );
 
-        return {valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em postStateAndSetters.`}
-    }
+        return { valido: false, value: 400, erro: `Campo "${field}" não é uma chave válida em postStateAndSetters.` };
+    };
 
     const handleCreatePost = async (
-        //title: string,
         UserID: string,
         description: string,
         local: string,
-    ): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> => {
-        if (/*title === '' ||*/ description === '') {
-            return {valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.`}
+        imageUri?: string, // Adicionando parâmetro para a imagem
+    ): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post }> => {
+        if (description === '') {
+            return { valido: false, value: 400, erro: `Preeencha todos os campos para realizar o cadastro.` };
         }
         const post: Post = new Post(
             UserID,
@@ -68,36 +65,36 @@ const createPostStateController = () => {
         );
         try {
             console.log(post);
-            const req = await postService.createPost(post);
+            const req = await postService.createPost(post, imageUri);
             if (req.valido === false) {
                 throw new Error(req.erro as string);
             };
-            return {valido: true, value: 201, data: post};
+            return { valido: true, value: 201, data: post };
 
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
-                    return {valido: false, value: 401, erro: error}
+                    return { valido: false, value: 401, erro: error };
                 } else if (error.message === "Bad Request") {
-                    return {valido: false, value: 400, erro: error}
+                    return { valido: false, value: 400, erro: error };
                 }
-                return {valido: false, value: 400, erro: error}
+                return { valido: false, value: 400, erro: error };
             }
-            return {valido: false, value: 500, erro: "Internal Server Error"};
+            return { valido: false, value: 500, erro: "Internal Server Error" };
         }
     };
 
     return {
-        //title,
         createdAt,
         description,
         postId,
         local,
         status,
+        imageUri, // Adicionando o estado da imagem ao retorno
+        setImageUri, // Adicionando o setter da imagem ao retorno
         handleFieldChange,
-        //handleCheckDescriptionChange,
         handleCreatePost
     };
 };
 
-export { createPostStateController }
+export { createPostStateController };
