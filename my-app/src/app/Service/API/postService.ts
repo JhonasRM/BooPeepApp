@@ -10,8 +10,8 @@ export class postServices {
     constructor() {        
         this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
         this.endpointpost = "https://boopeepapir.onrender.com/post"
-        this.endpointest = "http://localhost:3000/post"
-        this.endpointests = "http://localhost:3000/posts"
+        this.endpointest = "https://boopeepapir.onrender.com/post"
+        this.endpointests = "https://boopeepapir.onrender.com/posts"
 
     };
 

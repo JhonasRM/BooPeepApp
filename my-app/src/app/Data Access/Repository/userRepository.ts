@@ -14,10 +14,10 @@ export class userRepository {
     this.endpointuser = 'https://boopeepapir.onrender.com/user',
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser',
     this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd',
-    this.endpointest = 'http://localhost:3000/user',
-    this.endpointests = 'http://localhost:3000/users',
-    this.endpointestlogin = 'http://localhost:3000/loginuser',
-    this.endpointestreset = 'http://localhost:3000/resetpwd'
+    this.endpointest = 'https://boopeepapir.onrender.com/user',
+    this.endpointests = 'https://boopeepapir.onrender.com/users',
+    this.endpointestlogin = 'https://boopeepapir.onrender.com/loginuser',
+    this.endpointestreset = 'https://boopeepapir.onrender.com/resetpwd'
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {
@@ -61,7 +61,7 @@ export class userRepository {
       })
       if (resp.status !== 200) {
         throw new Error(resp.statusText)
-      }
+      } 
       return { val: true, data: resp.data }
     }catch(error){
        if (error instanceof Error) {
