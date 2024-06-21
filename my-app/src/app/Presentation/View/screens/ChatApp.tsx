@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 
 import HeaderBar from '../components/HeaderBar';
 import FooterBar from '../components/FooterBar';
 import { Message } from '../../../Service/Entities/messageEntities';
+import ChatPersistence from '../../../Service/Persistence/chatPersistence'
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { chatService } from '../../../Service/API/chatService';
@@ -31,7 +32,7 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const result = await chatServiceInstance.getMessages();
+      const result = await chatServiceInstance.getMessages(chatid);
       if (result.val) {
         setMessages(result.data);
       } else {
@@ -39,7 +40,7 @@ export default function App(): JSX.Element {
       }
     };
     fetchMessages();
-  }, []);
+  }, [chatid]);
 
   const handleMessageSend = async (): Promise<void>=> {
     if (message.trim() === '') return;

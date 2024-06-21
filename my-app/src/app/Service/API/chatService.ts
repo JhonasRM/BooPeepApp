@@ -80,11 +80,13 @@ export class chatService {
 
   }
  
-  async getMessages(): Promise<IReturnAdapter> {
-  
+  async getMessages(chatID: string): Promise<IReturnAdapter> {
     try {
         console.log("getMessages foi chamado!");
         const resp = await axios.get(this.endpointchat, {
+          params:{
+            chatID: chatID
+          },
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "Authorization",
@@ -92,7 +94,6 @@ export class chatService {
                 "Content-Type": "application/json;charset=UTF-8"
             }
         });
-
         console.log('Response from API:');
         console.log(resp.data);
 

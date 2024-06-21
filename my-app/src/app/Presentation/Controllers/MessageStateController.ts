@@ -21,13 +21,11 @@ const createMessageStateController = () =>{
         lastmessage: setlastmessage
     };
 
-    
-
     const handleFieldChange = async (field: string, value: string ): Promise<IReturnAdapter> => {
         if (field in setState) {
             setState[field as keyof ChatStateAndSetters](value);
             const valfield = await validator.valByField(field, value);
-            
+              
             if (valfield.valido === false) {
                 console.log(valfield.erro);
                 return {val: false, erro: valfield.erro}
@@ -65,9 +63,9 @@ const createMessageStateController = () =>{
         const uid = searchOnStorage('uid') as unknown as string
         setUserID(uid)
         const chatid = searchOnStorage('uid') as unknown as string
-        setchatid(uid)
+        setchatid(chatid)
         const displayname = searchOnStorage('uid') as unknown as string
-        setdisplayname(uid)
+        setdisplayname(displayname)
     
       
         const message: Message = new Message(

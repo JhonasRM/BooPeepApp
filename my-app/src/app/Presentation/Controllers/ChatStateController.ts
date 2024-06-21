@@ -5,19 +5,16 @@ import { Chat } from "../../Service/Entities/chatEntities";
 import  {Message} from "../../Service/Entities/messageEntities"
 import { searchOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import ChatPersistence from "../../Service/Persistence/chatPersistence";
 
 const ChatStateController = () =>{
-    const [UserID, setUserID] = useState("");
-    const [displayname, setdisplayname] = useState("");
-    const [message, setmessage] = useState("");
-    const [chatid, setchatid] = useState("");
 
     const getchat = async(): Promise <IReturnAdapter> => {    
    
 
         try {
             const chatServiceInstance = new chatService();
-            const req = await chatServiceInstance.getMessages()
+            const req = await chatServiceInstance.getMessages(chat)
             console.log(`Request: ${req}`);
             if (req.val === false) {
                 throw new Error("Bad Request");
@@ -37,14 +34,18 @@ const ChatStateController = () =>{
                 chat.push(newMessage)
             });
 
-            if (chat[0] instanceof Message) {
-                return { val: true, data: chat };
+            const MyChat = ChatPersistence.getInstance()
+            MyChat.setchat(newMessage)
+            return { val: true, data: 'ChatID criado com sucesso' };
+          } catch (error) {
+            if (error instanceof Error) {
+                return { val: false, erro: error };
             }
+            return { val: false, erro: "Internal Server Error" };
+          }
 
-            throw new Error('Nenhum Chat encontrado.')
         } catch (error) {
             console.log("setchat respondeu com ERRO!")
-
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
                   return { val: false, erro: error };
@@ -57,9 +58,6 @@ const ChatStateController = () =>{
     
     }
     return{
-        UserID,
-        chatid,
-        message,
         getchat  
     }
 
