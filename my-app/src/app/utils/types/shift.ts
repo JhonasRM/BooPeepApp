@@ -1,1 +1,0 @@
-export type shift = 'matutino' | 'vespertino' | 'noturno' | 'integral'

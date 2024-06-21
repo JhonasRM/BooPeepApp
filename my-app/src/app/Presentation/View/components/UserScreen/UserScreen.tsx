@@ -9,6 +9,7 @@ import ErrorMessage from '../ErrorMessage';
 
 const UserProfileScreen: React.FC = () => {
   const {
+    postsID,
     user,
     GetUserInfo,
     CleanUpUserInfo
@@ -75,10 +76,9 @@ const UserProfileScreen: React.FC = () => {
             <Text style={styles.additionalInfo}>Turno: {user.shift}</Text>
           </View>
         </View>
-
         <View>
           <Text style={styles.userPostBlock}></Text>
-          <UserBlock/>
+          <UserBlock postsID={postsID}/>
         </View>
       </ScrollView>
     </>
@@ -86,7 +86,7 @@ const UserProfileScreen: React.FC = () => {
     </View>
     </>
   );
-};
+};''
 
 const styles = StyleSheet.create({
   container: {
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   },
   additionalInfoContainer: {
     paddingHorizontal: 20,
-    marginBottom: 20,
   },
   additionalInfoTitle: {
     fontSize: 20,
@@ -192,7 +191,7 @@ const styles = StyleSheet.create({
   additionalInfo: {
     fontSize: 16,
     color: '#000',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   userPostBlock: {
     marginBottom: 30,

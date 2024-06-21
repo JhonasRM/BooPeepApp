@@ -1,4 +1,4 @@
-import { shift } from "../../utils/types/shift";
+import { shift } from "../../utils/types/PostFeed";
 
 export interface IUserDTO{
     displayName?: string,

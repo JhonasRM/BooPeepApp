@@ -70,7 +70,7 @@ export class postServices {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    postID: String(param)
+                    postId: String(param)
                 }
             });
 

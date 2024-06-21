@@ -24,123 +24,118 @@ type UserBlockProps = {
     postsID: string[]
 }
 
-const UserBlock = () => {
-    const {
-        postsID,
-        GetPostID,
-        handleFetchUserPosts
-    } = userBlockStateController()
-    const [data, setData] = useState<Post[] | undefined>([])
-    const [erro, setErro] = useState(false)
-    const [loading, setLoading] = useState(true)
-    
-    const [erroFetch, setErroFetch] = useState("")
+const UserBlock = (props: UserBlockProps) => {
+    const { handleFetchUserPosts } = userBlockStateController();
+    const [data, setData] = useState<Post[]>([]);
+    const [erro, setErro] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [isDataFetched, setIsDataFetched] = useState(false);
+    const [erroFetch, setErroFetch] = useState("");
 
     useEffect(() => {
-    const incomingData = async () => {
-        console.log("incomingData is running")
-
-        try {
-            setLoading(true)
-            const getPostID = await GetPostID()
-            if (getPostID.val === false) {
-                setErro(true)
-                throw new Error(getPostID.erro as string);
-            }
-            if (getPostID.val === true) {
-                const getPosts = await handleFetchUserPosts(postsID)
-                if(getPosts.val === false){
-                setErro(true)
-                throw new Error(getPostID.erro as string);
+        const incomingData = async () => {
+            console.log("incomingData is running");
+            console.log(props.postsID);
+            try {
+                setLoading(true);
+                const getPosts = await handleFetchUserPosts(props.postsID);
+                if (getPosts.val === false) {
+                    setErro(true);
+                    throw new Error(getPosts.erro as string);
                 }
-                setData(getPosts.data)
-                console.log(`Data from setData: ${data}`)
-                console.log(`getPostID from getPostID: ${getPostID}`)
+                const postData: Post[] = getPosts.data as Post[];
+                setData(postData);
+            } catch (error) {
+                console.error("Erro ao realizar requisição:", error);
+                if (error instanceof Error) {
+                    setErroFetch(error.message);
+                } else {
+                    setErroFetch('An unknown error occurred');
+                }
+            } finally {
+                setLoading(false);
             }
-
-        } catch (error) {
-            console.error("Erro ao realizar requisição:", error);
-            if (error instanceof Error) {
-                setErroFetch(error.message)
-            } else {
-                setErroFetch('An unknown error occurred')
-            }
+        };
+        incomingData();
+    }, [props.postsID]);
+    useEffect(() => {
+        console.log(data)
+        if (data.length !== 0|| erro) {
+            setIsDataFetched(true);
         }
-        finally {
-            setLoading(false)
-        }
+    }, [data]);
+    if(isDataFetched === false){
+        return(
+            <Text>Nenhuma postagem foi encontrada</Text>
+        )
     }
-    incomingData()
-    }, []);
+    return (
+        <UserBlockComponent posts={data} erro={erro} loading={loading} erroFetch={`${erroFetch}`}/>
+    )
+}
+
+
+type UserBlockComponentProps = {
+    posts: Post[];
+    erro: boolean;
+    loading: boolean;
+    erroFetch: string;
+};
+
+const UserBlockComponent: React.FC<UserBlockComponentProps> = ({ posts, erro, loading, erroFetch }) => {
+    if (loading) {
+        return <LoadingBox whatPage="Comment" />;
+    }
+
+    if (erro) {
+        return <ErrorMessage message={erroFetch} />;
+    }
+    if(posts){
+        console.log(posts)
+    }
 
     return (
-        <>
         <View style={styles.container}>
-            { loading ? (
-                <>
-                    <LoadingBox whatPage="Comment" />
-                </>
-            ) : erro ? (
-                <>
-                    <ErrorMessage message={erroFetch}/>
-                </>
-            ) : (
-            <>
-            {data && data.map((item: any) => (
-                <View style={styles.userblock}>
-                    <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
-                        <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
-                        style={styles.user}/>
-
-                        <View>
-                            <Text style={styles.usertext}>{item.UserID}</Text>
-                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
-                        </View>
-
-                        <ContainerOptions style={styles.options}/>
+            {posts.map((item: Post) => (
+                <View style={styles.userblock} key={item.postId}>
+                    <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+                        <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
+                            style={styles.user} />
+                        <ContainerOptions style={styles.options} />
                     </View>
-                    
-                    <Text style={[styles.titletext]}>
-                        Perdi o meu Relogio :( {/*{item.}*/}
+                    <Text style={styles.titletext}>
+                        Perdi o meu Relogio :( {/*{item.title}*/}
                     </Text>
-                    <Text style={[styles.infotext]}> 
+                    <Text style={styles.infotext}>
                         {item.description}
                     </Text>
-
                     <View style={styles.middleline}>
-                        <ImageCarousel ImgSource={photos}/>
+                        <ImageCarousel ImgSource={photos} />
                     </View>
-
-                <View style={styles.endline}>
-                        <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                        { item.status == "0" ? (
-                        <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                        ) : item.status == "1" ? (
-                        <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                        ) : item.status == "2" ? (
-                        <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                        ) : (
-                        <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                        )} 
-                        <Text>Status: {item.status}</Text>
+                    <View style={styles.endline}>
+                        <View style={[styles.status, { marginHorizontal: wp(2) }]}>
+                            {item.status === 0 ? (
+                                <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                            ) : item.status === 1 ? (
+                                <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
+                            ) : item.status === 2 ? (
+                                <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                            ) : (
+                                <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
+                            )}
+                            <Text>Status: {item.status}</Text>
                         </View>
-
-                        <View style={{marginHorizontal: wp(2)}}>
-                            <Text>Criado em: {item.createdAt.toString()}</Text>
+                        <View style={{ marginHorizontal: wp(2) }}>
+                            <Text>Criado em: {new Date(item.createdAt).toLocaleDateString()}</Text>
                         </View>
-
                         <CommentButton btnStyle={styles.chaticon} />
                     </View>
                 </View>
-                )
-            )
-            } 
-            </>
-            )}
+            ))}
         </View>
-        </>
-    )
+    );
 }
+
 
 const {styles} = StyleSheet.create ({
     container: {

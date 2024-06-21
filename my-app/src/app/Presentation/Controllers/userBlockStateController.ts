@@ -12,7 +12,7 @@ const userBlockStateController = () => {
   const [postsID, setPostsID] = useState<string[]>([]);
 
   const postService: postServices = new postServices();
-  const posts: Post[] = [];
+  const [posts, setPosts] = useState<Post[]>([])
   const uRepository: userRepository = new userRepository();
 
   const GetPostID = async (): Promise<IReturnAdapter> => {
@@ -51,9 +51,9 @@ const userBlockStateController = () => {
     postsID: string[]
   ): Promise<IReturnAdapter> => {
     try {
+      let postsData: Post[] = []
       postsID.forEach(async (postID) => {
         const req = await postService.getPostFromUser(postID);
-        console.log(`Request: ${req}`);
         if (req.valido === false) {
           throw new Error("Bad Request");
         }
@@ -66,12 +66,10 @@ const userBlockStateController = () => {
           post.status,
           post.createdAt
         );
-        posts.push(newPost);
+        postsData.push(newPost);
       });
-      if (posts.length === 0) {
-        throw new Error("Nenhum post encontrado.");
-      }
-      return { val: true, data: posts };
+      setPosts(postsData)
+      return { val: true, data: postsData };
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Unauthorized") {
@@ -83,9 +81,10 @@ const userBlockStateController = () => {
       return { val: false, erro: "Internal Server Error" };
     }
   };
+  
 
   return {
-    postsID,
+    posts,
     GetPostID,
     handleFetchUserPosts,
   };

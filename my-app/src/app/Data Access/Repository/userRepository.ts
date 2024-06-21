@@ -9,11 +9,13 @@ export class userRepository {
   private endpointreset: string;
   private endpointest: string;
   private endpointestlogin: string;
+  private endpointests: string;
   constructor() {
     this.endpointuser = 'https://boopeepapir.onrender.com/user',
     this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser',
     this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd',
     this.endpointest = 'http://localhost:3000/user',
+    this.endpointests = 'http://localhost:3000/users',
     this.endpointestlogin = 'http://localhost:3000/loginuser',
     this.endpointestreset = 'http://localhost:3000/resetpwd'
   };
@@ -47,6 +49,27 @@ export class userRepository {
 
   }
 
+  async getUsers(): Promise<IReturnAdapter> {
+    try{
+      const resp = await axios.get(this.endpointests, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Authorization",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+      if (resp.status !== 200) {
+        throw new Error(resp.statusText)
+      }
+      return { val: true, data: resp.data }
+    }catch(error){
+       if (error instanceof Error) {
+      return { val: false, erro: error.message }
+    }
+    return { val: false, erro: `Erro interno da aplicação: ${error}` }
+  }
+  }
   async getUser(email: string, password: string): Promise<IReturnAdapter> {
     try{
       const resp = await axios.get(this.endpointest, {
