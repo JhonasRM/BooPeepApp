@@ -2,6 +2,8 @@ import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator"
 import { postServices } from "../../Service/API/postService"
 import { Post } from "../../Service/Entities/postEntities"
+import { User } from "../../Service/Entities/userEntities";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 
 const feedStateController = () => {
     //const [title, setTitle] = useState("")
@@ -14,7 +16,7 @@ const feedStateController = () => {
 
     // const validator: postValidator = new postValidator()
     const postService: postServices = new postServices()
-
+    const uRepository: userRepository = new userRepository()
     // const handleFeedFetch = async (/*title: string,*/ description: string, local: string, status: number, createdAt: number): Promise<{valido: boolean, value?: number, erro?: string | Error, data?: Post}> {
         
     // }
@@ -46,6 +48,19 @@ const feedStateController = () => {
 
                 posts.push(newPost)
             });
+            posts.forEach(async(post: Post) => {
+                const reqUser = await uRepository.getUserByUID(post.UserID)
+                if(reqUser.val === false){
+                    throw new Error(reqUser.erro as string)
+                }
+                const userData = reqUser.data as User
+                const newUser = new User({
+                    displayName: reqUser.data.displayName,
+                    course: userData.course,
+                    shift: userData.shift
+                })
+                post.user = newUser
+            })
 
             if (posts[0] instanceof Post) {
                 return { valido: true, value: 200, data: posts };

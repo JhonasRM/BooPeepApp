@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { User } from './userEntities';
 export class Post {
     public createdAt: string;
     public UserID: string;
@@ -6,6 +7,7 @@ export class Post {
     public postId: string;
     public local: string;
     public status: number;
+    public user: User | null
     
     constructor(
         UserID: string, 
@@ -13,15 +15,18 @@ export class Post {
         local: string,
         postID?: string,
         status?: number,
-        createdAt?: string
+        createdAt?: string,
+        user?: User,
     ) {
-        this.createdAt = 'Agora',
+        const agora = Date.now()
+        this.createdAt =  format(agora, 'dd/MM/yyyy HH:mm:ss'),
         this.UserID = UserID,
         this.description = description,
         this.postId = "",
         //this.title = title,
         this.local = local,
         this.status = 0
+        this.user = null
         if(status){
             this.status = status
         }
@@ -29,8 +34,10 @@ export class Post {
             this.postId = postID
         }
         if(createdAt){
-            const agora = Date.now()
             this.createdAt = format(createdAt, 'dd/MM/yyyy HH:mm:ss')
+        }
+        if(user){
+            this.user = user
         }
     }
 }
