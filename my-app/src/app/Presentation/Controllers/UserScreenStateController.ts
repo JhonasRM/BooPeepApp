@@ -13,6 +13,7 @@ const UserScreenStateController = () => {
           shift: "", 
           description: ""
   })
+  const [postsID, setPostsID] = useState<string[]>([])
   const [user, setUser] = useState<User>(defaultUser);
   const uRepository: userRepository = new userRepository();
 
@@ -38,6 +39,7 @@ const UserScreenStateController = () => {
         });
         MyUser.setUser(GottenInfo);
         setUser(GottenInfo);
+        setPostsID(req.data.postsID)
         return { val: true, data: 'Usuário encontrado' };
     } catch (error) {
       if (error instanceof Error) {
@@ -61,14 +63,11 @@ const UserScreenStateController = () => {
     }
   }
 
-{/*  // Use useEffect to log when user changes
-  useEffect(() => {
-    console.log(`User state updated: ${JSON.stringify(user)}`);
-  }, [user]);*/}
 
   return {
     defaultUser,
     user,
+    postsID,
     GetUserInfo,
     CleanUpUserInfo
   };

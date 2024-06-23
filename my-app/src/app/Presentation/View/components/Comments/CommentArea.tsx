@@ -5,7 +5,7 @@ import CommentBlock from "./CommentBlock";
 import PostBlock from "./PostBlock";
 
 const CommentArea = () => {
-    return (        //INCLUIR O NEGOCIO DO CHAT DO IGOR EMBAIXO DO COMMENTBLOCK
+    return (        
     <ScrollView style={styles.container}>
         <PostBlock />
         <CommentBlock />

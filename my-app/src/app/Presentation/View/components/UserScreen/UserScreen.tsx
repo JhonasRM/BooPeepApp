@@ -11,6 +11,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen: React.FC = () => {
   const {
+    postsID,
     user,
     GetUserInfo,
     CleanUpUserInfo
@@ -80,10 +81,8 @@ const UserProfileScreen: React.FC = () => {
             {/*<Text style={styles.additionalInfo}>Telefone: (11) 12345-6789</Text>*/}
             <Text style={styles.additionalInfo}>Curso: {user.course}</Text>
             <Text style={styles.additionalInfo}>Turno: {user.shift}</Text>
-            {/* Adicione mais informações conforme necessário */}
           </View>
         </View>
-
         <View>
         <View style={styles.queryContainer}>
           { changeSection == false ? (
@@ -101,12 +100,11 @@ const UserProfileScreen: React.FC = () => {
             </TouchableOpacity>
             </>
           )} 
-          {/* <>
-            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
-          </> */}
+          <Text style={styles.userPostBlock}></Text>
+          <UserBlock postsID={postsID}/>
         </View>
           { changeSection == false ? (
-            <UserBlock />  
+            <UserBlock postsID={[]} />  
           ) : (
             <MyCommentsBlock />
           )} 
@@ -118,7 +116,7 @@ const UserProfileScreen: React.FC = () => {
     </View>
     </>
   );
-};
+};''
 
 const styles = StyleSheet.create({
   container: {
@@ -208,7 +206,6 @@ const styles = StyleSheet.create({
   },
   additionalInfoContainer: {
     paddingHorizontal: 20,
-    marginBottom: 20,
   },
   additionalInfoTitle: {
     fontSize: 20,
@@ -226,7 +223,7 @@ const styles = StyleSheet.create({
   additionalInfo: {
     fontSize: 16,
     color: '#000',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   userPostBlock: {
     marginBottom: 30,

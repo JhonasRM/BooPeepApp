@@ -1,4 +1,4 @@
-import { shift } from "../../utils/types/shift";
+import { shift } from "../../utils/types/PostFeed";
 import { IUserDTO } from "../DTO/IUserDTO";
 
 export class User{

@@ -19,14 +19,7 @@ export class postRepository {
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
-        // const Posts = {
-        //     createdAt: post.createdAt,
-        //     UserID: post.UserID,
-        //     description: post.description,
-        //     postId: post.postId,
-        //     local: post.local,
-        //     status: post.status,
-        // };
+
 
         try {
             console.log("getPosts foi chamado!");
@@ -44,14 +37,14 @@ export class postRepository {
 
             if (resp.status !== 200) {
                 console.log('getPosts respondeu com ERRO!')
-                throw new Error(resp.statusText)
+                throw new Error(resp.statusText);
             };
             console.log('getPosts respondeu com SUCESSO!');
             return { valido: true, value: 200, data: resp.data as Post[] };
 
         } catch (error) {
             if (error instanceof Error) {
-                return { valido: false, value: 400, erro: error.message }
+                return { valido: false, value: 400, erro: error.message };
             };
             return { valido: false, value: 500, erro: 'Internal Server Error' };
         };
@@ -85,7 +78,6 @@ export class postRepository {
         }
     }
 
-    // ------------------------------------------------------------------------------------ //
 
     async getPostFromUser(param: string): Promise<{ 
         valido: boolean, 
@@ -103,11 +95,11 @@ export class postRepository {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    UserID: String(param)
+                    postId: String(param)
                 }
             });
 
-            console.log(`resp: ${resp}`)
+            console.log(`resp: ${resp}`);
 
             if (resp.status !== 200) {
                 console.log('getPostFromUser respondeu com ERRO!');
@@ -124,9 +116,7 @@ export class postRepository {
         }
     }
 
-    //------------------------------------------------------------------
-
-    async getSpecificPost(param: string): Promise<{
+    async getSpecificPost(param: string): Promise<{ 
         valido: boolean, 
         value?: number, 
         erro?: string | Error, 
@@ -161,63 +151,63 @@ export class postRepository {
         };
     };
 
-    //------------------------------------------------------------------
-
     async createPost(
-        post: Post
-    ): Promise<{
-        valido: boolean, 
-        value?: number, 
-        erro?: string | Error, 
-        data?: Post[]}> {
+        post: Post,
+        imageUri?: string
+    ): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
         try {
             console.log("createPost foi chamado!");
-            const sendPost = {
-                UserID: post.UserID,
-                description: post.description,
-                local: post.local,
-                status: post.status
-                
-            };
-            const resp = await axios.post(this.endpointpost, sendPost, {
+
+            const formData = new FormData();
+            formData.append('UserID', post.UserID);
+            formData.append('description', post.description);
+            formData.append('local', post.local);
+            formData.append('status', post.status);
+
+            if (imageUri) {
+                const file = {
+                    uri: imageUri,
+                    name: imageUri.split('/').pop(),
+                    type: 'image/jpeg'
+                };
+                formData.append('file', file);
+            }
+
+            const resp = await axios.post(this.endpointpost, formData, {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "Authorization",
-                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-                    "Content-Type": "application/json;charset=UTF-8"
-                }
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
             if (resp.status !== 200) {
                 console.log("createPost respondeu com ERRO!");
                 throw new Error(resp.statusText);
-            };
+            }
 
             console.log("createPost respondeu com SUCESSO!");
             console.log(resp.data);
-            return {valido: true, value: 200, data: resp.data};
+            return { valido: true, value: 200, data: resp.data };
 
         } catch (error) {
             if (error instanceof Error) {
-                return {valido: false, value: 400, erro: error.message};
-            };
-            return {valido: false, value: 500, erro: 'Internal Server Error'};
-        };
+                return { valido: false, value: 400, erro: error.message };
+            }
+            return { valido: false, value: 500, erro: 'Internal Server Error' };
+        }
     }
 
-    //------------------------------------------------------------------
-    //Melhor ver isso com o Jonathan:
-    async deletePost(postID: string) {
+    async deletePost(post: Post): Promise<IReturnAdapter> {
         try {
+            console.log("deletePost foi chamado!");
             const resp = await axios.delete(this.endpointpost, {
-                params: {
-                    postID: postID
-                },
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Authorization",
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
                     "Content-Type": "application/json;charset=UTF-8"
+                },
+                params: {
+                    postId: post.postId
                 }
             })
 
@@ -234,7 +224,6 @@ export class postRepository {
         }
     }
 
-    //----------------------------------------------------------------------------------------//
 
     async updatePost(postID: string | undefined, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
         const updateData = {
@@ -271,28 +260,3 @@ export class postRepository {
     }
 };
 
-
-// fetchPosts = async () => {
-//     const response = await fetch('https://boopeepapir.onrender.com/posts');
-//     if (!response.ok) {
-//         throw new Error('Fetch response is not ok!');
-//     }
-//     return response.json();
-// }
-
-// //VERIFICAR A API, ENTÃO VER SE ELE SÓ PEGA OS POSTS DO USUÁRIO
-// fetchPostsfromUser = async (UserID: string) => {
-//     const response = await fetch(`https://boopeepapir.onrender.com/posts/${UserID}`)
-//     if (!response.ok) {
-//         throw new Error('Fetch response is not ok!');
-//     }
-//     return response.json();
-// }
-
-// fetchPostsfromPost = async (postId: string) => {
-//     const response = await fetch(`https://boopeepapir.onrender.com/posts/${postId}`)
-//     if ("response.ok") {
-//         throw new Error('Fetch response is not ok!')
-//     }
-//     return response.json();
-// }

@@ -1,75 +1,93 @@
-import { useState } from "react"
-import { postRepository } from "../../Data Access/Repository/postRepository"
-import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters"
-import { Post } from "../../Service/Entities/postEntities"
+import { useState } from "react";
+import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters";
+import { Post } from "../../Service/Entities/postEntities";
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import UserPersistence from "../../Service/Persistence/UserPersistence";
+import { userRepository } from "../../Data Access/Repository/userRepository";
+import { User } from "../../Service/Entities/userEntities";
+import { postRepository } from "../../Data Access/Repository/postRepository";
 
 const userBlockStateController = () => {
-    //const [title, setTitle] = useState("")
-    const [createdAt, setCreatedAt] = useState(0)
-    const [UserID, setUserID] = useState("")
-    const [description, setDescription] = useState("")
-    const [postId, setPostId] = useState("")
-    const [local, setLocal] = useState("")
-    const [status, setStatus] = useState(0)
+  const [postsID, setPostsID] = useState<string[]>([]);
 
-    const postrepository: postRepository = new postRepository()
+  const pRepository: postRepository = new postRepository();
+  const [posts, setPosts] = useState<Post[]>([])
+  const uRepository: userRepository = new userRepository();
 
-    const handleFetchUserPosts = async (): Promise<{
-        valido: boolean, 
-        value?: number, 
-        erro?: string | Error, 
-        data?: Post[]
-    }> => {
-         try {
-            const req = await postrepository.getPostFromUser("0")
-            console.log(`Request: ${req}`);
-            if (req.valido === false) {
-                throw new Error("Bad Request");
-            }
-
-            const postData = req.data as Post[]
-
-            let posts: Post[] = []
-            postData.forEach(post => {
-                const newPost = new Post(
-                    post.UserID, 
-                    post.description, 
-                    post.local, 
-                    post.postId, 
-                    post.status
-                )
-
-                posts.push(newPost)
-            });
-
-            if (posts[0] instanceof Post) {
-                return { valido: true, value: 200, data: posts };
-            }
-
-            throw new Error('Nenhum post encontrado.')
-        } catch (error) {
-            console.log("handleFetchUserPosts respondeu com ERRO!")
-
-            if (error instanceof Error) {
-                if (error.message === "Unauthorized") {
-                  return { valido: false, value: 401, erro: error };
-                } else if (error.message === "Bad Request") {
-                  return { valido: false, value: 400, erro: error };
-                }
-            }
-              return { valido: false, value: 500, erro: "Internal Server Error" };
-        }
+  const GetPostID = async (): Promise<IReturnAdapter> => {
+    try {
+      const email = await GetOnStorage("email");
+      const req = await uRepository.getUser(email.info, "");
+      if (req.val === false) {
+        throw new Error(req.erro as string);
+      }
+      const userData = req.data as User;
+      const displayName = req.data.displayName as string;
+      const GottenInfo = new User({
+        displayName: displayName,
+        email: userData.email,
+        uid: userData.uid,
+        postID: userData.postID,
+        chatID: userData.chatID,
+        course: userData.course,
+        shift: userData.shift,
+        description: userData.description,
+      });
+      if (GottenInfo.postID.length !== 0) {
+        setPostsID(GottenInfo.postID);
+      }
+      console.log(`postsID: ${postsID}`);
+      return { val: true, data: "Usuário encontrado" };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { val: false, erro: error.message };
+      }
+      return { val: false, erro: "Internal Server Error" };
     }
+  };
 
-    return {
-        createdAt,
-        UserID, 
-        description, 
-        postId, 
-        local, 
-        status, 
-        handleFetchUserPosts
-    };
-}
+  const handleFetchUserPosts = async (
+    postsID: string[]
+  ): Promise<IReturnAdapter> => {
+    try {
+      let postsData: Post[] = []
+      postsID.forEach(async (postID) => {
+        const req = await pRepository.getPostFromUser(postID);
+        if (req.valido === false) {
+          throw new Error("Bad Request");
+        }
+        const post = req.data as unknown as Post;
+        const newPost = new Post(
+          post.UserID,
+          post.description,
+          post.local,
+          post.postId,
+          post.status,
+          post.createdAt
+        );
+        postsData.push(newPost);
+      });
+      setPosts(postsData)
+      return { val: true, data: postsData };
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Unauthorized") {
+          return { val: false, erro: error };
+        } else if (error.message === "Bad Request") {
+          return { val: false, erro: error };
+        }
+      }
+      return { val: false, erro: "Internal Server Error" };
+    }
+  };
+  
 
-export { userBlockStateController }
+  return {
+    posts,
+    GetPostID,
+    handleFetchUserPosts,
+  };
+};
+
+export { userBlockStateController };
