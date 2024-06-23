@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
@@ -21,28 +21,68 @@ const contacts: Contact[] = [
   { id: 7, name: 'Jonathan', status: 'Offline' },
 ];
 
+
+interface AuthContextType {
+  isAdmin: boolean;
+  setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAdmin, setIsAdmin] = useState(true); 
+
+  return (
+    <AuthContext.Provider value={{ isAdmin, setIsAdmin }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
 const ContactList: React.FC = () => {
+  const { isAdmin } = useAuth(); 
+
+  if (!isAdmin) {
+    return null; 
+  }
+
   return (
     <>
-    <HeaderBar whatScreen='feedchat'/>
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Mensagens</Text>
-      {contacts.map((contact) => (
-        <Link href={"./ChatApp"} asChild>
-        <TouchableOpacity key={contact.id} style={styles.contactContainer}>
-          <View style={styles.contact}>
-            <Text style={styles.contactName}>
-              <Ionicons name="person" size={24} color="#400096" style={{ marginRight: 10 }} />
-              {contact.name}
-            </Text>
-            <Text style={styles.contactStatus}>{contact.status}</Text>
-          </View>
-        </TouchableOpacity>
-        </Link>
-      ))}
-    </ScrollView>
-    <FooterBar whatScreen='chat'/>
+      <HeaderBar whatScreen='chat' />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Mensagens</Text>
+        {contacts.map((contact) => (
+          <Link href={"./ChatApp"} asChild key={contact.id}>
+            <TouchableOpacity style={styles.contactContainer}>
+              <View style={styles.contact}>
+                <Text style={styles.contactName}>
+                  <Ionicons name="person" size={24} color="#400096" style={{ marginRight: 10 }} />
+                  {contact.name}
+                </Text>
+                <Text style={styles.contactStatus}>{contact.status}</Text>
+              </View>
+            </TouchableOpacity>
+          </Link>
+        ))}
+      </ScrollView>
+      <FooterBar whatScreen='chat' />
     </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <ContactList />
+    </AuthProvider>
   );
 };
 
@@ -89,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContactList;
+export default App;
