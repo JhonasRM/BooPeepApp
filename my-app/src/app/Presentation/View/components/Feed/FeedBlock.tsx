@@ -13,41 +13,28 @@ import ContainerOptions from "../ContainerOptions";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
-import React, { DependencyList, SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
+import { User } from "../../../../Service/Entities/userEntities";
 
 const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/501/300',
 'https://picsum.photos/502/300',
 'https://picsum.photos/503/300']
 
-type Props = {
-    isTouched?: any
-    pressedEdit?: any
-    stopEdit?: any
-    postId: any
-    reloadGET: any
-    reloadResponse: any
-}
-
-export function FeedQuery(props: Props) {
+export function FeedQuery() {
     const {
-        createdAt, 
-        UserID, 
-        description, 
-        postId, 
-        local, 
-        status, 
+        handleFeedInfo,
         handleFeedFetch
     } = feedStateController()
 
-    const [data, setData] = useState<Post[] | undefined>([])
+    const [data, setData] = useState<{posts: Post[], users: User[]}>()
+    const [dataFeed, setDataFeed] = useState([])
     const [erro, setErro] = useState(false)
     const [loading, setLoading] = useState(true)
     
     const [erroFetch, setErroFetch] = useState("")
-    const [effectController, setEffectController] = useState<DependencyList | undefined>([])
 
     useEffect(() => {
         console.log("useEffect is running")
@@ -59,17 +46,13 @@ export function FeedQuery(props: Props) {
             setLoading(true)
             const response = await handleFeedFetch()
 
-            if (response.valido === false) {
-                setErro(true)
+            if (response.val === false) {
                 throw new Error(response.erro as string);
             }
 
-            if (response.valido === true) {
-                console.log(`${response.value}. GET realizado com sucesso!`);
-
-
-                setData(response.data)                
-                console.log(`Data from setData: ${data}`)
+            if (response.val === true) {
+                setData(response.data.posts)
+                console.log(data)
             }
 
         } catch (error) {
@@ -79,6 +62,7 @@ export function FeedQuery(props: Props) {
             } else {
                 setErroFetch('An unknown error occurred')
             }
+            setErro(true)
         }
         finally {
             setLoading(false)
@@ -88,21 +72,6 @@ export function FeedQuery(props: Props) {
     console.log(`FeedBlock Response: ${data}`)
     console.log(`erro Response: ${erro}`)
     }, []);
-
-    // useEffect(() => {
-    //     if (props.reloadGET == true) {
-    //         setEffectController(undefined)
-    //         setEffectController([])
-    //         props.reloadResponse(true)
-    //     }
-    // })
-
-    const handleContainerOptionsEditResponse = (response: any) => {
-        props.isTouched(response)
-    }
-    useEffect(() => {
-        console.log(data)
-    }, [data])
 
     return (
         <>
@@ -117,18 +86,18 @@ export function FeedQuery(props: Props) {
                 </>
             ) : (
             <>
-            {data && data.map((item: Post) => (
+            {data?.posts && data.posts.map((item: any) => (
                 <View style={styles.feedblock}>
                     <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
                         style={styles.user}/>
 
                         <View>
-                            <Text style={styles.usertext}>{item.user?.name} {item.user?.nickname}</Text>
-                            <Text style={styles.userinfo}>{item.user?.course} - {item.user?.course}</Text>
+                            <Text style={styles.usertext}>{item.name} {item.nickname}</Text>
+                            <Text style={styles.userinfo}>2°Lógistica - Noite </Text>
                         </View>
 
-                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={item.postId}/>
+                        <ContainerOptions style={styles.options} postID={undefined}/>
                     </View>
 {/*                     
                     <Text style={[styles.titletext]}>
@@ -144,31 +113,20 @@ export function FeedQuery(props: Props) {
 
                 <View style={styles.endline}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                        { item.status == 0 ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Perdido</Text>
-                        </>
-                        ) : item.status == 1 ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Achado</Text>
-                        </>
-                        ) : item.status == 2 ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Devolvido</Text>
-                        </>
+                        { item.status == "0" ? (
+                        <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                        ) : item.status == "1" ? (
+                        <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                        ) :item.status == "2" ? (
+                        <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
                         ) : (
-                        <>
-                            <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                            <Text>Status: {item.status}</Text>
-                        </>
+                        <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
                         )} 
+                        <Text>Status: {item.status}</Text>
                         </View>
 
                         <View style={{marginHorizontal: wp(2)}}>
-                            <Text>Criado em: {item.createdAt}</Text>
+                            <Text>Criado em: {item.createdAt.toString}</Text>
                         </View>
 
                         <CommentButton btnStyle={styles.chaticon} />
@@ -187,7 +145,7 @@ export function FeedQuery(props: Props) {
 const FeedBlock = () => {
     return (
         <View style={styles.container}>
-            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId} reloadGET={props.reloadGET} reloadResponse={props.reloadResponse}/>
+            <FeedQuery />
         </View>
     )
 }
@@ -269,9 +227,6 @@ const {styles} = StyleSheet.create ({
         // marginRight: wp(1),
         flexDirection: "row",
         alignItems: "center",
-    },
-    statusText: {
-        marginTop: 0.2
     },
     time: {
         marginLeft: 4,

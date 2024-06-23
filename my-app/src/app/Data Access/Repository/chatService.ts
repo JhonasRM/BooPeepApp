@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Chat } from "../Entities/chatEntities";
-import { Message } from "../Entities/messageEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import { MessagesSquare } from "@tamagui/lucide-icons";
+import { Chat } from "../../Service/Entities/chatEntities";
+import { Message } from "../../Service/Entities/messageEntities";
 
 export class chatService {
    
