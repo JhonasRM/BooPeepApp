@@ -16,14 +16,7 @@ export class postServices {
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
-        // const Posts = {
-        //     createdAt: post.createdAt,
-        //     UserID: post.UserID,
-        //     description: post.description,
-        //     postId: post.postId,
-        //     local: post.local,
-        //     status: post.status,
-        // };
+
 
         try {
             console.log("getPosts foi chamado!");
