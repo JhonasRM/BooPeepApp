@@ -9,6 +9,9 @@ type Props = {
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postId: any
+    reloadGET: any
+    reloadResponse: any
 }
 
 const FeedArea = (props: Props) => {
@@ -19,7 +22,7 @@ const FeedArea = (props: Props) => {
     return (
         <View style={styles.feed} dataSet={{ media: ids.feed }}>
             <ScrollView >
-                <FeedBlock isTouched={handleFeedBlockEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit}/>
+                <FeedBlock isTouched={handleFeedBlockEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId} reloadGET={props.reloadGET} reloadResponse={props.reloadResponse}/>
             </ScrollView>
         </View>
     )

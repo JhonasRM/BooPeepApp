@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { postServices } from "../../Service/API/postService";
 import { postStateAndSetters } from "../../utils/Interfaces/postStateAndSetters";
 import { Post } from "../../Service/Entities/postEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
@@ -7,11 +6,12 @@ import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import UserPersistence from "../../Service/Persistence/UserPersistence";
 import { userRepository } from "../../Data Access/Repository/userRepository";
 import { User } from "../../Service/Entities/userEntities";
+import { postRepository } from "../../Data Access/Repository/postRepository";
 
 const userBlockStateController = () => {
   const [postsID, setPostsID] = useState<string[]>([]);
 
-  const postService: postServices = new postServices();
+  const pRepository: postRepository = new postRepository();
   const [posts, setPosts] = useState<Post[]>([])
   const uRepository: userRepository = new userRepository();
 
@@ -53,7 +53,7 @@ const userBlockStateController = () => {
     try {
       let postsData: Post[] = []
       postsID.forEach(async (postID) => {
-        const req = await postService.getPostFromUser(postID);
+        const req = await pRepository.getPostFromUser(postID);
         if (req.valido === false) {
           throw new Error("Bad Request");
         }

@@ -12,11 +12,17 @@ import { createPostStateController } from "../../Controllers/createPostStateCont
 import { AntDesign } from '@expo/vector-icons';
 import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
 import ContainerOptions from "./ContainerOptions";
+import { Post } from "../../../Service/Entities/postEntities";
+import { feedStateController } from "../../Controllers/feedStateController";
+import { User } from "../../../Service/Entities/userEntities";
 
 type Props = {
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postId: any
+    reloadGET: any
+    reloadResponse: any
 }
 
 const CreatePost = (props: Props) => {
@@ -25,7 +31,8 @@ const CreatePost = (props: Props) => {
         local,
         handleFieldChange,
         //handleCheckDescriptionChange,
-        handleCreatePost
+        handleCreatePost,
+        UpdatePost
     } = createPostStateController()
     
     const [erroA, setErroA] = useState("");
@@ -37,6 +44,12 @@ const CreatePost = (props: Props) => {
     const [image, setImage] = useState<string | null>(null)
     const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
     const [startEdit, isEditStarting] = useState<boolean | null>(false)
+
+    const [postData, setPostData] = useState({
+        UserID: "",
+        description: "",
+        local: ""
+    });
 
     const handleTouch = () => {
         setIsTouched(true)
@@ -95,12 +108,44 @@ const CreatePost = (props: Props) => {
         console.log(erroB);
     }
 
+    const handlePostChange = (name: any, value: any) => {
+        setPostData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+        console.log(postData);
+    };
+
+    const handleUpdate = async () => {
+        console.log("Dados do post atualizados:", postData);
+        const newPost = new Post (
+            postData.UserID, postData.description, postData.local
+        )
+
+        //post, newPost, props.postID
+        const updatePost = await UpdatePost("ble3jZht5ruroAflmDRA", newPost);
+        console.log(`postId: ${props.postId}`)
+        if (updatePost.val === false) {
+            setErroCreatePost(updatePost.erro as string);
+            console.log(`handleUpdate respondeu com ERRO! ${erroCreatePost}`)
+        } else if (updatePost.val === true) {
+            console.log("handleUpdate respondeu com SUCESSO!")
+            handleExit()
+            props.reloadGET(true)
+        }
+    }
+
     useEffect(() => {
         console.log(props.pressedEdit)
 
         if (props.pressedEdit == true) {
             isEditStarting(true)
             setIsTouched(true)
+        }
+
+        if (props.reloadResponse == true) {
+            props.reloadGET(false)
         }
     })
 
@@ -189,21 +234,17 @@ const CreatePost = (props: Props) => {
                     />  */}
 
                     <TextInput 
-                    placeholder={"Me diga o que ocorreu..."} 
+                    placeholder={postData.description} 
                     placeholderTextColor={"#303030"}
                     multiline
                     numberOfLines={10}
                     autoCorrect={false}
-                    onChangeText={async (description) => {
-                        const handle = await handleFieldChange("description", description)
-                        if (handle.valido === false) {
-                            setErroB(handle.erro as string);
-                        } else if (handle.valido === true) {
-                            setErroB("")
-                        }
+                    onChangeText={(text: any) => {
+                        handlePostChange("description", text)
                     }}
                     style={styles.textInput}
                     />
+
                     </View>
                 ) : (null)
                 }
@@ -211,7 +252,7 @@ const CreatePost = (props: Props) => {
                     <View style={styles.buttonView}>
                         { startEdit == true ? (
                         <>
-                        <TouchableOpacity onPress={handleSendPost} style={styles.postbtn}>
+                        <TouchableOpacity onPress={handleUpdate} style={styles.postbtn}>
                             <Text style={styles.btntext}>Alterar</Text>
                         </TouchableOpacity>
 

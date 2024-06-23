@@ -101,7 +101,7 @@ const UserBlockComponent: React.FC<UserBlockComponentProps> = ({ posts, erro, lo
                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
                             style={styles.user} />
-                        <ContainerOptions style={styles.options} />
+                        <ContainerOptions style={styles.options} postID={undefined} />
                     </View>
                     <Text style={styles.titletext}>
                         Perdi o meu Relogio :( {/*{item.title}*/}

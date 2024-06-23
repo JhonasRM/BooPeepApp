@@ -13,7 +13,7 @@ import ContainerOptions from "../ContainerOptions";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
 import { Entypo } from '@expo/vector-icons';
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { DependencyList, SetStateAction, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 
@@ -22,7 +22,16 @@ const photos: string[] = ['https://picsum.photos/500/300',
 'https://picsum.photos/502/300',
 'https://picsum.photos/503/300']
 
-export function FeedQuery() {
+type Props = {
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+    postId: any
+    reloadGET: any
+    reloadResponse: any
+}
+
+export function FeedQuery(props: Props) {
     const {
         createdAt, 
         UserID, 
@@ -38,6 +47,7 @@ export function FeedQuery() {
     const [loading, setLoading] = useState(true)
     
     const [erroFetch, setErroFetch] = useState("")
+    const [effectController, setEffectController] = useState<DependencyList | undefined>([])
 
     useEffect(() => {
         console.log("useEffect is running")
@@ -79,6 +89,17 @@ export function FeedQuery() {
     console.log(`erro Response: ${erro}`)
     }, []);
 
+    // useEffect(() => {
+    //     if (props.reloadGET == true) {
+    //         setEffectController(undefined)
+    //         setEffectController([])
+    //         props.reloadResponse(true)
+    //     }
+    // })
+
+    const handleContainerOptionsEditResponse = (response: any) => {
+        props.isTouched(response)
+    }
     useEffect(() => {
         console.log(data)
     }, [data])
@@ -107,7 +128,7 @@ export function FeedQuery() {
                             <Text style={styles.userinfo}>{item.user?.course} - {item.user?.course}</Text>
                         </View>
 
-                        <ContainerOptions style={styles.options}/>
+                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={item.postId}/>
                     </View>
 {/*                     
                     <Text style={[styles.titletext]}>
@@ -124,15 +145,26 @@ export function FeedQuery() {
                 <View style={styles.endline}>
                         <View style={[styles.status, {marginHorizontal: wp(2)}]}>
                         { item.status == 0 ? (
-                        <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Perdido</Text>
+                        </>
                         ) : item.status == 1 ? (
-                        <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Achado</Text>
+                        </>
                         ) : item.status == 2 ? (
-                        <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
+                            <Text style={styles.statusText}>Status: Devolvido</Text>
+                        </>
                         ) : (
-                        <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                        <>
+                            <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
+                            <Text>Status: {item.status}</Text>
+                        </>
                         )} 
-                        <Text>Status: {item.status}</Text>
                         </View>
 
                         <View style={{marginHorizontal: wp(2)}}>
@@ -155,7 +187,7 @@ export function FeedQuery() {
 const FeedBlock = () => {
     return (
         <View style={styles.container}>
-            <FeedQuery />
+            <FeedQuery isTouched={props.isTouched} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postId={props.postId} reloadGET={props.reloadGET} reloadResponse={props.reloadResponse}/>
         </View>
     )
 }
@@ -237,6 +269,9 @@ const {styles} = StyleSheet.create ({
         // marginRight: wp(1),
         flexDirection: "row",
         alignItems: "center",
+    },
+    statusText: {
+        marginTop: 0.2
     },
     time: {
         marginLeft: 4,

@@ -3,7 +3,7 @@ import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage"
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter"
 
 const ContaConfigStateController = () => {
-    const userRep =  new  userRepository()
+    const userRep =  new userRepository()
     const DeleteUser = async(): Promise<IReturnAdapter> => {
         const emailGet =  await GetOnStorage('email')
         try {

@@ -5,6 +5,8 @@ import UserBlock from './UserBlock';
 import { UserScreenStateController } from '../../../Controllers/UserScreenStateController';
 import LoadingBox from '../LoadingIcon';
 import ErrorMessage from '../ErrorMessage';
+import MyCommentsBlock from './MyCommentsBlock';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const UserProfileScreen: React.FC = () => {
@@ -16,11 +18,16 @@ const UserProfileScreen: React.FC = () => {
   } = UserScreenStateController();
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(true)
+  const [changeSection, setChangeSection] = useState(false);
+
+  const handleChange = () => {
+    setChangeSection(changeSection => !changeSection)
+  }
 
   useEffect(() => {
     const getInfo = async() => {
       const get = await GetUserInfo();
-      if(get.val=== false){
+      if(get.val === false){
         setErro(get.erro as string)
         setLoading(false)
       }
@@ -39,7 +46,7 @@ const UserProfileScreen: React.FC = () => {
         <View style={styles.container}>
             { loading ? (
                 <>
-                    <LoadingBox whatPage="Comment" />
+                    <LoadingBox whatPage="Feed" />
                 </>
             ) : erro ? (
                 <>
@@ -77,9 +84,32 @@ const UserProfileScreen: React.FC = () => {
           </View>
         </View>
         <View>
+        <View style={styles.queryContainer}>
+          { changeSection == false ? (
+            <>
+            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Minhas postagens</Text>
+            <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+              <AntDesign name="stepforward" size={30} color="black" />
+            </TouchableOpacity>
+            </>
+          ) : (
+            <>
+            <Text style={[styles.additionalInfoTitle, styles.additionalInfoContainer]}>Meus comentários</Text>
+            <TouchableOpacity style={styles.postsCommentsBtn} onPress={handleChange}>
+              <AntDesign name="stepbackward" size={30} color="black" />
+            </TouchableOpacity>
+            </>
+          )} 
           <Text style={styles.userPostBlock}></Text>
           <UserBlock postsID={postsID}/>
         </View>
+          { changeSection == false ? (
+            <UserBlock postsID={[]} />  
+          ) : (
+            <MyCommentsBlock />
+          )} 
+          {/* <UserBlock />   */}
+      </View>
       </ScrollView>
     </>
     )}
@@ -121,14 +151,16 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'flex-start',
     marginBottom: 20,
-    paddingHorizontal: 20,
-  },
-  profileInfo: {
-    backgroundColor: 'white',
-    padding: 20,
+    marginTop: 10,
+    marginHorizontal: 20,
+    //paddingRight: 40,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',
+    backgroundColor: 'white',
+  },
+  profileInfo: {
+    padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -197,6 +229,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  queryContainer: {
+    flexDirection: 'row'
+  },
+  postsCommentsBtn: {
+    position: 'absolute',
+    right: 0,
+    paddingRight: 20
   }
 });
 

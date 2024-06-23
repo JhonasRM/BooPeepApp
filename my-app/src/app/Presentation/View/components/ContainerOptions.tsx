@@ -2,15 +2,19 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import { Image, StyleProp, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle, Modal, Pressable } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { containerOptionsStateController } from "../../Controllers/containerOptionsStateController";
 
 interface Props {
     style?: StyleProp<ViewStyle> //"Isso será usado para receber o estilo do Parent!" - Bolt
     isTouched?: any
     pressedEdit?: any
     stopEdit?: any
+    postID: any
 }
 
 const ContainerOptions = (props: Props) => {
+    const {DeletePost} = containerOptionsStateController()
+
     const [isPress, setIsPress] = useState(false)
     const [pressEdit, setPressEdit] = useState(false)
 
@@ -19,30 +23,40 @@ const ContainerOptions = (props: Props) => {
     }
 
    const handleExit = () => {
-	setIsPress(false)
+	    setIsPress(false)
    }
 
    const handlePostFormEditDenial = (response: any) => {
-    props.stopEdit(response)
+        props.stopEdit(response)
    }
 
    //veja isso
    const EditHandle = () => {    
-    //props.pressedEdit = pressEdit
+        //props.pressedEdit = pressEdit
 
-    //props.isTouched(true)
-    props.pressedEdit(true)
-    handlePostFormEditDenial
+        //props.isTouched(true)
+        props.pressedEdit(true)
+        handlePostFormEditDenial
+   }
 
-    // useEffect(() => {
-    //     props.isTouched(true);
-    // }, [])
+   
+
+   const DeleteHandle = async() => {
+        try {
+            const deletePost = await DeletePost(props.postID)
+            if (deletePost.val === false) {
+                throw new Error(deletePost.erro as string)
+            }
+        } catch (error) {
+            console.log(`DeleteHandle respondeu com ERRO! ${error}`)
+        }
+        console.log(`Post tentando ser deletado: ${props.postID}`)
    }
 
    useEffect(() => {
-    if (props.stopEdit == true) {
-        props.pressedEdit(false)
-    }
+        if (props.stopEdit == true) {
+            props.pressedEdit(false)
+        }
    })
 
     //if/else based on click boolean
@@ -75,7 +89,7 @@ const ContainerOptions = (props: Props) => {
                     <Text style={[styles.btnText]}>Editar Postagem</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={styles.optioncontainer}>
+                <TouchableOpacity style={styles.optioncontainer} onPress={DeleteHandle}>
                     <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
                     <Text style={[styles.btnText, {color: "red"}]}>Deletar Postagem</Text>
                 </TouchableOpacity>
