@@ -11,13 +11,13 @@ export class userRepository {
   private endpointestlogin: string;
   private endpointests: string;
   constructor() {
-    this.endpointuser = 'https://boopeepapir.onrender.com/user',
-    this.endpointlogin = 'https://boopeepapir.onrender.com/loginuser',
-    this.endpointreset = 'https://boopeepapir.onrender.com/resetpwd',
-    this.endpointest = 'https://boopeepapir.onrender.com/user',
-    this.endpointests = 'https://boopeepapir.onrender.com/users',
-    this.endpointestlogin = 'https://boopeepapir.onrender.com/loginuser',
-    this.endpointestreset = 'https://boopeepapir.onrender.com/resetpwd'
+    this.endpointuser = 'http://localhost:3100/user',
+    this.endpointlogin = 'http://localhost:3100/loginuser',
+    this.endpointreset = 'http://localhost:3100/resetpwd',
+    this.endpointest = 'http://localhost:3100/user',
+    this.endpointests = 'http://localhost:3100/users',
+    this.endpointestlogin = 'http://localhost:3100/loginuser',
+    this.endpointestreset = 'http://localhost:3100/resetpwd'
   };
 
   async cadastro(user: User): Promise<IReturnAdapter> {

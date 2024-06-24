@@ -56,7 +56,8 @@ const userBlockStateController = () => {
         const req = await pRepository.getPostFromUser(postID);
         if (req.valido === false) {
           throw new Error("Bad Request");
-        }
+        } else {
+          console.log(req.data)
         const post = req.data as unknown as Post;
         const newPost = new Post(
           post.UserID,
@@ -67,20 +68,16 @@ const userBlockStateController = () => {
           post.createdAt
         );
         postsData.push(newPost);
-      });
+      }});
       setPosts(postsData)
       return { val: true, data: postsData };
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === "Unauthorized") {
-          return { val: false, erro: error };
-        } else if (error.message === "Bad Request") {
-          return { val: false, erro: error };
+    }
+     catch (error) {
+      console.log(error)
+          return { val: false, erro: error as string };
         }
       }
-      return { val: false, erro: "Internal Server Error" };
-    }
-  };
+  
   
 
   return {

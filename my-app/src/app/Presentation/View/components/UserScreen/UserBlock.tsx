@@ -52,8 +52,7 @@ const UserBlock = (props: UserBlockProps) => {
                 } else {
                     setErroFetch('An unknown error occurred');
                 }
-            } finally {
-                setLoading(false);
+                setLoading(false)
             }
         };
         incomingData();

@@ -10,8 +10,10 @@ import { router } from "expo-router";
 import { ChatMessageHelper } from "../../utils/Helpers/ChatMessagesHelper";
 import { removeItemFromStorage } from "../../Data Access/Storage/removeItemFromStorage";
 import SetOnStorage from "../../Data Access/Storage/SetOnStorage";
+import { userRepository } from "../../Data Access/Repository/userRepository";
 
 const ChatStateController = () => {
+  const uRepository = new userRepository()
   const ChatRepository = new chatRepository();
   const chatPersistence = ChatPersistence.getInstance();
   const getchat = async (): Promise<IReturnAdapter> => {
@@ -26,6 +28,7 @@ const ChatStateController = () => {
         }
         const chatData = new Chat(uid.info, settingChat.data.chatID as string);
         await chatPersistence.setchat(chatData)
+      const req = uRepository.update("jhonas.rodrigues@gmail.com", 'chatID', chatData.chatid) 
         return { val: true, data: chatData };
       } else {
       const MyChat = new Chat(uid.info, chatid.info)
@@ -39,6 +42,11 @@ const ChatStateController = () => {
         chatData.chatid,
         chatData.messages
       );
+      const reqUpUserAdmin = await uRepository.update("jhonas.rodrigues@gmail.com", 'chatID', GottenInfo.chatid) 
+      if(reqUpUserAdmin.val === false){
+        throw new Error(reqUpUserAdmin.erro as string)
+      }
+
       return { val: true, data: GottenInfo };
     }
     } catch (error) {

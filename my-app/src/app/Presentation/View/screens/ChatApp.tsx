@@ -82,10 +82,10 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     const readChat = async() =>{
-      const read = await readMessages()
+    try {  const read = await readMessages()
       if(read.val === false){
         throw new Error(read.erro as string)
-      }
+      } else {
       const myChat = read.data;
       setChat(read.data as Chat);
       let MyMessages: ChatMessageHelper[] = [];
@@ -96,6 +96,10 @@ export default function App(): JSX.Element {
         MyMessages.push(newMesage);
       });
       setMessages(MyMessages);
+    }
+    } catch(error){
+      console.log(error)
+    }
     }
     readChat()
   }, [isUpdated])

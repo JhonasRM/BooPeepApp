@@ -10,24 +10,14 @@ export class postRepository {
     private endpointusers: string
 
     constructor() {        
-        // this.endpointposts = "https://special-couscous-g97g6xgv4jxh9w97-3000.app.github.dev//posts"
-        this.endpointposts = "https://boopeepapir.onrender.com/posts"
-        this.endpointpost = "https://boopeepapir.onrender.com/post"
+        this.endpointposts = "http://localhost:3100/posts"
+        this.endpointpost = "http://localhost:3100/post"
         this.endpointest = "http://localhost:3000/post"
-        this.endpointests = "http://localhost:3000/posts"
-        this.endpointusers = "https://boopeepapir.onrender.com/users"
+        this.endpointests = "https://boopeepapir.onrender.com/posts"
+        this.endpointusers = "http://localhost:3100/users"
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {
-        // const Posts = {
-        //     createdAt: post.createdAt,
-        //     UserID: post.UserID,
-        //     description: post.description,
-        //     postId: post.postId,
-        //     local: post.local,
-        //     status: post.status,
-        // };
-
         try {
             console.log("getPosts foi chamado!");
             const resp = await axios.get(this.endpointposts, {
@@ -85,8 +75,6 @@ export class postRepository {
         }
     }
 
-    // ------------------------------------------------------------------------------------ //
-
     async getPostFromUser(param: string): Promise<{ 
         valido: boolean, 
         value?: number, 
@@ -103,7 +91,7 @@ export class postRepository {
                     "Content-Type": "application/json;charset=UTF-8"
                 },
                 params: {
-                    UserID: String(param)
+                    postId: String(param)
                 }
             });
 
