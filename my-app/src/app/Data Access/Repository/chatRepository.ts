@@ -9,7 +9,7 @@ export class chatRepository {
   private endpointchat: string;
 
   constructor() {
-    this.endpointchat = "http://localhost:3100/chat"
+    this.endpointchat = "https://https://boopeepapir.onrender.com/chat"
   };
 
   async setchat(uid: string): Promise< IReturnAdapter> {
