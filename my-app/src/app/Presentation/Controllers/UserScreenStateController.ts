@@ -4,6 +4,7 @@ import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import UserPersistence from "../../Service/Persistence/UserPersistence";
 import { userRepository } from "../../Data Access/Repository/userRepository";
+import ChatPersistence from "../../Service/Persistence/chatPersistence";
 
 const UserScreenStateController = () => {
   const defaultUser = new User({
@@ -37,6 +38,8 @@ const UserScreenStateController = () => {
           shift: userData.shift, 
           description: userData.description 
         });
+        const chat = ChatPersistence.getInstance()
+        chat.setChatID(userData.chatID)
         MyUser.setUser(GottenInfo);
         setUser(GottenInfo);
         setPostsID(req.data.postsID)
