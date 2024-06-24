@@ -25,7 +25,7 @@ type UserBlockProps = {
 }
 
 const UserBlock = (props: UserBlockProps) => {
-    const { handleFetchUserPosts } = userBlockStateController();
+    const { posts, handleFetchUserPosts } = userBlockStateController();
     const [data, setData] = useState<Post[]>([]);
     const [erro, setErro] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -44,7 +44,11 @@ const UserBlock = (props: UserBlockProps) => {
                     throw new Error(getPosts.erro as string);
                 }
                 const postData: Post[] = getPosts.data as Post[];
-                setData(postData);
+                console.log('ele fex dnv:')
+                console.log(postData)
+                setData(posts);
+                setLoading(false)
+
             } catch (error) {
                 console.error("Erro ao realizar requisição:", error);
                 if (error instanceof Error) {
@@ -56,18 +60,8 @@ const UserBlock = (props: UserBlockProps) => {
             }
         };
         incomingData();
-    }, [props.postsID]);
-    useEffect(() => {
-        console.log(data)
-        if (data.length !== 0|| erro) {
-            setIsDataFetched(true);
-        }
-    }, [data]);
-    if(isDataFetched === false){
-        return(
-            <Text>Nenhuma postagem foi encontrada</Text>
-        )
-    }
+    }, [props.postsID])
+    
     return (
         <UserBlockComponent posts={data} erro={erro} loading={loading} erroFetch={`${erroFetch}`}/>
     )

@@ -10,9 +10,9 @@ import { postRepository } from "../../Data Access/Repository/postRepository";
 
 const userBlockStateController = () => {
   const [postsID, setPostsID] = useState<string[]>([]);
-
+  let postsData: Post[] = []
   const pRepository: postRepository = new postRepository();
-  const [posts, setPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<Post[]>(postsData)
   const uRepository: userRepository = new userRepository();
 
   const GetPostID = async (): Promise<IReturnAdapter> => {
@@ -51,12 +51,11 @@ const userBlockStateController = () => {
     postsID: string[]
   ): Promise<IReturnAdapter> => {
     try {
-      let postsData: Post[] = []
-      postsID.forEach(async (postID) => {
+      await postsID.forEach(async (postID) => {
         const req = await pRepository.getPostFromUser(postID);
         if (req.valido === false) {
           throw new Error("Bad Request");
-        } else {
+        }
           console.log(req.data)
         const post = req.data as unknown as Post;
         const newPost = new Post(
@@ -67,9 +66,9 @@ const userBlockStateController = () => {
           post.status,
           post.createdAt
         );
-        postsData.push(newPost);
-      }});
-      setPosts(postsData)
+        console.log('post criado: ', newPost)
+        await SettingPost(newPost)
+      });
       return { val: true, data: postsData };
     }
      catch (error) {
@@ -78,7 +77,10 @@ const userBlockStateController = () => {
         }
       }
   
-  
+   const SettingPost = (newPost: Post) => {
+    postsData.push(newPost);
+    console.log('postData: ', postsData)
+   }
 
   return {
     posts,
