@@ -4,13 +4,16 @@ import { postRepository } from "../../Data Access/Repository/postRepository"
 import { Post } from "../../Service/Entities/postEntities"
 import { User } from "../../Service/Entities/userEntities"
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage"
 
 const feedStateController = () => {
     const [posts, setPosts] = useState<Post[]>([])
     const [users, setUsers] = useState<User[]>([])
     const postrepository: postRepository = new postRepository()
+    const [loggedUser, setLoggedUser] = useState()
 
     const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
+        let myUser = await GetOnStorage('uid')
         try {
             const req = await postrepository.getPosts()
             console.log(`Post Request: ${req}`);
@@ -33,6 +36,8 @@ const feedStateController = () => {
 
             if (posts[0] instanceof Post) {
                 setPosts(posts)
+                setLoggedUser(myUser.info)
+                console.log(`Usuário Logado: ${loggedUser}`)
                 return { val: true, data: 'Posts encontrados' };
             }
             throw new Error('Nenhum post foi encontrado')
@@ -51,6 +56,7 @@ const feedStateController = () => {
 
     return {
         posts,
+        loggedUser,
         handleFeedFetch};
 };
 

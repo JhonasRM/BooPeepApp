@@ -16,6 +16,7 @@ import React, { DependencyList, SetStateAction, useEffect, useState } from "reac
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
 import ContainerOptions from "../ContainerOptions";
+import { GetOnStorage } from "../../../../Data Access/Storage/GetOnStorage";
 
 const photos: string[] = [
  'https://picsum.photos/500/300',
@@ -36,6 +37,7 @@ type Props = {
 export function FeedQuery(props: Props) {
     const {
         posts,
+        loggedUser,
         handleFeedFetch
     } = feedStateController()
 
@@ -120,7 +122,11 @@ export function FeedQuery(props: Props) {
                             <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
                         </View>
 
+                        { item.UserID === loggedUser ? (
+                        <>
                         <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={item.postId}/>
+                        </>
+                        ) : (null)}
                     </View>
                     
                     <Text style={[styles.titletext]}> 

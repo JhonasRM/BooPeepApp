@@ -236,7 +236,7 @@ export class postRepository {
 
     //----------------------------------------------------------------------------------------//
 
-    async updatePost(postID: string | undefined, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
+    async updatePost(postID: string, fieldToUpdate: string, newValue: string): Promise<IReturnAdapter> {
         const updateData = {
             postID: postID,
             fieldToUpdate: fieldToUpdate,
@@ -261,6 +261,7 @@ export class postRepository {
             console.log('updatePost respondeu com SUCESSO!')
             console.log(resp.data)
             return { val: true, data: resp.data }
+            
         } catch (error) {
             if (error instanceof Error) {
                 return { val: false, erro: error.message }
