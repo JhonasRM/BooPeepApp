@@ -1,16 +1,16 @@
 import { router } from "expo-router";
-import { chatService } from "../API/chatService";
-import { searchOnStorage} from "../../Data Access/Storage/GetOnStorage";
 import { Chat } from "../Entities/chatEntities";
 import { Message } from "../Entities/messageEntities";
+import { chatRepository } from "../../Data Access/Repository/chatRepository";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
 
 class ChatPersistence {
   private static instance: ChatPersistence;
-  private servicechat: chatService;
+  private ChatRepository: chatRepository;
   public chat: Chat | null = null;
 
   private constructor(){
-    this.servicechat = new chatService()
+    this.ChatRepository = new chatRepository()
   }
 
   public static getInstance(): ChatPersistence {
@@ -26,25 +26,26 @@ class ChatPersistence {
 
   public async getChat(): Promise<Chat| null>{
     if(this.chat === null){
-      const chatid = await searchOnStorage('chatID');
+      const chatid = await GetOnStorage('chatID');
       if(chatid.val === false){
         router.push('/')
       }
-        const req = await this.servicechat.getMessages(chatid.info);
+        const req = await this.ChatRepository.getMessages(chatid.info);
         if (req.val === false){
-          const uid = await searchOnStorage('uid')
-          const settingChat = await this.servicechat.setchat(uid.info)
+          const uid = await GetOnStorage('uid')
+          const settingChat = await this.ChatRepository.setchat(uid.info)
           if(settingChat.val === false){
             throw new Error(settingChat.erro as string)
           }
-          const chatData = new Chat(uid.info, '', settingChat.data as string)
+          const message = new Message(uid.info, '', '')
+          const chatData = new Chat(uid.info, [message] , settingChat.data as string)
         } else {
         const chatData = req.data as Chat;
        
         const GottenInfo = new Chat(
          chatData.uid,
-         chatData.chatid,
-         chatData.messages
+         chatData.messages,
+         chatData.chatid
    );
    
    

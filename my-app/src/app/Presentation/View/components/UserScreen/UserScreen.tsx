@@ -104,7 +104,7 @@ const UserProfileScreen: React.FC = () => {
           <UserBlock postsID={postsID}/>
         </View>
           { changeSection == false ? (
-            <UserBlock postsID={[]} />  
+            <UserBlock postsID={postsID} />  
           ) : (
             <MyCommentsBlock />
           )} 

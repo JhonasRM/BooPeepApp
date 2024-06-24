@@ -6,8 +6,8 @@ import { Message } from '../../../Service/Entities/messageEntities';
 import ChatPersistence from '../../../Service/Persistence/chatPersistence'
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { chatService } from '../../../Service/API/chatService';
 import { createMessageStateController } from '../../Controllers/MessageStateController';
+import { chatRepository } from '../../../Data Access/Repository/chatRepository';
 
 interface Messages {
   chatid: string;
@@ -28,11 +28,11 @@ export default function App(): JSX.Element {
     chatid
   } = createMessageStateController();
 
-  const chatServiceInstance = new chatService()
+  const ChatRpository = new chatRepository()
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const result = await chatServiceInstance.getMessages(chatid);
+      const result = await ChatRpository.getMessages(chatid);
       if (result.val) {
         setMessages(result.data);
       } else {

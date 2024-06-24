@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { chatValidator } from "../../Service/Validators/chatValidator";
-import { chatService } from "../../Service/API/chatService";
 import { Chat } from "../../Service/Entities/chatEntities";
 import  {Message} from "../../Service/Entities/messageEntities"
-import { searchOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 import ChatPersistence from "../../Service/Persistence/chatPersistence";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { chatRepository } from "../../Data Access/Repository/chatRepository";
 
 const ChatStateController = () =>{
 
@@ -13,8 +13,9 @@ const ChatStateController = () =>{
    
 
         try {
-            const chatServiceInstance = new chatService();
-            const req = await chatServiceInstance.getMessages(chat)
+          const chatID = await GetOnStorage('chatID')
+            const chatRepositoryInstance = new chatRepository();
+            const req = await chatRepositoryInstance.getMessages(chatID.info)
             console.log(`Request: ${req}`);
             if (req.val === false) {
                 throw new Error("Bad Request");
@@ -33,18 +34,11 @@ const ChatStateController = () =>{
 
                 chat.push(newMessage)
             });
-
+            const newChat = new Chat(chatData[0].UserID, chat, chatID.info)
             const MyChat = ChatPersistence.getInstance()
-            MyChat.setchat(newMessage)
+            MyChat.setchat(newChat)
             return { val: true, data: 'ChatID criado com sucesso' };
-          } catch (error) {
-            if (error instanceof Error) {
-                return { val: false, erro: error };
-            }
-            return { val: false, erro: "Internal Server Error" };
-          }
-
-        } catch (error) {
+          }catch (error) {
             console.log("setchat respondeu com ERRO!")
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {

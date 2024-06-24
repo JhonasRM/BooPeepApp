@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { Message } from "../../Service/Entities/messageEntities";
 import {User} from "../../Service/Entities/userEntities"
-import { searchOnStorage } from "../../Data Access/Storage/GetOnStorage";
 import { chatValidator } from "../../Service/Validators/chatValidator";
-import { chatService} from "../../Service/API/chatService";
 import { ChatStateAndSetters } from "../../utils/Interfaces/ChatStateAndSetters";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { chatRepository } from "../../Data Access/Repository/chatRepository";
 
 
 const createMessageStateController = () =>{
@@ -46,7 +46,7 @@ const createMessageStateController = () =>{
     }
    
     const checkChatExistence = (): boolean => {
-        const existingChat = searchOnStorage('chatid') as unknown as string;
+        const existingChat = GetOnStorage('chatid') as unknown as string;
         return existingChat ? true : false;
     };
  
@@ -60,11 +60,11 @@ const createMessageStateController = () =>{
         }
 
 
-        const uid = searchOnStorage('uid') as unknown as string
+        const uid = GetOnStorage('uid') as unknown as string
         setUserID(uid)
-        const chatid = searchOnStorage('uid') as unknown as string
+        const chatid = GetOnStorage('uid') as unknown as string
         setchatid(chatid)
-        const displayname = searchOnStorage('uid') as unknown as string
+        const displayname = GetOnStorage('uid') as unknown as string
         setdisplayname(displayname)
     
       
@@ -78,9 +78,9 @@ const createMessageStateController = () =>{
 
         try {
             console.log(message);
-            const chatServiceInstance = new chatService();
+            const ChatRepository = new chatRepository();
 
-            const req = await chatServiceInstance.createmessage(message);
+            const req = await ChatRepository.createmessage(message);
             if (req.val === false) {
                 throw new Error("Bad Request");
             };

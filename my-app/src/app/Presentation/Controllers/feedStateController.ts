@@ -1,66 +1,77 @@
 import { useState } from "react"
 import { postValidator } from "../../Service/Validators/postValidator"
-
-import { Post } from "../../Service/Entities/postEntities"
-import { userRepository } from "../../Data Access/Repository/userRepository"
-import { User } from "../../Service/Entities/userEntities"
-import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter"
-import FeedPersistence from "../../Service/Persistence/FeedPersistence"
 import { postRepository } from "../../Data Access/Repository/postRepository"
+import { Post } from "../../Service/Entities/postEntities"
+import { User } from "../../Service/Entities/userEntities"
+import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
 
 const feedStateController = () => {
+    const [posts, setPosts] = useState<Post[]>([])
+    const [users, setUsers] = useState<User[]>([])
+    const postrepository: postRepository = new postRepository()
 
-    const [userData, setUserData] = useState<User[]>([])
-    const [postData, setPostData] = useState<Post[]>([])
-    const postService: postRepository = new postRepository()
-    const uRepository: userRepository = new userRepository()
+    // const handleUserFetch = async (): Promise<IReturnAdapter> => {
+    //     try {
+    //         const req = await postrepository.getUsers()
+    //         console.log(`User Request: ${req}`);
+    //         if (req.val === false) {
+    //             throw new Error("Bad Request");
+    //         }
+    //         const usersData = req.data as User[]
+    //         let users: User[] = []
+    //         usersData.forEach(user => {
+    //             const newUser = new User(
+    //                 user
+    //             )
+    //             users.push(newUser)
+    //         });
+
+    //         if (users[0] instanceof User) {
+    //             setUsers(users)
+    //             return { val: true, data: 'Usuários encontrados' };
+    //         }
+    //         throw new Error('Nenhum post foi encontrado')
+    //     } catch (error) {
+    //         console.log("handleUserFetch respondeu com ERRO!")
+    //         if (error instanceof Error) {
+    //             if (error.message === "Unauthorized") {
+    //               return { val: false, erro: error };
+    //             } else if (error.message === "Bad Request") {
+    //               return { val: false, erro: error };
+    //             }
+    //         }
+    //           return { val: false, erro: "Internal Server Error" };
+    //     }
+    // }
 
     const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
         try {
-            const req = await postService.getPosts()
-            console.log(`Request: ${req}`);
+            const req = await postrepository.getPosts()
+            console.log(`Post Request: ${req}`);
             if (req.valido === false) {
                 throw new Error("Bad Request");
             }
-
             const postData = req.data as Post[]
-
             let posts: Post[] = []
             postData.forEach(post => {
                 const newPost = new Post(
                     post.UserID, 
                     post.description, 
-                    post.postId, 
                     post.local, 
+                    post.postId, 
                     post.status,
-                    post.createdAt
+                    post.createdAt,
                 )
                 posts.push(newPost)
             });
-            let users: User[] = []
-            if (posts[0] instanceof Post) {
-                posts.forEach(async(post: Post) => {
-                    const reqUser = await uRepository.getUserByUID(post.UserID)
-                    if(reqUser.val === false){
-                        throw new Error(reqUser.erro as string)
-                    }
-                    const userData = reqUser.data as User
-                    const newUser = new User({
-                        displayName: reqUser.data.displayName,
-                        course: userData.course,
-                        shift: userData.shift
-                    })
-                    users.push(newUser)
-                })
-                setUserData(users)
-                setPostData(posts)
-                return { val: true, data: {post: posts, users: users} };
-            }
 
-            throw new Error('Nenhum post encontrado.')
+            if (posts[0] instanceof Post) {
+                setPosts(posts)
+                return { val: true, data: 'Posts encontrados' };
+            }
+            throw new Error('Nenhum post foi encontrado')
         } catch (error) {
             console.log("handleFeedFetch respondeu com ERRO!")
-
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
                   return { val: false, erro: error };
@@ -72,23 +83,8 @@ const feedStateController = () => {
         }
     }
 
-    const handleFeedInfo = async(): Promise<IReturnAdapter> => {
-    try{
-        const Feed = FeedPersistence.getInstance()
-        const reqFeed = await Feed.getPosts(postData)
-        if(reqFeed ===  null){
-            throw new Error('Requisição do feed deu errado')
-        }    
-        return {val: true, data: reqFeed}
-    } catch (error) {
-            console.log(error)
-            return{val: false, erro: `Erro ${error}`}
-        }
-        
-    }
-
     return {
-        handleFeedInfo,
+        posts,
         handleFeedFetch};
 };
 
