@@ -15,6 +15,7 @@ import ContainerOptions from "./ContainerOptions";
 import { Post } from "../../../Service/Entities/postEntities";
 import { feedStateController } from "../../Controllers/feedStateController";
 import { User } from "../../../Service/Entities/userEntities";
+import {Picker} from '@react-native-picker/picker';
 
 type Props = {
     isTouched?: any
@@ -44,6 +45,7 @@ const CreatePost = (props: Props) => {
     const [image, setImage] = useState<string | null>(null)
     const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
     const [startEdit, isEditStarting] = useState<boolean | null>(false)
+    const [selectedLanguage, setSelectedLanguage] = useState();
 
     const [postData, setPostData] = useState({
         UserID: "",
@@ -237,7 +239,7 @@ const CreatePost = (props: Props) => {
                     placeholder={postData.description} 
                     placeholderTextColor={"#303030"}
                     multiline
-                    numberOfLines={10}
+                    numberOfLines={9}
                     autoCorrect={false}
                     onChangeText={(text: any) => {
                         handlePostChange("description", text)
@@ -249,9 +251,26 @@ const CreatePost = (props: Props) => {
                 ) : (null)
                 }
 
+                <View>
+                    { startEdit == true ? (
+                    <>
+                    <Picker
+                    selectedValue={selectedLanguage}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSelectedLanguage(itemValue)
+                    }
+                    style={styles.selectPicker}>
+                        <Picker.Item label="Perdido" value={0} />
+                        <Picker.Item label="Achado" value={1} />
+                        <Picker.Item label="Devolvido" value={2} />
+                    </Picker>
+                    </>
+                    ): (null)}
+                </View>
+
                     <View style={styles.buttonView}>
                         { startEdit == true ? (
-                        <>
+                        <>                   
                         <TouchableOpacity onPress={handleUpdate} style={styles.postbtn}>
                             <Text style={styles.btntext}>Alterar</Text>
                         </TouchableOpacity>
@@ -407,6 +426,13 @@ const styles = StyleSheet.create ({
         width: 40,
         height: 40,
     },
+    selectPicker: {
+        backgroundColor: '#d4d7ff', 
+        marginBottom: 20,
+    },
+    selectContainer: {
+        borderRadius: 2
+    }
 })
 
 export default CreatePost
