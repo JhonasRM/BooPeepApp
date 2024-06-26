@@ -1,28 +1,29 @@
 import { useState } from "react"
-import { postValidator } from "../../Service/Validators/postValidator"
-import { postRepository } from "../../Data Access/Repository/postRepository"
-import { Post } from "../../Service/Entities/postEntities"
-import { User } from "../../Service/Entities/userEntities"
+import { postRepository } from "../../Data Access/Repository/postRepository";
+import { userRepository } from "../../Data Access/Repository/userRepository";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { Post } from "../../Service/Entities/postEntities";
+import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
-import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage"
+import { PostFeed } from "../../utils/types/PostFeed";
 
 const feedStateController = () => {
-    const [posts, setPosts] = useState<Post[]>([])
-    const [users, setUsers] = useState<User[]>([])
+    const [posts, setPosts] = useState<PostFeed[]>([])
     const postrepository: postRepository = new postRepository()
     const [loggedUser, setLoggedUser] = useState()
 
+    const userrepository: userRepository = new userRepository()
     const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
         let myUser = await GetOnStorage('uid')
         try {
-            const req = await postrepository.getPosts()
-            console.log(`Post Request: ${req}`);
+            const req = await postrepository.getPosts();
             if (req.valido === false) {
                 throw new Error("Bad Request");
             }
-            const postData = req.data as Post[]
-            let posts: Post[] = []
-            postData.forEach(post => {
+            const postData = req.data as Post[];
+            let posts: PostFeed[] = [];
+            
+            await Promise.all(postData.map(async (post) => {
                 const newPost = new Post(
                     post.UserID, 
                     post.description, 
@@ -30,29 +31,44 @@ const feedStateController = () => {
                     post.postId, 
                     post.status,
                     post.createdAt,
-                )
-                posts.push(newPost)
-            });
-
-            if (posts[0] instanceof Post) {
-                setPosts(posts)
-                setLoggedUser(myUser.info)
-                console.log(`Usuário Logado: ${loggedUser}`)
+                );
+                const reqUser = await userrepository.getUserByUID(newPost.UserID);
+                if(reqUser.val === false){
+                    console.log(reqUser.erro as string);
+                    console.log(`Erro ao requisitar os dados do post ${newPost.postId}`);
+                    return;
+                }
+                const user = reqUser.data as User;
+                const newUser = new User({
+                    displayName: reqUser.data.displayName,
+                    course: user.course,
+                    shift: user.shift,
+                });
+                const newPostFeed: PostFeed = {
+                    user: newUser,
+                    post: newPost,
+                };
+                posts.push(newPostFeed);
+            }));
+    
+            if (posts.length > 0) {
+                setPosts(posts);
                 return { val: true, data: 'Posts encontrados' };
             }
-            throw new Error('Nenhum post foi encontrado')
+            throw new Error('Nenhum post foi encontrado');
         } catch (error) {
-            console.log("handleFeedFetch respondeu com ERRO!")
+            console.log("handleFeedFetch respondeu com ERRO!");
             if (error instanceof Error) {
                 if (error.message === "Unauthorized") {
-                  return { val: false, erro: error };
+                    return { val: false, erro: error };
                 } else if (error.message === "Bad Request") {
-                  return { val: false, erro: error };
+                    return { val: false, erro: error };
                 }
             }
-              return { val: false, erro: "Internal Server Error" };
+            return { val: false, erro: "Internal Server Error" };
         }
-    }
+    };
+    
 
     return {
         posts,
