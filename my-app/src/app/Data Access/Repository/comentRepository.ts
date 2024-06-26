@@ -6,7 +6,7 @@ export class comentRepository {
     private endpointcoment: string
 
     constructor() {        
-        this.endpointcoment = "https://boopeepapir.onrender.com/coment"
+        this.endpointcoment = "https://boopeepapir.onrender.com/coments"
     };
 
     async getComents(postID: string): Promise<IReturnAdapter> {
@@ -61,7 +61,7 @@ export class comentRepository {
                 }
             });
 
-            if (resp.status !== 200) {
+            if (resp.status !== 201) {
                 console.log("createPost respondeu com ERRO!");
                 throw new Error(resp.statusText);
             };
