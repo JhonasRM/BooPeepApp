@@ -42,7 +42,7 @@ const ChatStateController = () => {
         chatData.chatid,
         chatData.messages
       );
-      const reqUpUserAdmin = await uRepository.update("jhonas.rodrigues@gmail.com", 'chatID', GottenInfo.chatid) 
+      const reqUpUserAdmin = await uRepository.update("jhonas.rodrigues32@gmail.com", 'chatID', GottenInfo.chatid) 
       if(reqUpUserAdmin.val === false){
         throw new Error(reqUpUserAdmin.erro as string)
       }

@@ -10,11 +10,11 @@ export class postRepository {
     private endpointusers: string
 
     constructor() {        
-        this.endpointposts = "http://localhost:3100/posts"
-        this.endpointpost = "http://localhost:3100/post"
-        this.endpointest = "http://localhost:3000/post"
+        this.endpointposts = "https://boopeepapir.onrender.com/posts"
+        this.endpointpost = "https://boopeepapir.onrender.com/post"
+        this.endpointest = "https://boopeepapir.onrender.com/post"
         this.endpointests = "https://boopeepapir.onrender.com/posts"
-        this.endpointusers = "http://localhost:3100/users"
+        this.endpointusers = "https://boopeepapir.onrender.com/users"
     };
 
     async getPosts(): Promise<{ valido: boolean, value?: number, erro?: string | Error, data?: Post[] }> {

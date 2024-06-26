@@ -21,17 +21,17 @@ import { Info, MessageSquareMore } from "@tamagui/lucide-icons";
 export default function App(): JSX.Element {
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessageHelper[]>([]);
+  const [currentUserUid, setCurrentUserUid] = useState<string | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const { getchat, sendMessage, readMessages } = ChatStateController();
   const [chat, setChat] = useState<Chat | null>(null);
-  const uid = GetOnStorage("uid");
   const [isUpdated, setIsUpdated] = useState<boolean>();
 
   const handleMessageSend = async () => {
     if (message.trim() === "") return;
     try {
       const newMessage: ChatMessageHelper = new ChatMessageHelper({
-        uid: (await uid).info,
+        uid: currentUserUid!,
         text: message,
       });
       setMessages([...messages, newMessage]);
@@ -82,7 +82,8 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     const readChat = async() =>{
-    try {  const read = await readMessages()
+    try {  
+      const read = await readMessages()
       if(read.val === false){
         throw new Error(read.erro as string)
       } else {
@@ -104,17 +105,38 @@ export default function App(): JSX.Element {
     readChat()
   }, [isUpdated])
 
-  const renderMessages = (): JSX.Element[] => {
-    return messages.map((message) => (
-      <View
-        style={[styles.messageContainer, { alignSelf: "flex-end" }]}
-        key={message.uid}
-      >
-        <Text style={styles.messageText}>{message.text}</Text>
-      </View>
-    ));
-  };
+  useEffect(() => {
+    const fetchUid = async () => {
+      const storedUid = await GetOnStorage("uid");
+      setCurrentUserUid(storedUid.info);
+    };
+    fetchUid();
+  }, []);
 
+  const renderMessages = (): JSX.Element[] => {
+    return messages.map((message) => {
+      if (message.uid === currentUserUid) {
+        return (
+          <View
+            style={[styles.messageContainerCurrentUser, { alignSelf: "flex-end" }]}
+            key={message.uid}
+          >
+            <Text style={styles.messageText}>{message.text}</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View
+            style={[styles.messageContainerOtherUser, { alignSelf: "flex-start" }]}
+            key={message.uid}
+          >
+            <Text style={styles.messageText}>{message.text}</Text>
+          </View>
+        );
+      }
+    });
+  };
+  
   return (
     <View style={styles.container}>
       <HeaderBar whatScreen="chat" whatLink="../screens/Feed" />
@@ -154,8 +176,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  messageContainer: {
+  messageContainerCurrentUser: {
     backgroundColor: "#7C83FF",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 8,
+    maxWidth: "80%",
+  },
+  messageContainerOtherUser: {
+    backgroundColor: "#400096",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,

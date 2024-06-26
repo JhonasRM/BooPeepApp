@@ -1,40 +1,32 @@
-import { Text, View, Image, Pressable } from "react-native";
+import { Text, View, Image } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
-import { ids } from "./UserBlockResponsivity";
-import { useQuery } from "@tanstack/react-query";
-import LoadingBox from "../LoadingIcon";
+import React, { useEffect, useState } from "react";
+import { Entypo } from '@expo/vector-icons';
+import { userBlockStateController } from "../../../Controllers/userBlockStateController";
 import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
-import { Entypo } from '@expo/vector-icons';
-import React, { SetStateAction, useEffect, useState } from "react";
-import { feedStateController } from "../../../Controllers/feedStateController";
+import LoadingBox from "../LoadingIcon";
 import { Post } from "../../../../Service/Entities/postEntities";
-import { userBlockStateController } from "../../../Controllers/userBlockStateController";
-import { UserScreenStateController } from "../../../Controllers/UserScreenStateController";
-
-const photos: string[] = ['https://picsum.photos/500/300',
-'https://picsum.photos/501/300',
-'https://picsum.photos/502/300',
-'https://picsum.photos/503/300']
+import { User } from "../../../../Service/Entities/userEntities";
 
 type UserBlockProps = {
-    postsID: string[]
+    postsID: string[],
+    user: User
 }
 
 const UserBlock = (props: UserBlockProps) => {
-    const { posts, handleFetchUserPosts } = userBlockStateController();
+    const { handleFetchUserPosts } = userBlockStateController();
     const [data, setData] = useState<Post[]>([]);
     const [erro, setErro] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [isDataFetched, setIsDataFetched] = useState(false);
     const [erroFetch, setErroFetch] = useState("");
 
     useEffect(() => {
-        const incomingData = async () => {
-            console.log("incomingData is running");
+        const fetchData = async () => {
+            console.log("fetchData is running");
             console.log(props.postsID);
             try {
                 setLoading(true);
@@ -44,10 +36,8 @@ const UserBlock = (props: UserBlockProps) => {
                     throw new Error(getPosts.erro as string);
                 }
                 const postData: Post[] = getPosts.data as Post[];
-                console.log('ele fex dnv:')
-                console.log(postData)
-                setData(posts);
-                setLoading(false)
+                setData(postData);
+                setLoading(false);
 
             } catch (error) {
                 console.error("Erro ao realizar requisição:", error);
@@ -56,54 +46,38 @@ const UserBlock = (props: UserBlockProps) => {
                 } else {
                     setErroFetch('An unknown error occurred');
                 }
-                setLoading(false)
+                setLoading(false);
             }
         };
-        incomingData();
-    }, [props.postsID])
-    
-    return (
-        <UserBlockComponent posts={data} erro={erro} loading={loading} erroFetch={`${erroFetch}`}/>
-    )
-}
+        fetchData();
+    }, [props.postsID]);
 
-
-type UserBlockComponentProps = {
-    posts: Post[];
-    erro: boolean;
-    loading: boolean;
-    erroFetch: string;
-};
-
-const UserBlockComponent: React.FC<UserBlockComponentProps> = ({ posts, erro, loading, erroFetch }) => {
     if (loading) {
-        return <LoadingBox whatPage="Comment" />;
+        return <LoadingBox whatPage={"Comment"} />;
     }
 
     if (erro) {
         return <ErrorMessage message={erroFetch} />;
     }
-    if(posts){
-        console.log(posts)
-    }
 
     return (
         <View style={styles.container}>
-            {posts.map((item: Post) => (
+            {data.map((item: Post) => (
                 <View style={styles.userblock} key={item.postId}>
                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
                             style={styles.user} />
+                            <View>
+                            <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
+                            <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
+                        </View>
                         <ContainerOptions style={styles.options} postID={undefined} />
                     </View>
-                    <Text style={styles.titletext}>
-                        Perdi o meu Relogio :( {/*{item.title}*/}
-                    </Text>
                     <Text style={styles.infotext}>
                         {item.description}
                     </Text>
                     <View style={styles.middleline}>
-                        <ImageCarousel ImgSource={photos} />
+                        <ImageCarousel ImgSource={['']} />
                     </View>
                     <View style={styles.endline}>
                         <View style={[styles.status, { marginHorizontal: wp(2) }]}>
@@ -119,7 +93,7 @@ const UserBlockComponent: React.FC<UserBlockComponentProps> = ({ posts, erro, lo
                             <Text>Status: {item.status}</Text>
                         </View>
                         <View style={{ marginHorizontal: wp(2) }}>
-                            <Text>Criado em: {new Date(item.createdAt).toLocaleDateString()}</Text>
+                            <Text>Criado em: {item.createdAt.toString()}</Text>
                         </View>
                         <CommentButton btnStyle={styles.chaticon} />
                     </View>
@@ -129,12 +103,10 @@ const UserBlockComponent: React.FC<UserBlockComponentProps> = ({ posts, erro, lo
     );
 }
 
-
-const {styles} = StyleSheet.create ({
+const { styles } = StyleSheet.create({
     container: {
         marginVertical: hp(1),
         paddingBottom: hp(2),
-
         borderBottomColor: "black",
         borderBottomWidth: 2,
     },
@@ -165,14 +137,13 @@ const {styles} = StyleSheet.create ({
         marginLeft: wp(1)
     },
     userinfo: {
-      marginLeft: wp(1)
+        marginLeft: wp(1)
     },
     options: {
         position: "absolute",
-        right: 0,  
+        right: 0,
         marginRight: 10,
         zIndex: 2,
-        //backgroundColor: "#dbdbdb",
         borderRadius: 5,
     },
     titletext: {
@@ -191,7 +162,6 @@ const {styles} = StyleSheet.create ({
         marginBottom: hp(2),
         paddingHorizontal: wp(5),
         marginHorizontal: wp(1),
-        
     },
     middleline: {
         flexDirection: "row",
@@ -199,19 +169,13 @@ const {styles} = StyleSheet.create ({
         marginVertical: hp(2)
     },
     status: {
-        // borderWidth: wp(2),
-        // borderRadius: 50,
-        // width: wp(1),
-        // height: hp(1),
-        // borderColor: "#ce1e1e",
-        // marginRight: wp(1),
         flexDirection: "row",
         alignItems: "center",
     },
     time: {
         marginLeft: 4,
     },
-    chaticon: {     
+    chaticon: {
         position: "absolute",
         right: 0,
         paddingBottom: 10,
@@ -222,6 +186,6 @@ const {styles} = StyleSheet.create ({
         alignItems: "center",
         marginBottom: hp(1)
     },
-})
+});
 
-export default UserBlock
+export default UserBlock;
