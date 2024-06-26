@@ -1,17 +1,20 @@
 import { useState } from "react"
-import { postValidator } from "../../Service/Validators/postValidator"
-import { postRepository } from "../../Data Access/Repository/postRepository"
-import { Post } from "../../Service/Entities/postEntities"
-import { User } from "../../Service/Entities/userEntities"
+import { postRepository } from "../../Data Access/Repository/postRepository";
+import { userRepository } from "../../Data Access/Repository/userRepository";
+import { GetOnStorage } from "../../Data Access/Storage/GetOnStorage";
+import { Post } from "../../Service/Entities/postEntities";
+import { User } from "../../Service/Entities/userEntities";
 import { IReturnAdapter } from "../../utils/Interfaces/IReturnAdapter";
-import { userRepository } from "../../Data Access/Repository/userRepository"
-import { PostFeed } from "../../utils/types/PostFeed"
+import { PostFeed } from "../../utils/types/PostFeed";
 
 const feedStateController = () => {
     const [posts, setPosts] = useState<PostFeed[]>([])
     const postrepository: postRepository = new postRepository()
+    const [loggedUser, setLoggedUser] = useState()
+
     const userrepository: userRepository = new userRepository()
     const handleFeedFetch = async (): Promise<IReturnAdapter> => {    
+        let myUser = await GetOnStorage('uid')
         try {
             const req = await postrepository.getPosts();
             if (req.valido === false) {
@@ -69,6 +72,7 @@ const feedStateController = () => {
 
     return {
         posts,
+        loggedUser,
         handleFeedFetch};
 };
 
