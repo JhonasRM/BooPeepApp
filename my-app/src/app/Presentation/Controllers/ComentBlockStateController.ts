@@ -9,13 +9,14 @@ import { User } from "../../Service/Entities/userEntities";
 import { postRepository } from "../../Data Access/Repository/postRepository";
 import { Coment } from "../../Service/Entities/comentEntities";
 import { comentRepository } from "../../Data Access/Repository/comentRepository";
+import { router } from "expo-router";
 
 const ComentBlockStateController = () => {
     const [coments, setComents] = useState<Coment[]>([]);
     const cRepository: comentRepository = new comentRepository();
     const uRepository: userRepository = new userRepository();
 
-    const handleFetchUserPosts = async (postID: string): Promise<IReturnAdapter> => {
+    const handleFetchComents = async (postID: string): Promise<IReturnAdapter> => {
         try {
                 const req = await cRepository.getComents(postID);
                 if (req.val === false) {
@@ -42,9 +43,33 @@ const ComentBlockStateController = () => {
         }
     };
 
+    const createComent = async(postID: string, text: string): Promise<IReturnAdapter> => {
+        try {
+            const uid = await GetOnStorage('uid')
+        if(uid.val === false){
+            router.push('/')
+        }
+        const newComent = new Coment(postID, uid.info, text)
+        const req = await cRepository.createComent(newComent)
+        if(req.val === false){
+            throw new Error(req.erro as string)
+        }
+        console.log(req.data)
+        return { val: true, data: newComent}
+        } catch (error) {
+            if(error instanceof Error){
+            return {val:  false, erro: error.message }
+            } else{
+                return {val: false, erro: `Erro interno da aplicação: ${error as string}`}
+            }
+        }
+        
+    }
+
     return {
         coments,
-        handleFetchUserPosts,
+        handleFetchComents,
+        createComent
     };
 };
 

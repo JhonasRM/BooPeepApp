@@ -110,7 +110,7 @@ const UserBlock = (props: UserBlockProps) => {
                         <View style={{ marginHorizontal: wp(2) }}>
                             <Text>Criado em: {item.createdAt.toString()}</Text>
                         </View>
-                        <CommentButton btnStyle={styles.chaticon} />
+                        <CommentButton btnStyle={styles.chaticon} postID={item.postId} user={props.user} />
                     </View>
                 </View>
             ))}

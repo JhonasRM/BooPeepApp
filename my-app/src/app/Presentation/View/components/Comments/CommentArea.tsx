@@ -12,8 +12,7 @@ const CommentArea = (props: CommentProps) => {
     return (        
     <ScrollView style={styles.container}>
         <PostBlock postID={props.postID} user={props.user} />
-        <CommentBlock />
-        
+        <CommentBlock postID={props.postID} />
     </ScrollView>
     )
 }

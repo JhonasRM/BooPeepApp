@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Text, View, Image } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -15,6 +16,7 @@ import { PostBlockStateController } from "../../../Controllers/PostBlockStateCon
 
 type PostBlockProps = {
     postID: string,
+    post?: Post,
     user: User
 }
 
@@ -71,6 +73,48 @@ const PostBlock = (props: PostBlockProps) => {
         );
     }
 
+    if(props.post){
+        return (
+            <View style={styles.container}>
+                    <View style={styles.userblock} key={props.post.postId}>
+                        <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+                            <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
+                                style={styles.user} />
+                            <View>
+                                <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
+                                <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
+                            </View>
+                            <ContainerOptions style={styles.options} postID={undefined} />
+                        </View>
+                        <Text style={styles.infotext}>
+                            {props.post.description}
+                        </Text>
+                        <View style={styles.middleline}>
+                            <ImageCarousel ImgSource={['']} />
+                        </View>
+                        <View style={styles.endline}>
+                            <View style={[styles.status, { marginHorizontal: wp(2) }]}>
+                                {props.post.status === 0 ? (
+                                    <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                                ) : props.post.status === 1 ? (
+                                    <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
+                                ) : props.post.status === 2 ? (
+                                    <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                                ) : (
+                                    <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
+                                )}
+                                <Text>Status: {props.post.status}</Text>
+                            </View>
+                            <View style={{ marginHorizontal: wp(2) }}>
+                                <Text>Criado em: {props.post.createdAt.toString()}</Text>
+                            </View>
+                            <CommentButton btnStyle={styles.chaticon} postID={props.postID} user={props.user} />
+                        </View>
+                    </View>
+            </View>
+        );
+    } else {
+
     return (
         <View style={styles.container}>
                 <View style={styles.userblock} key={data?.postId}>
@@ -105,24 +149,23 @@ const PostBlock = (props: PostBlockProps) => {
                         <View style={{ marginHorizontal: wp(2) }}>
                             <Text>Criado em: {data?.createdAt.toString()}</Text>
                         </View>
-                        <CommentButton btnStyle={styles.chaticon} />
+                        <CommentButton btnStyle={styles.chaticon} postID={props.postID} user={props.user} />
                     </View>
                 </View>
         </View>
     );
+}
 }
 
 const { styles } = StyleSheet.create({
     container: {
         marginVertical: hp(1),
         paddingBottom: hp(2),
-        borderBottomColor: "black",
-        borderBottomWidth: 2,
     },
     noPostsContainer: {
         flex: 1,
         justifyContent: 'center',
-        aligndatas: 'center',
+        alignItems: 'center',
         height: '100%'
     },
     noPostsText: {
@@ -141,7 +184,7 @@ const { styles } = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         flexWrap: "wrap",
-        aligndatas: "center"
+        alignItems: "center"
     },
     beyondfirstline: {
         marginLeft: wp(7),
@@ -190,7 +233,7 @@ const { styles } = StyleSheet.create({
     },
     status: {
         flexDirection: "row",
-        aligndatas: "center",
+        alignItems: "center",
     },
     time: {
         marginLeft: 4,
@@ -203,7 +246,7 @@ const { styles } = StyleSheet.create({
     },
     endline: {
         flexDirection: "row",
-        aligndatas: "center",
+        alignItems: "center",
         marginBottom: hp(1)
     },
 });

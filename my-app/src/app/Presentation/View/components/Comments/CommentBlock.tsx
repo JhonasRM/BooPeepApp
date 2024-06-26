@@ -11,11 +11,10 @@ import ErrorMessage from "../ErrorMessage";
 
 type ComentBlockProps = {
     postID: string,
-    user: User
 }
 
 const CommentBlock = (props: ComentBlockProps) => {
-    const { handleFetchUserPosts } = ComentBlockStateController();
+    const { handleFetchComents, createComent } = ComentBlockStateController();
     const [data, setData] = useState<Coment[]>([]);
     const [erro, setErro] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -27,7 +26,7 @@ const CommentBlock = (props: ComentBlockProps) => {
             console.log(props.postID);
             try {
                 setLoading(true);
-                const getPosts = await handleFetchUserPosts(props.postID);
+                const getPosts = await handleFetchComents(props.postID);
                 if (getPosts.val === false) {
                     setErro(true);
                     throw new Error(getPosts.erro as string);
@@ -51,6 +50,29 @@ const CommentBlock = (props: ComentBlockProps) => {
             setLoading(false);
     }, [props.postID]);
 
+    const handleInputComent = async(text: string) => {
+        setLoading(true)
+        try {
+            const handleCreateComent = await createComent(props.postID, text)
+            if(handleCreateComent.val === false){
+                throw new Error(handleCreateComent.erro as string)
+            }
+            console.log('Comentário criado')
+            console.log(handleCreateComent.data)
+            setLoading(false)
+        } catch (error) {
+            if(error instanceof Error){
+            setErroFetch(error as unknown as string)
+            } else {
+                console.log(error)
+                setErroFetch('Erro interno da aplicação')
+                setLoading(false)
+                setErro(true)
+            }
+        }
+      
+    }
+
     if (loading) {
         <LoadingBox whatPage="Comment" />
     }
@@ -58,7 +80,6 @@ const CommentBlock = (props: ComentBlockProps) => {
     if (erro) {
         return <ErrorMessage message={erroFetch} />;
     }
-
     
     return ( 
         <>
