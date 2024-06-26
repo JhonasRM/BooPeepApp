@@ -69,7 +69,6 @@ export default function App(): JSX.Element {
         if (get.val === false) {
           console.log(get.erro);
         }
-        const myChat = get.data;
         setChat(get.data as Chat);
       }
     };

@@ -27,8 +27,7 @@ const ChatStateController = () => {
           throw new Error(settingChat.erro as string);
         }
         const chatData = new Chat(uid.info, settingChat.data.chatID as string);
-        await chatPersistence.setchat(chatData)
-      const req = uRepository.update("jhonas.rodrigues@gmail.com", 'chatID', chatData.chatid) 
+      const req = uRepository.update("jhonas.rodrigues32@gmail.com", 'chatID', chatData.chatid) 
         return { val: true, data: chatData };
       } else {
       const MyChat = new Chat(uid.info, chatid.info)
@@ -74,9 +73,6 @@ const ChatStateController = () => {
       ) {
         router.push("/");
       } 
-      // if(chatID.info === ''){ 
-      //   getchat()
-      // }
       const newMessage = new Message(
         uid.info,
         displayName.info,
@@ -118,7 +114,6 @@ const ChatStateController = () => {
         MessagesUpdated.push(newMessage);
       });
       const chatUpdated = new Chat(uid.info, chatID.info, MessagesUpdated);
-      chatPersistence.setchat(chatUpdated);
       return { val: true, data: chatUpdated };
     } catch (error) {
       console.log(error);

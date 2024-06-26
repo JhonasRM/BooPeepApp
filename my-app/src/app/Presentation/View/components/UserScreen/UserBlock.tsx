@@ -1,16 +1,16 @@
+import React, { useEffect, useState } from "react";
 import { Text, View, Image } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import StyleSheet from 'react-native-media-query';
-import React, { useEffect, useState } from "react";
 import { Entypo } from '@expo/vector-icons';
 import { userBlockStateController } from "../../../Controllers/userBlockStateController";
 import ErrorMessage from "../ErrorMessage";
 import ContainerOptions from "../ContainerOptions";
 import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
-import LoadingBox from "../LoadingIcon";
 import { Post } from "../../../../Service/Entities/postEntities";
 import { User } from "../../../../Service/Entities/userEntities";
+import LoadingBox from "../LoadingIcon";
 
 type UserBlockProps = {
     postsID: string[],
@@ -49,15 +49,30 @@ const UserBlock = (props: UserBlockProps) => {
                 setLoading(false);
             }
         };
-        fetchData();
+
+        // Verifica se postsID contém valores válidos
+        const validPostIDs = props.postsID.filter(id => id.trim() !== "");
+        if (validPostIDs.length > 0) {
+            fetchData();
+        } else {
+            setLoading(false);
+        }
     }, [props.postsID]);
 
     if (loading) {
-        return <LoadingBox whatPage={"Comment"} />;
+        <LoadingBox whatPage="Comment" />
     }
 
     if (erro) {
         return <ErrorMessage message={erroFetch} />;
+    }
+
+    if (props.postsID.length === 0 || props.postsID.every(id => id.trim() === "")) {
+        return (
+            <View style={styles.noPostsContainer}>
+                <Text style={styles.noPostsText}>Você não possui nenhuma postagem</Text>
+            </View>
+        );
     }
 
     return (
@@ -67,7 +82,7 @@ const UserBlock = (props: UserBlockProps) => {
                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                         <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
                             style={styles.user} />
-                            <View>
+                        <View>
                             <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
                             <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
                         </View>
@@ -109,6 +124,17 @@ const { styles } = StyleSheet.create({
         paddingBottom: hp(2),
         borderBottomColor: "black",
         borderBottomWidth: 2,
+    },
+    noPostsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+    },
+    noPostsText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     userblock: {
         backgroundColor: "#eeeeee",

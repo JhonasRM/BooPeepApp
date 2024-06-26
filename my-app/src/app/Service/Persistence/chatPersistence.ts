@@ -24,6 +24,7 @@ class ChatPersistence {
 
   public setchat(chat: Chat): void {
     this.chat = chat;
+    this.setChatID(chat.chatid)
   }
   public setChatID(chatID: string): void{
     removeItemFromStorage('chatID')
@@ -54,8 +55,6 @@ class ChatPersistence {
           [newMessage],
 
         );
-        removeItemFromStorage('chatID')
-        SetOnStorage('chatID', settingChat.data as string)
         this.chat = chatData;
       }
       const req = await this.ChatRepository.getMessages(chatid.info);
