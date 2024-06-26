@@ -101,10 +101,9 @@ const UserProfileScreen: React.FC = () => {
             </>
           )} 
           <Text style={styles.userPostBlock}></Text>
-          <UserBlock postsID={postsID}/>
         </View>
           { changeSection == false ? (
-            <UserBlock postsID={postsID} />  
+            <UserBlock postsID={postsID} user={user} />  
           ) : (
             <MyCommentsBlock />
           )} 
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  configButton: {
+  configButton: { 
     padding: 10,
     borderRadius: 50,
     alignItems: 'center',

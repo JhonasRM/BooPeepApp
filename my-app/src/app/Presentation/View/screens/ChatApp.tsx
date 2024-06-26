@@ -1,79 +1,144 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
-import HeaderBar from '../components/HeaderBar';
-import FooterBar from '../components/FooterBar';
-import { Message } from '../../../Service/Entities/messageEntities';
-import ChatPersistence from '../../../Service/Persistence/chatPersistence'
-
-import { MaterialIcons } from '@expo/vector-icons';
-import { createMessageStateController } from '../../Controllers/MessageStateController';
-import { chatRepository } from '../../../Data Access/Repository/chatRepository';
-
-interface Messages {
-  chatid: string;
-  lastmessage: string;
-}
+import React, { useState, useRef, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+} from "react-native";
+import HeaderBar from "../components/HeaderBar";
+import FooterBar from "../components/FooterBar";
+import { MaterialIcons } from "@expo/vector-icons";
+import { GetOnStorage } from "../../../Data Access/Storage/GetOnStorage";
+import { ChatStateController } from "../../Controllers/ChatStateController";
+import { Chat } from "../../../Service/Entities/chatEntities";
+import { Message } from "../../../Service/Entities/messageEntities";
+import { ChatMessageHelper } from "../../../utils/Helpers/ChatMessagesHelper";
+import { setYear } from "date-fns";
+import { Info, MessageSquareMore } from "@tamagui/lucide-icons";
 
 export default function App(): JSX.Element {
-  const [message, setMessage] = useState<string>('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<ChatMessageHelper[]>([]);
+  const [currentUserUid, setCurrentUserUid] = useState<string | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
-  const {
-    handleFieldChange,
-    handleCreateChat,
-    UserID,
-    displayname,
-    lastmessage,
-    dataTime,
-    chatid
-  } = createMessageStateController();
+  const { getchat, sendMessage, readMessages } = ChatStateController();
+  const [chat, setChat] = useState<Chat | null>(null);
+  const [isUpdated, setIsUpdated] = useState<boolean>();
 
-  const ChatRpository = new chatRepository()
+  const handleMessageSend = async () => {
+    if (message.trim() === "") return;
+    try {
+      const newMessage: ChatMessageHelper = new ChatMessageHelper({
+        uid: currentUserUid!,
+        text: message,
+      });
+      setMessages([...messages, newMessage]);
+      setMessage("");
+      if (chat === null) {
+        const getMyChat = await getchat();
+        if (getMyChat.val === false) {
+          throw new Error(getMyChat.erro as string);
+        }
+        const MyChat = getMyChat.data as Chat;
+        setChat(MyChat);
+      }
+      const sendNewMessage = await sendMessage(message);
+      if (sendNewMessage.val === false) {
+        throw new Error(sendNewMessage.erro as string);
+      }
+      const Chat = chat as Chat;
+      const MyMessage = newMessage.getMessage();
+      Chat.messages?.push(await MyMessage);
+      setIsUpdated(false);
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    } catch (error) {
+      console.log(error)
+    }
+   
+  };
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      const result = await ChatRpository.getMessages(chatid);
-      if (result.val) {
-        setMessages(result.data);
+    const getMyChat = async () => {
+      const chatID = await GetOnStorage("chatID");
+      if (chatID.info === "") {
+        return;
       } else {
-        console.error("Failed to fetch messages:", result.erro);
+        const get = await getchat();
+        if (get.val === false) {
+          console.log(get.erro);
+        }
+        setChat(get.data as Chat);
       }
     };
-    fetchMessages();
-  }, [chatid]);
+    getMyChat();
+    
+    return () => {
+      setIsUpdated(false);
+    };
+  }, []);
 
-  const handleMessageSend = async (): Promise<void>=> {
-    if (message.trim() === '') return;
- 
+  useEffect(() => {
+    const readChat = async() =>{
+    try {  
+      const read = await readMessages()
+      if(read.val === false){
+        throw new Error(read.erro as string)
+      } else {
+      const myChat = read.data;
+      setChat(read.data as Chat);
+      let MyMessages: ChatMessageHelper[] = [];
+      myChat.messages?.forEach((MyLastMessage: Message) => {
+        const newMesage: ChatMessageHelper = new ChatMessageHelper(
+          {message: MyLastMessage}
+        );
+        MyMessages.push(newMesage);
+      });
+      setMessages(MyMessages);
+    }
+    } catch(error){
+      console.log(error)
+    }
+    }
+    readChat()
+  }, [isUpdated])
 
-   const response = await  handleCreateChat(message.trim());
-
-   if (response.val) {
-      setMessages([...messages, response.data]);
-      setMessage('');
-      scrollViewRef.current?.scrollToEnd({ animated: true });
-   } else {
-      console.error("Failed to send message:", response.erro);
-   }
-  };
+  useEffect(() => {
+    const fetchUid = async () => {
+      const storedUid = await GetOnStorage("uid");
+      setCurrentUserUid(storedUid.info);
+    };
+    fetchUid();
+  }, []);
 
   const renderMessages = (): JSX.Element[] => {
-    return messages.map((message) => (
-      <View
-        style={[
-          styles.messageContainer,
-          { alignSelf: 'flex-end' }, 
-        ]}
-        key={message.chatid}
-      >
-        <Text style={styles.messageText}>{message.lastmsg}</Text>
-      </View>
-    ));
+    return messages.map((message) => {
+      if (message.uid === currentUserUid) {
+        return (
+          <View
+            style={[styles.messageContainerCurrentUser, { alignSelf: "flex-end" }]}
+            key={message.uid}
+          >
+            <Text style={styles.messageText}>{message.text}</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View
+            style={[styles.messageContainerOtherUser, { alignSelf: "flex-start" }]}
+            key={message.uid}
+          >
+            <Text style={styles.messageText}>{message.text}</Text>
+          </View>
+        );
+      }
+    });
   };
-
+  
   return (
     <View style={styles.container}>
-      <HeaderBar whatScreen='chat' whatLink="../screens/Feed"/>
+      <HeaderBar whatScreen="chat" whatLink="../screens/Feed" />
       <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.messagesContainer}
@@ -86,10 +151,7 @@ export default function App(): JSX.Element {
         <TextInput
           style={styles.input}
           value={message}
-          onChangeText={async (text) => {
-            setMessage(text);
-            await handleFieldChange('lastmessage', text);
-         } }
+          onChangeText={setMessage}
           placeholder="Digite sua mensagem..."
           placeholderTextColor="#888"
         />
@@ -99,7 +161,7 @@ export default function App(): JSX.Element {
           </View>
         </TouchableOpacity>
       </View>
-      <FooterBar whatScreen='chat'/>
+      <FooterBar whatScreen="chat" />
     </View>
   );
 }
@@ -107,53 +169,59 @@ export default function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   messagesContainer: {
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  messageContainer: {
-    backgroundColor: '#7C83FF',
+  messageContainerCurrentUser: {
+    backgroundColor: "#7C83FF",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 8,
-    maxWidth: '80%',
+    maxWidth: "80%",
+  },
+  messageContainerOtherUser: {
+    backgroundColor: "#400096",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 8,
+    maxWidth: "80%",
   },
   messageText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: "#ffffff",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderTopWidth: 1,
-    borderTopColor: '#202112',
-    backgroundColor: '#ffffff',
+    borderTopColor: "#202112",
+    backgroundColor: "#ffffff",
   },
   input: {
     flex: 1,
     height: 40,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: '#cccccc',
+    borderColor: "#cccccc",
     borderRadius: 20,
     marginRight: 8,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   sendButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   sendButtonIcon: {
-    backgroundColor: '#ffffff', 
+    backgroundColor: "#ffffff",
   },
 });
-
-

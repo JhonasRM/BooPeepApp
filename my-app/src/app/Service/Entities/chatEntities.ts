@@ -3,9 +3,9 @@ import { Message } from "./messageEntities";
 export class Chat{
     public  uid: string;
     public chatid: string;
-    public messages: Message[];
+    public messages?: Message[];
   
-    constructor(uid:string, messages: Message[], chatid?: string,){
+    constructor(uid:string,  chatid?: string, messages?: Message[],){
         this.uid = uid
         this.messages = messages
         this.chatid = ""

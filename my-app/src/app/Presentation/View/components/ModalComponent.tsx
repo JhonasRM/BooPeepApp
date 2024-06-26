@@ -25,14 +25,16 @@ const ModalComponent: React.FC<ModalProps> = ({
     >
       <View style={styles.centeredView}>
         {Category === "Single Action" && (
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, styles.singleActionModalView]}>
             <Text style={styles.modalText}>{content}</Text>
+            <View style={styles.buttonContainer}>
             <Pressable
               style={[styles.button, styles.buttonPress]}
               onPress={onPress}
             >
               <Text style={styles.textStyle}>OK</Text>
             </Pressable>
+            </View>
           </View>
         )}
         {Category === "Dual Action" && (
@@ -80,6 +82,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  singleActionModalView: {
+    width: "80%", // Ajusta o tamanho do modal para uma largura fixa
   },
   buttonContainer: {
     flexDirection: "row",

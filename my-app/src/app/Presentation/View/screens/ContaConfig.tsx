@@ -35,6 +35,7 @@ const ContaConfig = () => {
         removeItemFromStorage('uid')
         removeItemFromStorage('email')
         removeItemFromStorage('name')
+        removeItemFromStorage('chatID')
         setModalLogOutVisible(false)
         router.push('/')
         } catch (error) {

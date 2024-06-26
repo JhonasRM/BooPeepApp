@@ -12,13 +12,12 @@ export class chatRepository {
     this.endpointchat = "https://boopeepapir.onrender.com/chat"
   };
 
-  async setchat(chat: Chat): Promise< IReturnAdapter> {
+  async setchat(uid: string): Promise< IReturnAdapter> {
     
     try {
       console.log("createChat foi chamado!")
       const chatData = {
-        uid: chat.uid,
-        message: chat.messages,
+        uid: uid
     }
       const resp = await axios.post(this.endpointchat, chatData, {
         headers: {
@@ -49,13 +48,13 @@ export class chatRepository {
       console.log("createMessage foi chamado")
       const chatData = {
         uid: message.UserID,
-        chat: message.chatid,
+        chatID: message.chatid,
         displayName: message.displayName,
         lastmsg: message.lastmsg,
         dateTime: message.dateTime
     }
    
-      const resp = await axios.post(this.endpointchat, chatData, {
+      const resp = await axios.put(this.endpointchat, chatData, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Authorization",
