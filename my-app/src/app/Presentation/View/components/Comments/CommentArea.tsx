@@ -3,11 +3,15 @@ import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CommentBlock from "./CommentBlock";
 import PostBlock from "./PostBlock";
-
-const CommentArea = () => {
+import { User } from "../../../../Service/Entities/userEntities";
+type CommentProps = {
+    postID: string,
+    user: User
+}
+const CommentArea = (props: CommentProps) => {
     return (        
     <ScrollView style={styles.container}>
-        <PostBlock />
+        <PostBlock postID={props.postID} user={props.user} />
         <CommentBlock />
         
     </ScrollView>

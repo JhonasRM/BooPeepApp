@@ -1,48 +1,81 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import ContainerOptions from "../ContainerOptions";
 import LoadingBox from "../LoadingIcon";
+import { User } from "../../../../Service/Entities/userEntities";
+import { ComentBlockStateController } from "../../../Controllers/ComentBlockStateController";
+import { Coment } from "../../../../Service/Entities/comentEntities";
+import ErrorMessage from "../ErrorMessage";
 
-const CommentBlock = () => {
-    const fetchComments = async () => {                                 //Chamar a API
-        const response = await fetch('https://jsonplaceholder.typicode.com/comments');
-        return response.json();
+type ComentBlockProps = {
+    postID: string,
+    user: User
+}
+
+const CommentBlock = (props: ComentBlockProps) => {
+    const { handleFetchUserPosts } = ComentBlockStateController();
+    const [data, setData] = useState<Coment[]>([]);
+    const [erro, setErro] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [erroFetch, setErroFetch] = useState("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("fetchData is running");
+            console.log(props.postID);
+            try {
+                setLoading(true);
+                const getPosts = await handleFetchUserPosts(props.postID);
+                if (getPosts.val === false) {
+                    setErro(true);
+                    throw new Error(getPosts.erro as string);
+                }
+                const postData: Coment[] = getPosts.data as Coment[];
+                setData(postData);
+                setLoading(false);
+
+            } catch (error) {
+                console.error("Erro ao realizar requisição:", error);
+                if (error instanceof Error) {
+                    setErroFetch(error.message);
+                } else {
+                    setErroFetch('An unknown error occurred');
+                }
+                setLoading(false);
+            }
+        };
+
+            fetchData();
+            setLoading(false);
+    }, [props.postID]);
+
+    if (loading) {
+        <LoadingBox whatPage="Comment" />
     }
 
-    // const fetchUsers = async () => {    //"Vamos precisar disso para exibir o nome/status no .firstline"
-    //     const response = await fetch ('https://jsonplaceholder.typicode.com/users');
-    //     return response.json();
-    // }
-
-    const {data, isLoading} = useQuery({
-        queryKey: ['CommentsData'],
-        queryFn: fetchComments
-    })
-
-    if (isLoading) {
-        return (
-            <LoadingBox whatPage="Comment" />
-        )
+    if (erro) {
+        return <ErrorMessage message={erroFetch} />;
     }
+
     
-    return ( //FAZER O QUERY AQUI
+    return ( 
         <>
-             {data && data.map((item: any) => (
-            <View style={styles.commentblock} key={item.id}>
+             {data && data.map((item: Coment) => (
+            <View style={styles.commentblock} key={item.comentID}>
                 <View style={styles.firstline}>
                     <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} style={styles.user}/>
-                    <Text style={styles.usertext}> {item.email} </Text>
-                    <ContainerOptions style={styles.commentoptions}/>
+                    <Text style={styles.usertext}> {item.uid} </Text>
+                    <ContainerOptions style={styles.commentoptions} postID={undefined}/>
                 </View>
 
                 <View style={[styles.bodyarea, styles.beyonduserpic]}>
-                    <Text>{item.body}</Text>
+                    <Text>{item.text}</Text>
                 </View>
 
                 <View style={[styles.lastline, styles.beyonduserpic]}>
-                    <Text style={styles.timetext}>Criado em: {item.id}</Text>
+                    <Text style={styles.timetext}>Criado em: {item.createdAt.toString()}</Text>
                     <TouchableOpacity style={styles.commentbtn}>
                         <Image source={require('../../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.commentimg}/>
                     </TouchableOpacity>
