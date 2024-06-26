@@ -84,10 +84,10 @@ const ContainerOptions = (props: Props) => {
                     <Text style={styles.headerText}>Opções da Postagem</Text>
                 </View>
 
-                {/* <TouchableOpacity style={styles.optioncontainer} onPress={EditHandle}> 
+                <TouchableOpacity style={styles.optioncontainer} onPress={EditHandle}> 
                     <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
                     <Text style={[styles.btnText]}>Editar Postagem</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 
                 <TouchableOpacity style={styles.optioncontainer} onPress={DeleteHandle}>
                     <Image source={require('../../../../../assets/icons/icons8-menu-2-24.png')} style={styles.btnImg}/>
