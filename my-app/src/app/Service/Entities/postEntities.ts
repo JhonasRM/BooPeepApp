@@ -36,23 +36,6 @@ export class Post {
         if(createdAt){
             this.createdAt = format(createdAt, 'dd/MM/yyyy HH:mm:ss')
         }
-        this.setUser()
     }
 
-    async setUser(){
-        if(this.user === null){
-        const reqUser = await this.uRepository.getUserByUID(this.UserID)
-                if(reqUser.val === false){
-                    throw new Error(reqUser.erro as string)
-                }
-                const userData = reqUser.data as User
-                const newUser = new User({
-                    displayName: reqUser.data.displayName,
-                    course: userData.course,
-                    shift: userData.shift
-                })
-                this.user = newUser
-            }
-            return this.user
-    }
 }

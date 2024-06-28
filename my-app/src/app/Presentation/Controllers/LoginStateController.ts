@@ -77,6 +77,7 @@ const LoginStateController = () => {
       SetOnStorage("name", foundUser.displayName)
       SetOnStorage("email", foundUser.email)
       SetOnStorage("uid", foundUser.uid)
+      SetOnStorage("chatID", foundUser.chatID)
       const newUser = new User({
         displayName: foundUser.displayName,
         email: foundUser.email,

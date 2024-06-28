@@ -1,33 +1,28 @@
-import React, { useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
-import Comments from "../screens/Comments"
-import { Link } from "expo-router"
+import React from 'react';
+import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from 'react-native';
+import { Link } from 'expo-router';
 
 type CommentBtnProps = {
-    btnStyle: StyleProp<ImageStyle>
-}
+    btnStyle: StyleProp<ImageStyle>;
+    postID: string;
+    user: any;
+};
 
 const CommentButton = (props: CommentBtnProps) => {
-    const [isCommentPress, setCommentIsPress] = useState(false);
-
-    const commentHandlePress = () => {
-        setCommentIsPress(isCommentPress => !isCommentPress)
-    }
-
     return (
-        <Link href={"../screens/Comments"} asChild>
-            <TouchableOpacity onPress={commentHandlePress} style={props.btnStyle}>
-                <Image source={require('../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.img}/>
+        <Link href={{ pathname: './Comments', params: { postID: props.postID, user: JSON.stringify(props.user) } }} asChild>
+            <TouchableOpacity style={props.btnStyle}>
+                <Image source={require('../../../../../assets/icons/icons8-mensagens-100_Feed.png')} style={styles.img} />
             </TouchableOpacity>
         </Link>
-    )
-}
+    );
+};
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
     img: {
         width: 35,
         height: 35,
     },
-})
+});
 
-export default CommentButton
+export default CommentButton;

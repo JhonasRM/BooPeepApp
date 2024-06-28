@@ -1,132 +1,184 @@
-import React, { useEffect, useState } from "react"
-import { Image, Text, View, StyleSheet } from "react-native"
-import ContainerOptions from "../ContainerOptions"
+
+import React, { useEffect, useState } from "react";
+import { Text, View, Image } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import StyleSheet from 'react-native-media-query';
 import { Entypo } from '@expo/vector-icons';
-import { Post } from "../../../../Service/Entities/postEntities";
-import { commentPostBlockStateController } from "../../../Controllers/commentPostBlockStateController";
+import { userBlockStateController } from "../../../Controllers/userBlockStateController";
+import ErrorMessage from "../ErrorMessage";
+import ContainerOptions from "../ContainerOptions";
+import CommentButton from "../CommentButton";
 import ImageCarousel from "../ImageCarousel";
+import { Post } from "../../../../Service/Entities/postEntities";
+import { User } from "../../../../Service/Entities/userEntities";
+import LoadingBox from "../LoadingIcon";
+import { PostBlockStateController } from "../../../Controllers/PostBlockStateController";
 
-const photos: string[] = ['https://picsum.photos/500/300',
-'https://picsum.photos/501/300',
-'https://picsum.photos/502/300',
-'https://picsum.photos/503/300']
-
-const PostBlock = () => {
-    const {
-        createdAt, 
-        UserID, 
-        description, 
-        postId, 
-        local, 
-        status, 
-        handleFetchSpecificPost
-    } = commentPostBlockStateController()
-
-    const [data, setData] = useState<Post[] | undefined>([])
-    const [erro, setErro] = useState(false)
-    const [loading, setLoading] = useState(true)
-    
-    const [erroFetch, setErroFetch] = useState("")
-
-    useEffect(() => {
-        console.log("useEffect is running")
-
-    const incomingData = async () => {
-        console.log("incomingData is running")
-
-        try {
-            const response = await handleFetchSpecificPost ()
-
-            if (response.valido === false) {
-                throw new Error(response.erro as string);
-            }
-
-            if (response.valido === true) {
-                console.log(`${response.value}. GET realizado com sucesso!`);
-                setData(response.data)
-                console.log(`Data from setData: ${data}`)
-            }
-
-        } catch (error) {
-            console.error("Erro ao realizar requisição:", error);
-            if (error instanceof Error) {
-                setErroFetch(error.message)
-            } else {
-                setErroFetch('An unknown error occurred')
-            }
-        }
-    }
-    incomingData()
-    }, []);
-
-    return (
-        <>
-        <View style={styles.container}>    
-         {data && data.map((item: any) => (    
-            <View style={styles.postblock}>
-                <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
-                    <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
-                    style={styles.user}/>
-
-                    <View>
-                        <Text style={styles.usertext}>Augusto{/*{item.UserID}*/}</Text>
-                        <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
-                    </View>
-
-                    <ContainerOptions style={styles.options}/>
-                </View>
-                
-                 <Text style={[styles.titletext, styles.beyondfirstline]}>
-                    Perdi o meu Relogio :( {/*{item.}*/}
-                 </Text>
-                 <Text style={[styles.infotext, styles.beyondfirstline]}> 
-                    O meu relogio ele é feito de aluminio, tem um LED daora e toca até musiquinha. Perdi ele lá
-                    na sala de aula 10, alguém poderia me informar aonde ele está? :(
-                    {/*item.description*/}
-                 </Text>
-
-                <View style={styles.middleline}>
-                    <ImageCarousel ImgSource={photos}/>
-                </View>
-
-               <View style={styles.endline}>
-                    <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                    {/* { item.status == "0" ? (
-                    <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                    ) : item.status == "1" ? (
-                    <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                    ) : item.status == "2" ? (
-                    <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                    ) : (
-                    <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                    )} */}
-                    <Text>Status: 2</Text>
-                    </View>
-
-                    <View style={{marginHorizontal: wp(2)}}>
-                        <Text>Criado em: 10/30/2010 11:32</Text>
-                    </View>
-                </View>
-            </View>
-            ))}
-        </View>
-        </>
-    )
+type PostBlockProps = {
+    postID: string,
+    post?: Post,
+    user: User
 }
 
-const styles = StyleSheet.create ({
+const PostBlock = (props: PostBlockProps) => {
+    const { handleFetchPost } = PostBlockStateController();
+    const [data, setData] = useState<Post>();
+    const [erro, setErro] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [erroFetch, setErroFetch] = useState("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("fetchData is running");
+            console.log(props.postID);
+            try {
+                setLoading(true);
+                const getPosts = await handleFetchPost(props.postID);
+                if (getPosts.val === false) {
+                    setErro(true);
+                    throw new Error(getPosts.erro as string);
+                }
+                const postData: Post = getPosts.data as Post;
+                setData(postData);
+                setLoading(false);
+
+            } catch (error) {
+                console.error("Erro ao realizar requisição:", error);
+                if (error instanceof Error) {
+                    setErroFetch(error.message);
+                } else {
+                    setErroFetch('An unknown error occurred');
+                }
+                setLoading(false);
+            }
+        };
+
+            fetchData();
+        setLoading(false)
+    }, [props.postID]);
+
+    if (loading) {
+        <LoadingBox whatPage="Comment" />
+    }
+
+    if (erro) {
+        return <ErrorMessage message={erroFetch} />;
+    }
+
+    if (props.postID === '') {
+        return (
+            <View style={styles.noPostsContainer}>
+                <Text style={styles.noPostsText}>Nenhuma Postagem Selecionada</Text>
+            </View>
+        );
+    }
+
+    if(props.post){
+        return (
+            <View style={styles.container}>
+                    <View style={styles.userblock} key={props.post.postId}>
+                        <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+                            <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
+                                style={styles.user} />
+                            <View>
+                                <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
+                                <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
+                            </View>
+                            <ContainerOptions style={styles.options} postID={undefined} />
+                        </View>
+                        <Text style={styles.infotext}>
+                            {props.post.description}
+                        </Text>
+                        <View style={styles.middleline}>
+                            <ImageCarousel ImgSource={['']} />
+                        </View>
+                        <View style={styles.endline}>
+                            <View style={[styles.status, { marginHorizontal: wp(2) }]}>
+                                {props.post.status === 0 ? (
+                                    <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                                ) : props.post.status === 1 ? (
+                                    <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
+                                ) : props.post.status === 2 ? (
+                                    <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                                ) : (
+                                    <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
+                                )}
+                                <Text>Status: {props.post.status}</Text>
+                            </View>
+                            <View style={{ marginHorizontal: wp(2) }}>
+                                <Text>Criado em: {props.post.createdAt.toString()}</Text>
+                            </View>
+                            <CommentButton btnStyle={styles.chaticon} postID={props.postID} user={props.user} />
+                        </View>
+                    </View>
+            </View>
+        );
+    } else {
+
+    return (
+        <View style={styles.container}>
+                <View style={styles.userblock} key={data?.postId}>
+                    <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+                        <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')}
+                            style={styles.user} />
+                        <View>
+                            <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
+                            <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
+                        </View>
+                        <ContainerOptions style={styles.options} postID={undefined} />
+                    </View>
+                    <Text style={styles.infotext}>
+                        {data?.description}
+                    </Text>
+                    <View style={styles.middleline}>
+                        <ImageCarousel ImgSource={['']} />
+                    </View>
+                    <View style={styles.endline}>
+                        <View style={[styles.status, { marginHorizontal: wp(2) }]}>
+                            {data?.status === 0 ? (
+                                <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                            ) : data?.status === 1 ? (
+                                <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
+                            ) : data?.status === 2 ? (
+                                <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                            ) : (
+                                <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
+                            )}
+                            <Text>Status: {data?.status}</Text>
+                        </View>
+                        <View style={{ marginHorizontal: wp(2) }}>
+                            <Text>Criado em: {data?.createdAt.toString()}</Text>
+                        </View>
+                        <CommentButton btnStyle={styles.chaticon} postID={props.postID} user={props.user} />
+                    </View>
+                </View>
+        </View>
+    );
+}
+}
+
+const { styles } = StyleSheet.create({
     container: {
         marginVertical: hp(1),
         paddingBottom: hp(2),
-
-        borderBottomColor: "black",
-        borderBottomWidth: 2,
     },
-    postblock: {
+    noPostsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+    },
+    noPostsText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    userblock: {
         backgroundColor: "#eeeeee",
         padding: 6,
         borderRadius: 10,
+        marginBottom: hp(3),
+        marginHorizontal: wp(3)
     },
     firstline: {
         flex: 1,
@@ -148,14 +200,13 @@ const styles = StyleSheet.create ({
         marginLeft: wp(1)
     },
     userinfo: {
-      marginLeft: wp(1)
+        marginLeft: wp(1)
     },
     options: {
         position: "absolute",
-        right: 0,  
+        right: 0,
         marginRight: 10,
         zIndex: 2,
-        //backgroundColor: "#dbdbdb",
         borderRadius: 5,
     },
     titletext: {
@@ -174,26 +225,20 @@ const styles = StyleSheet.create ({
         marginBottom: hp(2),
         paddingHorizontal: wp(5),
         marginHorizontal: wp(1),
-        
     },
     middleline: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: hp(2)
     },
     status: {
-        // borderWidth: wp(2),
-        // borderRadius: 50,
-        // width: wp(1),
-        // height: hp(1),
-        // borderColor: "#ce1e1e",
-        // marginRight: wp(1),
         flexDirection: "row",
         alignItems: "center",
     },
     time: {
         marginLeft: 4,
     },
-    chaticon: {     
+    chaticon: {
         position: "absolute",
         right: 0,
         paddingBottom: 10,
@@ -202,8 +247,8 @@ const styles = StyleSheet.create ({
     endline: {
         flexDirection: "row",
         alignItems: "center",
-        alignSelf: "center",
+        marginBottom: hp(1)
     },
-})
+});
 
-export default PostBlock
+export default PostBlock;
