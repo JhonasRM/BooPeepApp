@@ -15,6 +15,7 @@ import ContainerOptions from "./ContainerOptions";
 import { Post } from "../../../Service/Entities/postEntities";
 import { feedStateController } from "../../Controllers/feedStateController";
 import { User } from "../../../Service/Entities/userEntities";
+import {Picker} from '@react-native-picker/picker';
 
 type Props = {
     isTouched?: any
@@ -44,6 +45,7 @@ const CreatePost = (props: Props) => {
     const [image, setImage] = useState<string | null>(null)
     const [editPressed, wasEditPressed] = useState<boolean | null>(props.pressedEdit)
     const [startEdit, isEditStarting] = useState<boolean | null>(false)
+    const [selectedLanguage, setSelectedLanguage] = useState();
 
     const [postData, setPostData] = useState({
         UserID: "",
@@ -109,6 +111,7 @@ const CreatePost = (props: Props) => {
     }
 
     const handlePostChange = (name: any, value: any) => {
+        console.log("======= handlePostChange rodou! =======")
         setPostData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -118,6 +121,7 @@ const CreatePost = (props: Props) => {
     };
 
     const handleUpdate = async () => {
+        console.log("============ handleUpdate foi Chamado! ============")
         console.log("Dados do post atualizados:", postData);
         const newPost = new Post (
             postData.UserID, postData.description, postData.local
@@ -182,8 +186,8 @@ const CreatePost = (props: Props) => {
                         </TouchableOpacity>
                     </View>
 
-                { isTouched == true && editPressed == false ? (
-                    <View style={styles.inputView}>
+                { startEdit == true ? (
+                        <View style={styles.inputView}>
                         {/* <TextInput 
                         placeholder={"Título da postagem"} 
                         placeholderTextColor={"#303030"}
@@ -205,18 +209,13 @@ const CreatePost = (props: Props) => {
                         multiline
                         numberOfLines={10}
                         autoCorrect={false}
-                        onChangeText={async (description) => {
-                            const handle = await handleFieldChange("description", description)
-                            if (handle.valido === false) {
-                                setErroB(handle.erro as string);
-                            } else if (handle.valido === true) {
-                                setErroB("")
-                            }
+                        onChangeText={(text: any) => {
+                            handlePostChange('description', text)
                         }}
                         style={styles.textInput}
                         />
                     </View>
-                ) : isTouched == true && startEdit == true ? (
+                ) : editPressed == false ? (
                     <View style={styles.inputView}>
                     {/* <TextInput 
                     placeholder={"Título da postagem"} 
@@ -234,24 +233,45 @@ const CreatePost = (props: Props) => {
                     />  */}
 
                     <TextInput 
-                    placeholder={postData.description} 
+                    placeholder={"Me diga o que ocorreu..."} 
                     placeholderTextColor={"#303030"}
                     multiline
                     numberOfLines={10}
                     autoCorrect={false}
-                    onChangeText={(text: any) => {
-                        handlePostChange("description", text)
+                    onChangeText={async (description) => {
+                        const handle = await handleFieldChange("description", description)
+                        if (handle.valido === false) {
+                            setErroB(handle.erro as string);
+                        } else if (handle.valido === true) {
+                            setErroB("")
+                        }
                     }}
                     style={styles.textInput}
                     />
-
                     </View>
                 ) : (null)
                 }
 
+                <View>
+                    { startEdit == true ? (
+                    <>
+                    <Picker
+                    selectedValue={selectedLanguage}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSelectedLanguage(itemValue)
+                    }
+                    style={styles.selectPicker}>
+                        <Picker.Item label="Perdido" value={0} />
+                        <Picker.Item label="Achado" value={1} />
+                        <Picker.Item label="Devolvido" value={2} />
+                    </Picker>
+                    </>
+                    ): (null)}
+                </View>
+
                     <View style={styles.buttonView}>
                         { startEdit == true ? (
-                        <>
+                        <>                   
                         <TouchableOpacity onPress={handleUpdate} style={styles.postbtn}>
                             <Text style={styles.btntext}>Alterar</Text>
                         </TouchableOpacity>
@@ -407,6 +427,13 @@ const styles = StyleSheet.create ({
         width: 40,
         height: 40,
     },
+    selectPicker: {
+        backgroundColor: '#d4d7ff', 
+        marginBottom: 20,
+    },
+    selectContainer: {
+        borderRadius: 2
+    }
 })
 
 export default CreatePost

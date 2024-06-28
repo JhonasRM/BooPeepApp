@@ -94,6 +94,7 @@ const createPostStateController = () => {
     };
 
     const UpdatePost = async (updateThis: string, postData: Post): Promise<IReturnAdapter> => {
+        console.log("============ UpdatePost do Controller foi Chamado! ============")
         console.log(`UpdatePost's updateThis: ${updateThis}`)
         try {
             const updatedFields: FieldUpdate[] = [];
@@ -104,7 +105,7 @@ const createPostStateController = () => {
                     typedKey !== "createdAt" &&
                     typedKey !== "postId" &&
                     typedKey !== "local" &&
-                    postData[typedKey] !== "" && postData[typedKey] !== ""
+                    postData[typedKey] !== "" && postData[typedKey] !== " "
                 ) {
                     if (typedKey === "description") {
                         updatedFields.push({
@@ -126,13 +127,14 @@ const createPostStateController = () => {
                 }
 
                 try {
+                    console.log("try do UpdatePost do Controller rodou!")
                     const req = await postrepository.updatePost(updateThis, fieldToUpdate, newValue)
+                    console.log(`updateThis: ${updateThis}, fieldToUpdate: ${fieldToUpdate} & newValue: ${newValue}`)
                     
                     if (req.val === false) {
                         throw new Error(req.erro as string);
                     }
 
-                    return
                 } catch (error) {
                     if (error instanceof Error) {
                         throw new Error('Erro ao atualizar está postagem: ' + error.message);
