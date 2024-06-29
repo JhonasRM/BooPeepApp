@@ -13,15 +13,25 @@ import { Post } from "../../../../Service/Entities/postEntities";
 import { User } from "../../../../Service/Entities/userEntities";
 import LoadingBox from "../LoadingIcon";
 import { PostBlockStateController } from "../../../Controllers/PostBlockStateController";
+import { ListItem } from "tamagui";
 
 type PostBlockProps = {
+    //ISSO ERA DO FEEDBLOCK
+    isTouched?: any
+    pressedEdit?: any
+    stopEdit?: any
+    postId?: any
+    reloadGET?: any
+    reloadResponse?: any
+
+    //ISSO É DO POSTBLOCK
     postID: string,
     post?: Post,
     user: User
 }
 
 const PostBlock = (props: PostBlockProps) => {
-    const { handleFetchPost } = PostBlockStateController();
+    const { handleFetchPost, loggedUser } = PostBlockStateController();
     const [data, setData] = useState<Post>();
     const [erro, setErro] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -57,6 +67,10 @@ const PostBlock = (props: PostBlockProps) => {
         setLoading(false)
     }, [props.postID]);
 
+    const handleContainerOptionsEditResponse = (response: any) => {
+        props.isTouched(response)
+    }
+
     if (loading) {
         <LoadingBox whatPage="Comment" />
     }
@@ -84,7 +98,12 @@ const PostBlock = (props: PostBlockProps) => {
                                 <Text style={styles.usertext}>{props.user.name} {props.user.nickname}</Text>
                                 <Text style={styles.userinfo}>{props.user.course} - {props.user.shift}</Text>
                             </View>
-                            <ContainerOptions style={styles.options} postID={undefined} />
+
+                            { props.post.UserID === loggedUser ? (
+                            <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={props.post.postId} />
+                            ) : (null)
+                            }
+
                         </View>
                         <Text style={styles.infotext}>
                             {props.post.description}
@@ -95,15 +114,23 @@ const PostBlock = (props: PostBlockProps) => {
                         <View style={styles.endline}>
                             <View style={[styles.status, { marginHorizontal: wp(2) }]}>
                                 {props.post.status === 0 ? (
-                                    <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
-                                ) : props.post.status === 1 ? (
-                                    <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
-                                ) : props.post.status === 2 ? (
+                                    <>
                                     <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                                    <Text>Status: Perdido</Text>
+                                    </>
+                                ) : props.post.status === 1 ? (
+                                    <>
+                                    <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
+                                    <Text>Status: Achado</Text>
+                                    </>
+                                ) : props.post.status === 2 ? (
+                                    <>
+                                    <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                                    <Text>Status: Devolvido</Text>
+                                    </>
                                 ) : (
                                     <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
                                 )}
-                                <Text>Status: {props.post.status}</Text>
                             </View>
                             <View style={{ marginHorizontal: wp(2) }}>
                                 <Text>Criado em: {props.post.createdAt.toString()}</Text>
@@ -136,11 +163,11 @@ const PostBlock = (props: PostBlockProps) => {
                     <View style={styles.endline}>
                         <View style={[styles.status, { marginHorizontal: wp(2) }]}>
                             {data?.status === 0 ? (
-                                <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
+                                <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
                             ) : data?.status === 1 ? (
                                 <Entypo name="dot-single" size={50} color="yellow" style={{ margin: -15 }} />
                             ) : data?.status === 2 ? (
-                                <Entypo name="dot-single" size={50} color="red" style={{ margin: -15 }} />
+                                <Entypo name="dot-single" size={50} color="green" style={{ margin: -15 }} />
                             ) : (
                                 <Entypo name="dot-single" size={50} color="grey" style={{ margin: -15 }} />
                             )}

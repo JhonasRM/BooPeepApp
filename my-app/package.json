@@ -34,7 +34,6 @@
     "react-native-svg": "^15.2.0",
     "tamagui": "^1.95.1",
     "zod": "^3.23.8",
-    "react-native-web": "~0.19.10",
     "@react-native-picker/picker": "2.7.5"
   },
   "devDependencies": {

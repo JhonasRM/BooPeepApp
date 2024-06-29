@@ -12,9 +12,11 @@ const PostBlockStateController = () => {
     const [post, setPost] = useState<Post>();
     const pRepository: postRepository = new postRepository();
     const uRepository: userRepository = new userRepository();
+    const [loggedUser, setLoggedUser] = useState<any>()
 
 
     const handleFetchPost = async (postID: string): Promise<IReturnAdapter> => {
+        let myUser = await GetOnStorage('uid')
         try {
                 const req = await pRepository.getPostFromUser(postID);
                 if (req.valido === false) {
@@ -30,6 +32,8 @@ const PostBlockStateController = () => {
                     post.createdAt
                 );
             setPost(newPost);
+            setLoggedUser(myUser.info);
+            console.log(`THIS USER: ${loggedUser}`);
             return { val: true, data: post };
         } catch (error) {
             console.log(error);
@@ -39,6 +43,7 @@ const PostBlockStateController = () => {
 
     return {
         post,
+        loggedUser,
         handleFetchPost,
     };
 };

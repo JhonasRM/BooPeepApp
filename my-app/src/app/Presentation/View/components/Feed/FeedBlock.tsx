@@ -7,16 +7,8 @@ import ErrorMessage from "../ErrorMessage";
 import React, { DependencyList, useEffect, useState } from "react";
 import { feedStateController } from "../../../Controllers/feedStateController";
 import { Post } from "../../../../Service/Entities/postEntities";
-
-import ContainerOptions from "../ContainerOptions";
-import { GetOnStorage } from "../../../../Data Access/Storage/GetOnStorage";
-
-const photos: string[] = [
- 'https://picsum.photos/500/300',
- 'https://picsum.photos/501/300',
- 'https://picsum.photos/502/300',
- 'https://picsum.photos/503/300'
-]
+import PostBlock from "../Comments/PostBlock";
+import { PostFeed } from "../../../../utils/types/PostFeed";
 
 type Props = {
     isTouched?: any;
@@ -28,18 +20,10 @@ type Props = {
 }
 
 export function FeedQuery(props: Props) {
-    const {
-        posts,
-        loggedUser,
-        handleFeedFetch
-    } = feedStateController()
-
-    const [erro, setErro] = useState(false)
-    const [loading, setLoading] = useState(true)
-    
-    const [erroFetch, setErroFetch] = useState("")
-    const [effectController, setEffectController] = useState<DependencyList | undefined>([])
-
+    const { posts, handleFeedFetch } = feedStateController();
+    const [erro, setErro] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [erroFetch, setErroFetch] = useState("");
 
     useEffect(() => {
         const incomingData = async () => {
@@ -82,79 +66,9 @@ export function FeedQuery(props: Props) {
 
     return (
         <View style={styles.container}>
-            { loading ? (
-                <>
-                    <LoadingBox whatPage="Feed" />
-                </>
-            ) : erro ? (
-                <>
-                    <ErrorMessage message={erroFetch}/>
-                </>
-            ) : (
-            <>
-            {posts && posts.map((item: any) => (
-                <View style={styles.feedblock} key={item.createdAt}>
-                    {props.postId(item.postID)}
-                    <View style={{flexDirection: "row", flexWrap: "nowrap"}}>
-                        <Image source={require('../../../../../../assets/icons/icons8-usuário-homem-com-círculo-100_Feed.png')} 
-                        style={styles.user}/>
-
-                        <View>
-                            <Text style={styles.usertext}>{item.UserID}</Text>
-                            <Text style={styles.userinfo}>2°Lógistica - Noite {/*{item.}*/}</Text>
-                        </View>
-
-                        { item.UserID === loggedUser ? (
-                        <>
-                        <ContainerOptions style={styles.options} isTouched={handleContainerOptionsEditResponse} pressedEdit={props.pressedEdit} stopEdit={props.stopEdit} postID={item.postId}/>
-                        </>
-                        ) : (null)}
-                    </View>
-                    
-                    <Text style={[styles.titletext]}> 
-                        {item.description}
-                    </Text>
-
-                    <View style={styles.middleline}>
-                        <ImageCarousel ImgSource={photos}/>
-                    </View>
-
-                <View style={[styles.endline, {marginBottom: 0}]}>
-                        <View style={[styles.status, {marginHorizontal: wp(2)}]}>
-                        { item.status == "0" ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="red" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Perdido</Text>
-                        </>
-                        ) : item.status == "1" ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="yellow" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Achado</Text>
-                        </>
-                        ) : item.status == "2" ? (
-                        <>
-                            <Entypo name="dot-single" size={50} color="green" style={{margin: -15}} />
-                            <Text style={styles.statusText}>Status: Devolvido</Text>
-                        </>
-                        ) : (
-                        <>
-                            <Entypo name="dot-single" size={50} color="grey" style={{margin: -15}} />
-                            <Text>Status: {item.status}</Text>
-                        </>
-                        )} 
-                        </View>
-
-                        <CommentButton btnStyle={styles.chaticon} />
-                    </View>
-                    <View style={[styles.endline, {marginHorizontal: wp(2)}]}>
-                            <Text>Criado em: {item.createdAt.toString()}</Text>
-                    </View>
-                </View>
-                )
-            )
-            } 
-            </>
-            )}
+            {posts && posts.map((item: PostFeed) => (
+                <PostBlock key={item.post.postId} postID={item.post.postId} post={item.post} user={item.user} />
+            ))}
         </View>
     );
 }
